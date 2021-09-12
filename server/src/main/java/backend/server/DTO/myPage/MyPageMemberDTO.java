@@ -17,7 +17,7 @@ public class MyPageMemberDTO {
 
     private String password;
 
-    private LocalTime totalTime;
+    private int totalTime;
 
     private String profilePicture;
 }

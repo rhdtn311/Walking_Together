@@ -1,11 +1,17 @@
 package backend.server.controller;
 
 import backend.server.DTO.ActivityDTO;
-import backend.server.DTO.ActivityEndDTO;
+import backend.server.DTO.PartnerDTO;
 import backend.server.DTO.TokenDTO;
+import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.ApiException;
+import backend.server.exception.ErrorCode;
+import backend.server.exception.activityService.*;
 import backend.server.message.Message;
-import backend.server.service.ActivityService;
+import backend.server.service.activity.ActivityCreationService;
+import backend.server.service.activity.ActivityDeleteService;
+import backend.server.service.activity.ActivityEndService;
+import backend.server.service.activity.ActivityService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -22,140 +28,68 @@ import java.util.*;
 @RestController
 public class ActivityController {
 
-    private final ActivityService activityService;
+    private final ActivityCreationService activityCreationService;
+    private final ActivityEndService activityEndService;
+    private final ActivityDeleteService activityDeleteService;
 
     // 활동 생성 화면
     @GetMapping("/activity/create")
-    public Map<String, Object> createActivity(@RequestParam(value = "stdId") String stdId) {
+    public ResponseEntity<ResponseDTO> createActivity(@RequestParam(value = "stdId") String stdId) {
 
-        Map<String, Object> response = new HashMap<>();
+        List<PartnerDTO.PartnerListRes> partnerListRes = activityCreationService.createActivity(stdId);
 
-        response.put("status", 200);
-        response.put("message", "파트너 리스트 불러오기 완료");
-
-        List<ActivityDTO> activity = activityService.createActivity(stdId);
-
-        if (activity == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "파트너가 존재하지 않습니다.", 400L);
-        }
-
-        List<Map<String, Object>> partners = new ArrayList<>();
-        activity.forEach(a -> {
-
-            String years = a.getPartnerBirth().substring(2, 4);
-            Map<String, Object> partner = new HashMap<>();
-            partner.put("partnerName", a.getPartnerName());
-            partner.put("partnerDetail", a.getPartnerDetail());
-            partner.put("partnerDivision", a.getActivityDivision());
-            partner.put("partnerBirth", years);
-            partner.put("partnerId", a.getPartnerId());
-
-            partners.add(partner);
-        });
-
-        response.put("partners", partners);
-
-        return response;
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("파트너 리스트 불러오기 완료")
+                .data(partnerListRes)
+                .build());
     }
 
     // 활동 생성 완료
     @PostMapping("/activity/createActivity")
-    public ResponseEntity<Message> createActivityDone(@RequestParam(value = "partnerId") Long partnerId,
-            @RequestParam(value = "stdId") String stdId, @RequestParam(value = "startPhoto") MultipartFile startPhoto) {
+    public ResponseEntity<ResponseDTO> createActivityDone(@ModelAttribute ActivityDTO.ActivityCreationReq activityCreationReq) {
 
-        Long result = activityService.createActivityDone(partnerId, stdId, startPhoto);
+        Long activityId = activityCreationService.createActivityDone(activityCreationReq);
 
-        if (result == 404L) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 파트너입니다.", 404L);
-        }
-
-        if (result == 405L) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다.", 405L);
-        }
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("activityId", result);
-
-        Message resBody = new Message();
-        resBody.setMessage("저장이 완료 되었습니다.");
-        resBody.setData(response);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("활동 생성 완료")
+                .data(activityId)
+                .build());
     }
 
+    // MediaType.MULTIPART_FORM_DATA_VALUE
     // 활동 종료
-    @PostMapping(value = "/activity/end", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Message> endActivity(@ModelAttribute ActivityEndDTO activityEndDTO) {
+    @PostMapping(value = "/activity/end")
+    public ResponseEntity<ResponseDTO> endActivity(@ModelAttribute ActivityDTO.ActivityEndReq activityEndReq) {
 
-        String[] map = null;
-        if (activityEndDTO.getMap() != null) {
-            map = activityEndDTO.getMap().substring(1, activityEndDTO.getMap().length() - 1).replace("{", "")
-                    .replace("}", "").split(",");
-        }
+        Long result = activityEndService.endActivity(activityEndReq);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        LocalDateTime activityEndTime = LocalDateTime.parse(activityEndDTO.getEndTime(), formatter);
+        if (result.equals(ErrorCode.ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_TIME.getCode()))
+            throw new ActivityAbnormalDoneWithoutMinimumTimeException();
+        else if (result.equals(ErrorCode.ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_DISTANCE.getCode()))
+            throw new ActivityAbnormalDoneWithoutMinimumDistanceException();
 
-        Long result = activityService.endActivity(activityEndTime, activityEndDTO.getEndPhoto(),
-                activityEndDTO.getActivityId(), activityEndDTO.getDistance(), map, activityEndDTO.getCheckNormalQuit());
-
-        if (result == 404L) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "활동이 존재하지 않습니다.", 404L);
-        }
-        if (result == 405L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "종료 사진이 전송되지 않았습니다.", 405L);
-        }
-        if (result == 406L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "맵 경로 사진이 전송되지 않았습니다.", 406L);
-        }
-        if (result == 407L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "이미 종료된 활동입니다.", 407L);
-        }
-
-        if (result == 500L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "최소 활동 시간을 초과하지 못했습니다.", 500L);
-        }
-        if (result == 501L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "최소 활동 거리를 초과하지 못했습니다.", 501L);
-        }
-        if (result == 502L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "활동이 비정상적으로 종료되었고 시간을 충족시키지 못했습니다.", 502L);
-        }
-        if (result == 503L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "활동이 비정상적으로 종료되었고 거리를 충족시키지 못했습니다.", 503L);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("저장이 완료 되었습니다.");
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("저장이 완료 되었습니다.")
+                .data(result)
+                .build());
     }
 
     // 활동 삭제
     @PostMapping("/activity/delete")
-    public ResponseEntity<Message> deleteActivity(@RequestParam(value = "activityId") Long activityId) {
+    public ResponseEntity<ResponseDTO> deleteActivity(@RequestParam(value = "activityId") Long activityId) {
 
-        Long result = activityService.deleteActivity(activityId);
+        Long result = activityDeleteService.deleteActivity(activityId);
 
-        if (result == 404L) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 활동입니다.", 404L);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("성공적으로 삭제 되었습니다.");
-        resBody.setData(activityId);
-        resBody.setStatus(200L);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("성공적으로 삭제 되었습니다.")
+                .data(result)
+                .build());
     }
 
     // 활동 비정상 종료시 학번 리턴
     @PostMapping("/returnId")
     public String tokenToStdId(@RequestBody TokenDTO tokenDTO) {
-
-        String stdId = activityService.tokenToStdId(tokenDTO);
-
-        return stdId;
+        return activityEndService.tokenToStdId(tokenDTO);
     }
 
 }

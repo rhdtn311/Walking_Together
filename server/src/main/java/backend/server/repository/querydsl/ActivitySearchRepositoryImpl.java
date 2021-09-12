@@ -147,7 +147,7 @@ public class ActivitySearchRepositoryImpl extends QuerydslRepositorySupport impl
         return tuple.fetch().get(0);
     }
 
-    // 활동 중인 활동이 있는지 확인
+    // 진행 중인 활동이 있는지 확인
     @Override
     public boolean findDoingActivity(String stdId) {
         QMember member = QMember.member;
