@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 // 활동 후 경로 캡쳐
+@Table(name = "map_capture")
 public class MapCapture {
 
 

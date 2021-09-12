@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Entity
+@Table(name = "notice")
 public class Notice extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

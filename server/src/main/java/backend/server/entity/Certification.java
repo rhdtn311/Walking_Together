@@ -13,6 +13,7 @@ import java.time.LocalTime;
 @ToString
 @Getter
 @Entity
+@Table(name = "certification")
 public class Certification {
 
     @Id 
