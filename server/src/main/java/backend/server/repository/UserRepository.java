@@ -1,8 +1,6 @@
 package backend.server.repository;
 
 import backend.server.entity.Member;
-import backend.server.repository.querydsl.MemberSearchRepository;
-import org.hibernate.sql.Select;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<Member, Long>, MemberSearchRepository {
+public interface UserRepository extends JpaRepository<Member, Long> {
 
     // 쿼리가 수행될 때 Eager 조회로 authorities 정보를 가져오게 된다.
     @EntityGraph(attributePaths = "authorities")

@@ -72,7 +72,7 @@ const UserInfo = () => {
                                         <td>{data.department}</td>
                                         <td>{data.email}</td>
                                         <td>{data.birth}</td>
-                                        <td>{data.pNumber}</td>
+                                        <td>{data.phoneNumber}</td>
                                     </tr>
                                 )
                             })

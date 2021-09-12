@@ -1,14 +1,12 @@
-package backend.server.service;
+package backend.server.service.admin;
 
-import backend.server.DTO.admin.ActivityDetailInfoDTO;
-import backend.server.DTO.admin.ActivityInfoDTO;
-import backend.server.DTO.admin.MemberInfoDTO;
-import backend.server.DTO.admin.PartnerInfoDTO;
+import backend.server.DTO.admin.*;
 import backend.server.entity.Activity;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.MapCaptureRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.UserRepository;
+import backend.server.repository.querydsl.AdminQueryRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,27 +26,7 @@ public class AdminService {
     private final ActivityRepository activityRepository;
     private final PartnerRepository partnerRepository;
     private final MapCaptureRepository mapCaptureRepository;
-
-    // 학생정보조회
-    public List<MemberInfoDTO> userInfo(String keyword) {
-
-        List<Tuple> tuples = userRepository.memberDetail(keyword);
-        List<MemberInfoDTO> stdList = new ArrayList<>();
-
-        tuples.forEach(i -> {
-            MemberInfoDTO dto = MemberInfoDTO.builder()
-                    .stdName(i.get(0, String.class))
-                    .stdId(i.get(1, String.class))
-                    .stdDepartment(i.get(2, String.class))
-                    .stdEmail(i.get(3, String.class))
-                    .stdBirth(i.get(4, String.class))
-                    .pNumber(i.get(5, String.class))
-                    .build();
-            stdList.add(dto);
-        });
-
-        return stdList;
-    }
+    private final AdminQueryRepository adminQueryRepository;
 
     // 활동정보조회
     public List<ActivityInfoDTO> activityInfo(String keyword,

@@ -1,12 +1,12 @@
 package backend.server.controller;
 
-import backend.server.DTO.admin.ActivityDetailInfoDTO;
-import backend.server.DTO.admin.ActivityInfoDTO;
-import backend.server.DTO.admin.MemberInfoDTO;
-import backend.server.DTO.admin.PartnerInfoDTO;
+import backend.server.DTO.PartnerDTO;
+import backend.server.DTO.admin.*;
+import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
-import backend.server.service.AdminService;
+import backend.server.service.admin.AdminService;
+import backend.server.service.admin.MemberInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,32 +26,18 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     private final AdminService adminService;
+    private final MemberInfoService memberInfoService;
 
     // 학생정보조회
     @GetMapping("/admin/userinfo")
-    public ResponseEntity<Message> userInfo(@RequestParam(value = "keyword") @Nullable String keyword) {
+    public ResponseEntity<ResponseDTO> getMemberInfo(@RequestParam(value = "keyword") @Nullable String keyword) {
 
-        List<MemberInfoDTO> stdList = adminService.userInfo(keyword);
+        List<AdminDTO.MemberResDTO> memberInfo = memberInfoService.getMemberInfo(keyword);
 
-        List<HashMap<String, Object>> data = stdList.stream().map(student -> {
-            HashMap<String, Object> value = new HashMap<>();
-
-            value.put("name", student.getStdName());
-            value.put("stdId", student.getStdId());
-            value.put("department", student.getStdDepartment());
-            value.put("email", student.getStdEmail());
-            value.put("birth", student.getStdBirth());
-            value.put("pNumber", student.getPNumber());
-
-            return value;
-
-        }).collect(Collectors.toList());
-
-        Message resBody = new Message();
-        resBody.setMessage("조회 완료");
-        resBody.setData(data);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("조회 완료")
+                .data(memberInfo)
+                .build());
     }
 
     // 활동정보조회
