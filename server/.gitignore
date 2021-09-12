@@ -36,6 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
+### Qclass ###
+build/generated
 
 ### application.properties ###
 src/main/resources/application.properties
