@@ -1,11 +1,17 @@
 package backend.server.entity;
 
+import backend.server.exception.ErrorCode;
+import backend.server.exception.activityService.ActivityAbnormalDoneWithoutMinimumDistanceException;
+import backend.server.exception.activityService.ActivityAbnormalDoneWithoutMinimumTimeException;
+import backend.server.exception.activityService.MinimumActivityDistanceNotSatisfyException;
+import backend.server.exception.activityService.MinimumActivityTimeNotSatisfyException;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 
 @NoArgsConstructor
@@ -13,6 +19,7 @@ import java.time.LocalTime;
 @Builder
 @Getter
 @Entity
+@Table(name = "activity")
 public class Activity extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,6 +73,52 @@ public class Activity extends BaseEntity {
     public void changeCareTime(LocalTime careTime) { this.careTime = careTime;}
 
     // 일반 환산 시간
-    public void changeOrdinaryTime(LocalTime ordinaryTime) {this.ordinaryTime = ordinaryTime;}
+    public void changeOrdinaryTime(LocalTime ordinaryTime) {
+        this.ordinaryTime = ordinaryTime;}
 
+    // 활동 검증
+    public long checkAndSaveActivity(Long distance, int checkNormalQuit, LocalDateTime activityEndTime) {
+        long minutes = ChronoUnit.MINUTES.between(this.startTime, activityEndTime);
+        if (minutes < 30) {
+            if (checkNormalQuit == 0) {
+                throw new MinimumActivityTimeNotSatisfyException();
+            } else if (checkNormalQuit == 1) {
+                this.saveAbnormalActivity(activityEndTime);
+                return ErrorCode.ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_TIME.getCode();
+            }
+        }
+
+        int minimumDistance = this.activityDivision == 0 ? 4000 : 2000;
+        if (distance < minimumDistance) {
+            if (checkNormalQuit == 0) {
+                throw new MinimumActivityDistanceNotSatisfyException();
+            } else {
+                this.saveAbnormalActivity(activityEndTime);
+                return ErrorCode.ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_DISTANCE.getCode();
+            }
+        }
+        return 0;
+    }
+
+    public void saveAbnormalActivity(LocalDateTime activityEndTime) {
+        this.changeActivityStatus(0);
+        this.changeEndTime(activityEndTime);
+        this.changeOrdinaryTime(LocalTime.of(0,0));
+        this.changeCareTime(LocalTime.of(0,0));
+        this.changeDistance(0L);
+    }
+
+    // 활동의 환산 시간 변경
+    public void changeTotalTime() {
+        int totalMinutes = (int) ChronoUnit.MINUTES.between(this.getStartTime(), this.getEndTime());
+        int totalHours = (int) ChronoUnit.HOURS.between(this.getStartTime(), this.getEndTime());
+        int minutes = (totalMinutes - (60 * totalHours) < 30) ? 0 : 30;
+
+        LocalTime totalTime = LocalTime.of(totalHours, minutes);
+        if (this.getActivityDivision() == 0) {
+            this.changeOrdinaryTime(totalTime);
+        } else {
+            this.changeCareTime(totalTime);
+        }
+    }
 }

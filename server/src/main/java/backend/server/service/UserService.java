@@ -44,7 +44,7 @@ public class UserService {
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .birth(userDto.getBirth())
                 .email(userDto.getEmail())
-                .totalTime(LocalTime.of(0,0))
+                .totalTime(0)
                 .activate(true)
                 .department(userDto.getDepartment())
                 .phoneNumber(userDto.getPhoneNumber())

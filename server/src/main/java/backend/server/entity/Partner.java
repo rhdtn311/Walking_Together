@@ -1,5 +1,6 @@
 package backend.server.entity;
 
+import backend.server.DTO.PartnerDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,9 +12,11 @@ import java.util.List;
 @Builder
 @ToString(exclude = "member")
 @Entity
+@Table(name = "partner")
 public class Partner {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long partnerId; // 파트너 id
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -70,4 +73,7 @@ public class Partner {
         this.partnerBirth = partnerBirth;
     }
 
+    public PartnerDTO.PartnerListRes toPartnerListResDTO() {
+        return new PartnerDTO.PartnerListRes(this);
+    }
 }

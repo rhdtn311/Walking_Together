@@ -15,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "member")
 public class Member extends BaseEntity {
 
     @Id
@@ -38,7 +39,7 @@ public class Member extends BaseEntity {
 
     private Long distance;    // 총거리
 
-    private LocalTime totalTime;   // 총 환산시간
+    private int totalTime;   // 총 환산시간
 
     private String profilePicture;  // 프로필사진 URL
 
@@ -68,10 +69,21 @@ public class Member extends BaseEntity {
         this.department = department;
     }
 
-    // 총 거리 수정
-    public void changeDistance(Long distance) { this.distance = distance;}
+    // 총 거리 증가
+    public void addDistance(Long distance) {this.distance += distance;}
+    // 총 거리 감소
+    public void minusDistance(Long distance) {this.distance -= distance;}
 
     // 총 환산 시간 수정
-    public void changeTotalTime(LocalTime totalTime) {this.totalTime = totalTime;}
+    public void changeTotalTime(Activity activity, String cal) {
+        int hours = activity.getActivityDivision() == 0 ? activity.getOrdinaryTime().getHour() : activity.getCareTime().getHour();
+        int minutes = activity.getActivityDivision() == 0 ? activity.getOrdinaryTime().getMinute() : activity.getCareTime().getMinute();
 
+        int totalMinutes = hours * 60 + minutes;
+        if (cal.equals("plus")) {
+            this.totalTime += totalMinutes;
+        } else {
+            this.totalTime -= totalMinutes;
+        }
+    }
 }
