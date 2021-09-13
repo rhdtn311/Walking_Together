@@ -13,7 +13,7 @@ public class MemberInfoService {
 
     private final AdminQueryRepository adminQueryRepository;
     // 학생정보조회
-    public List<AdminDTO.MemberResDTO> getMemberInfo(String keyword) {
+    public List<AdminDTO.MemberInfoResDTO> getMemberInfo(String keyword) {
         return adminQueryRepository.findMemberInfo(keyword);
     }
 }
