@@ -32,7 +32,7 @@ public class AdminController {
     @GetMapping("/admin/userinfo")
     public ResponseEntity<ResponseDTO> getMemberInfo(@RequestParam(value = "keyword") @Nullable String keyword) {
 
-        List<AdminDTO.MemberResDTO> memberInfo = memberInfoService.getMemberInfo(keyword);
+        List<AdminDTO.MemberInfoResDTO> memberInfo = memberInfoService.getMemberInfo(keyword);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("조회 완료")
@@ -42,50 +42,14 @@ public class AdminController {
 
     // 활동정보조회
     @GetMapping("/admin/activityInfo")
-    public ResponseEntity<Message> activityInfo(@RequestParam(value = "keyword") @Nullable String keyword,
-                                                @RequestParam(value = "from") @Nullable String from,
-                                                @RequestParam(value = "to") @Nullable String to,
-                                                @RequestParam(value = "activityDivision") @Nullable int activityDivision) {
-        LocalDate fromDate = LocalDate.of(2020, 01, 01);
-        LocalDate toDate = LocalDate.of(2030, 01, 01);
+    public ResponseEntity<ResponseDTO> getActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
 
-        if (from != null || to != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            fromDate = LocalDate.parse(from, formatter);
-            toDate = LocalDate.parse(to, formatter);
-        }
+        List<AdminDTO.ActivityInfoResDTO> activityInfoQueryResDTOS = adminService.getActivityInfo(activityInfoReqDTO);
 
-        List<ActivityInfoDTO> activityList = adminService.activityInfo(keyword, fromDate, toDate, activityDivision);
-
-        List<HashMap<String, Object>> data = activityList.stream().map(activity -> {
-            HashMap<String, Object> value = new HashMap<>();
-
-            String activityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-            String startTime = activity.getActivityStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-            String endTime = null;
-            if (activity.getEndTime() != null) {
-                endTime = activity.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-            }
-
-            value.put("stdName", activity.getStdName());
-            value.put("department", activity.getDepartment());
-            value.put("stdId", activity.getStdId());
-            value.put("activityDate", activityDate);
-            value.put("startTime", startTime);
-            value.put("activityId", activity.getActivityId());
-            value.put("endTime", endTime);
-            value.put("totalDistance", activity.getDistance());
-            value.put("partnerName", activity.getPartnerName());
-
-            return value;
-
-        }).collect(Collectors.toList());
-
-        Message resBody = new Message();
-        resBody.setData(data);
-        resBody.setMessage("조회 완료");
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("조회 완료")
+                .data(activityInfoQueryResDTOS)
+                .build());
     }
 
     // 특정 활동 상세 조회

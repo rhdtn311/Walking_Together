@@ -29,30 +29,8 @@ public class AdminService {
     private final AdminQueryRepository adminQueryRepository;
 
     // 활동정보조회
-    public List<ActivityInfoDTO> activityInfo(String keyword,
-                                              LocalDate from,
-                                              LocalDate to,
-                                              int activityDivision) {
-        List<Tuple> tuples = activityRepository.activityInfo(keyword, from, to, activityDivision);
-        List<ActivityInfoDTO> activityList = new ArrayList<>();
-
-        tuples.forEach(activity -> {
-            ActivityInfoDTO dto = ActivityInfoDTO.builder()
-                    .stdName(activity.get(0, String.class))
-                    .department(activity.get(1, String.class))
-                    .stdId(activity.get(2, String.class))
-                    .activityDate(activity.get(3, LocalDate.class))
-                    .activityStartTime(activity.get(4, LocalDateTime.class))
-                    .activityId(activity.get(5, Long.class))
-                    .endTime(activity.get(6, LocalDateTime.class))
-                    .distance(activity.get(7, Long.class))
-                    .partnerName(activity.get(8, String.class))
-                    .build();
-
-            activityList.add(dto);
-        });
-
-        return activityList;
+    public List<AdminDTO.ActivityInfoResDTO> getActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
+        return adminQueryRepository.findActivityInfo(activityInfoReqDTO);
     }
 
     //활동 정보 세부 조회
