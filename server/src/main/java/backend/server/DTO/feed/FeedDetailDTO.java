@@ -1,10 +1,12 @@
 package backend.server.DTO.feed;
 
+import backend.server.entity.MapCapture;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,5 +27,5 @@ public class FeedDetailDTO {
 
     private String review;
 
-    private ArrayList<Object> mapPicture;
+    private List<MapCapture> mapPicture;
 }

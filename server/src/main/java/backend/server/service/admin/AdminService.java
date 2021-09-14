@@ -2,6 +2,8 @@ package backend.server.service.admin;
 
 import backend.server.DTO.admin.*;
 import backend.server.entity.Activity;
+import backend.server.entity.MapCapture;
+import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.MapCaptureRepository;
 import backend.server.repository.PartnerRepository;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -27,48 +30,6 @@ public class AdminService {
     private final PartnerRepository partnerRepository;
     private final MapCaptureRepository mapCaptureRepository;
     private final AdminQueryRepository adminQueryRepository;
-
-    // 활동정보조회
-    public List<AdminDTO.ActivityInfoResDTO> getActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
-        return adminQueryRepository.findActivityInfo(activityInfoReqDTO);
-    }
-
-    //활동 정보 세부 조회
-    public ActivityDetailInfoDTO activityDetail(Long activityId) {
-
-        List<Tuple> tuples = activityRepository.activityDetail(activityId);
-        Optional<Activity> activityOptional = activityRepository.findById(activityId);
-        if(activityOptional.isEmpty()) {
-            return null;
-        }
-        Activity activity = activityOptional.get();
-
-        if(tuples.isEmpty()) {
-            return null;
-        }
-
-        Tuple tuple = tuples.get(0);
-
-        // member.name, member.department, member.stdId, activity.activityDate,
-        //                partner.partnerName, activity.review, activity.distance, activity.startTime, activity.endTime
-
-        ArrayList<Object> mapPicture = mapCaptureRepository.findAllByActivityId(activityId);
-        ActivityDetailInfoDTO  result = ActivityDetailInfoDTO.builder()
-                .stdName(tuple.get(0,String.class))
-                .department(tuple.get(1,String.class))
-                .stdId(tuple.get(2, String.class))
-                .activityDate(tuple.get(3, LocalDate.class))
-                .partnerName(tuple.get(4, String.class))
-                .review(tuple.get(5, String.class))
-                .totalDistance(tuple.get(6, Long.class))
-                .startTime(tuple.get(7, LocalDateTime.class))
-                .endTime(tuple.get(8, LocalDateTime.class))
-                .totalTime(activity.getActivityDivision() == 0? activity.getOrdinaryTime():activity.getCareTime())
-                .mapPicture(mapPicture)
-                .build();
-
-        return result;
-    }
 
     // 파트너 정보 조회
     public List<PartnerInfoDTO> partnerInfo(String keyword, String partnerDetail) {

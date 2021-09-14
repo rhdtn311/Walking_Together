@@ -1,9 +1,14 @@
 package backend.server.repository.querydsl;
 
 import backend.server.DTO.admin.AdminDTO;
+import backend.server.DTO.admin.MapCaptureDTO;
+import backend.server.entity.*;
+import backend.server.exception.activityService.ActivityNotFoundException;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,10 +17,9 @@ import org.thymeleaf.util.StringUtils;
 import static backend.server.entity.QMember.member;
 import static backend.server.entity.QActivity.activity;
 import static backend.server.entity.QPartner.partner;
+import static backend.server.entity.QMapCapture.mapCapture;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +29,7 @@ public class AdminQueryRepository {
 
     private final JPQLQueryFactory queryFactory;
 
+    // 회원 정보 조회
     public List<AdminDTO.MemberInfoResDTO> findMemberInfo(String keyword) {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
@@ -51,6 +56,7 @@ public class AdminQueryRepository {
         return member.stdId.contains(keyword);
     }
 
+    // 활동 정보 조회
     public List<AdminDTO.ActivityInfoResDTO> findActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
@@ -81,5 +87,41 @@ public class AdminQueryRepository {
     public BooleanExpression betweenDate(LocalDate from, LocalDate to) {
 
         return activity.activityDate.between(from, to);
+    }
+
+    // 활동 세부 정보 조회
+    public AdminDTO.ActivityDetailInfoResDTO findActivityDetailInfo(Long activityId) {
+
+        AdminDTO.ActivityDetailInfoResDTO activityDetailInfoResDTO = queryFactory.select(Projections.constructor(AdminDTO.ActivityDetailInfoResDTO.class,
+                member.name, member.department, member.stdId, partner.partnerName, activity.review,
+                activity.activityDate, activity.startTime, activity.endTime, activity.distance))
+                .from(activity)
+                .leftJoin(member).on(activity.member.eq(member))
+                .leftJoin(partner).on(activity.partner.eq(partner))
+                .where(activity.activityId.eq(activityId))
+                .fetchOne();
+
+        List<MapCapture> mapCaptures = findMapCaptures(activityId);
+        activityDetailInfoResDTO.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(mapCaptures));
+
+        Activity activityEntity = findActivity(activityId);
+        activityDetailInfoResDTO.setTotalTime(activityEntity.getActivityDivision() == 0 ? activityEntity.getOrdinaryTime() : activityEntity.getCareTime());
+
+        return activityDetailInfoResDTO;
+    }
+
+    public List<MapCapture> findMapCaptures(Long activityId) {
+        return queryFactory.select(mapCapture)
+                .from(mapCapture)
+                .leftJoin(activity).on(mapCapture.activityId.eq(activity.activityId))
+                .where(mapCapture.activityId.eq(activityId))
+                .fetch();
+    }
+
+    public Activity findActivity(Long activityId) {
+        return queryFactory.select(activity)
+                .from(activity)
+                .where(activity.activityId.eq(activityId))
+                .fetchOne();
     }
 }

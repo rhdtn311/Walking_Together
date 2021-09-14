@@ -5,6 +5,7 @@ import backend.server.DTO.feed.FeedDTO;
 import backend.server.DTO.feed.FeedDetailDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.Certification;
+import backend.server.entity.MapCapture;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.CertificationRepository;
 import backend.server.repository.MapCaptureRepository;
@@ -59,7 +60,7 @@ public class FeedService {
 
         Tuple result = activityRepository.feedDetail(activityId);
 
-        ArrayList<Object> mapPicture = mapCaptureRepository.findAllByActivityId(activityId);
+        List<MapCapture> mapPicture = mapCaptureRepository.findAllByActivityId(activityId);
 
         FeedDetailDTO dto = FeedDetailDTO.builder()
                 .activityDate(result.get(0, LocalDate.class))

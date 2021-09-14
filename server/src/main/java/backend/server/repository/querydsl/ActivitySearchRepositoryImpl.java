@@ -20,27 +20,6 @@ public class ActivitySearchRepositoryImpl extends QuerydslRepositorySupport impl
     // 관리자 - 활동조회
 
     // 활동 상세 조회 ( 나중에 )
-    @Override
-    public List<Tuple> activityDetail(Long activityId) {
-
-        QActivity activity = QActivity.activity;
-        QMember member = QMember.member;
-        QPartner partner = QPartner.partner;
-
-        JPQLQuery<Activity> jpqlQuery = from(activity);
-
-        jpqlQuery.leftJoin(member).on(activity.member.eq(member));
-        jpqlQuery.leftJoin(partner).on(activity.partner.eq(partner));
-
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(member.name, member.department, member.stdId, activity.activityDate,
-                partner.partnerName, activity.review, activity.distance, activity.startTime, activity.endTime);
-
-        tuple.where(activity.activityId.eq(activityId));
-
-        List<Tuple> result = tuple.fetch();
-
-        return result;
-    }
 
     // 피드 메인
     @Override

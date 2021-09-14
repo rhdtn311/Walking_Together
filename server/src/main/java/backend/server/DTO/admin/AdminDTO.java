@@ -1,11 +1,13 @@
 package backend.server.DTO.admin;
 
-import com.querydsl.core.annotations.QueryProjection;
+import backend.server.entity.MapCapture;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class AdminDTO {
 
@@ -124,6 +126,46 @@ public class AdminDTO {
             this.startTime = startTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
             this.endTime = endTime == null ? null : endTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
             this.totalDistance = totalDistance;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class ActivityDetailInfoResDTO {
+        private String stdName;
+        private String department;
+        private String stdId;
+        private String partnerName;
+        private String review;
+        private LocalDate activityDate;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private Long totalDistance;
+
+        private List<MapCaptureDTO.MapCaptureResDTO> mapPicture;
+        private LocalTime totalTime;
+
+        @Builder
+        public ActivityDetailInfoResDTO(String stdName, String department, String stdId, String partnerName,
+                                        String review, LocalDate activityDate, LocalDateTime startTime,
+                                        LocalDateTime endTime, Long totalDistance) {
+            this.stdName = stdName;
+            this.department = department;
+            this.stdId = stdId;
+            this.partnerName = partnerName;
+            this.review = review;
+            this.activityDate = activityDate;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.totalDistance = totalDistance;
+        }
+
+        public void setTotalTime(LocalTime totalTime) {
+            this.totalTime = totalTime;
+        }
+
+        public void setMapPicture(List<MapCaptureDTO.MapCaptureResDTO> mapCaptureResDTOS) {
+            this.mapPicture = mapCaptureResDTOS;
         }
     }
 }

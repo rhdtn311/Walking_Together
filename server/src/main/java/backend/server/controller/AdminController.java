@@ -5,6 +5,7 @@ import backend.server.DTO.admin.*;
 import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
+import backend.server.service.admin.ActivityInfoService;
 import backend.server.service.admin.AdminService;
 import backend.server.service.admin.MemberInfoService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final MemberInfoService memberInfoService;
+    private final ActivityInfoService activityInfoService;
 
     // 학생정보조회
     @GetMapping("/admin/userinfo")
@@ -44,29 +46,22 @@ public class AdminController {
     @GetMapping("/admin/activityInfo")
     public ResponseEntity<ResponseDTO> getActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
 
-        List<AdminDTO.ActivityInfoResDTO> activityInfoQueryResDTOS = adminService.getActivityInfo(activityInfoReqDTO);
-
+        List<AdminDTO.ActivityInfoResDTO> activityInfo = activityInfoService.getActivityInfo(activityInfoReqDTO);
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("조회 완료")
-                .data(activityInfoQueryResDTOS)
+                .data(activityInfo)
                 .build());
     }
 
     // 특정 활동 상세 조회
     @GetMapping("/admin/activityInfo/detail")
-    public ResponseEntity<Message> activityInfoDetail(Long activityId) {
+    public ResponseEntity<ResponseDTO> getActivityInfoDetail(Long activityId) {
 
-        ActivityDetailInfoDTO result = adminService.activityDetail(activityId);
-
-        if (result == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 활동입니다.", 404L);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("불러오기 완료");
-        resBody.setData(result);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        AdminDTO.ActivityDetailInfoResDTO activityDetailInfo = activityInfoService.getActivityDetailInfo(activityId);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("조회 완료")
+                .data(activityDetailInfo)
+                .build());
     }
 
     // 파트너 정보 조회
