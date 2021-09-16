@@ -1,4 +1,4 @@
-package backend.server.DTO;
+package backend.server.DTO.activity;
 
 import backend.server.entity.Partner;
 import lombok.AccessLevel;

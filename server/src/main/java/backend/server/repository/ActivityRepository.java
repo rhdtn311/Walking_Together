@@ -1,6 +1,5 @@
 package backend.server.repository;
 
-import backend.server.DTO.PartnerDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.Partner;
 import backend.server.repository.querydsl.ActivitySearchRepository;

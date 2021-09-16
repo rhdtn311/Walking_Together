@@ -1,7 +1,7 @@
 package backend.server.service.activity;
 
-import backend.server.DTO.ActivityDTO;
-import backend.server.DTO.PartnerDTO;
+import backend.server.DTO.activity.ActivityDTO;
+import backend.server.DTO.activity.PartnerDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
@@ -15,7 +15,6 @@ import backend.server.s3.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;

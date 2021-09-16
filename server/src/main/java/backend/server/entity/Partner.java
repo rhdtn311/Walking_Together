@@ -1,6 +1,6 @@
 package backend.server.entity;
 
-import backend.server.DTO.PartnerDTO;
+import backend.server.DTO.activity.PartnerDTO;
 import lombok.*;
 
 import javax.persistence.*;
