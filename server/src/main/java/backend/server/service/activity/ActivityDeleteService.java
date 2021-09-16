@@ -26,8 +26,11 @@ public class ActivityDeleteService {
         }
         Activity activity = activityOptional.get();
         Member member = activity.getMember();
-        member.minusDistance(activity.getDistance());
-        member.changeTotalTime(activity, "minus");
+
+        if (!activity.isActive()) {
+            member.minusDistance(activity.getDistance());
+            member.changeTotalTime(activity, "minus");
+        }
 
         certificationDeleteService.deleteCertification(activityId);
         mapCaptureDeleteService.deleteMapCaptures(activityId);
