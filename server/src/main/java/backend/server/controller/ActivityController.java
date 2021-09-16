@@ -4,24 +4,16 @@ import backend.server.DTO.ActivityDTO;
 import backend.server.DTO.PartnerDTO;
 import backend.server.DTO.TokenDTO;
 import backend.server.DTO.response.ResponseDTO;
-import backend.server.exception.ApiException;
 import backend.server.exception.ErrorCode;
 import backend.server.exception.activityService.*;
-import backend.server.message.Message;
 import backend.server.service.activity.ActivityCreationService;
 import backend.server.service.activity.ActivityDeleteService;
 import backend.server.service.activity.ActivityEndService;
-import backend.server.service.activity.ActivityService;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -67,6 +59,11 @@ public class ActivityController {
             throw new ActivityAbnormalDoneWithoutMinimumTimeException();
         else if (result.equals(ErrorCode.ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_DISTANCE.getCode()))
             throw new ActivityAbnormalDoneWithoutMinimumDistanceException();
+        else if (result.equals(ErrorCode.MINIMUM_ACTIVITY_TIME_NOT_SATISFY.getCode()))
+            throw new MinimumActivityTimeNotSatisfyException();
+        else if (result.equals(ErrorCode.MINIMUM_ACTIVITY_DISTANCE_NOT_SATISFY.getCode())) {
+            throw new MinimumActivityDistanceNotSatisfyException();
+        }
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("저장이 완료 되었습니다.")

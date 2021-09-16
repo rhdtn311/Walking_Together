@@ -43,9 +43,7 @@ public class ActivityEndService {
             throw new ActivityAlreadyDoneException();
         }
 
-        long checkActivityResult = activity.checkAndSaveActivity(activityEndReq.getDistance(),
-                activityEndReq.getCheckNormalQuit(),
-                activityEndReq.getActivityEndTime());
+        long checkActivityResult = activity.checkAndSaveActivity(activityEndReq.getDistance(),activityEndReq.getCheckNormalQuit(),activityEndReq.getActivityEndTime());
         if (checkActivityResult != 0) {
             return checkActivityResult;
         }

@@ -78,12 +78,13 @@ public class Activity extends BaseEntity {
 
     // 활동 검증
     public long checkAndSaveActivity(Long distance, int checkNormalQuit, LocalDateTime activityEndTime) {
+        this.saveAbnormalActivity(activityEndTime);
+
         long minutes = ChronoUnit.MINUTES.between(this.startTime, activityEndTime);
         if (minutes < 30) {
             if (checkNormalQuit == 0) {
-                throw new MinimumActivityTimeNotSatisfyException();
+                return ErrorCode.MINIMUM_ACTIVITY_TIME_NOT_SATISFY.getCode();
             } else if (checkNormalQuit == 1) {
-                this.saveAbnormalActivity(activityEndTime);
                 return ErrorCode.ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_TIME.getCode();
             }
         }
@@ -91,9 +92,8 @@ public class Activity extends BaseEntity {
         int minimumDistance = this.activityDivision == 0 ? 4000 : 2000;
         if (distance < minimumDistance) {
             if (checkNormalQuit == 0) {
-                throw new MinimumActivityDistanceNotSatisfyException();
+                return ErrorCode.MINIMUM_ACTIVITY_DISTANCE_NOT_SATISFY.getCode();
             } else {
-                this.saveAbnormalActivity(activityEndTime);
                 return ErrorCode.ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_DISTANCE.getCode();
             }
         }
@@ -120,5 +120,10 @@ public class Activity extends BaseEntity {
         } else {
             this.changeCareTime(totalTime);
         }
+    }
+
+    // 활동 중인지 확인
+    public boolean isActive() {
+        return this.getActivityStatus() != 0;
     }
 }
