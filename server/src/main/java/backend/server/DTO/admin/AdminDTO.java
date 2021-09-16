@@ -168,4 +168,30 @@ public class AdminDTO {
             this.mapPicture = mapCaptureResDTOS;
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class PartnerInfoResDTO {
+        private String stdId;
+        private String stdName;
+        private String department;
+        private String partnerName;
+        private String partnerBirth;
+        private String gender;
+        private String relation;
+        private int partnerDivision;
+
+        @Builder
+        public PartnerInfoResDTO(String stdId, String stdName, String partnerName, String department,
+                                 String partnerBirth, String gender, String relation, int partnerDivision) {
+            this.stdId = stdId;
+            this.stdName = stdName;
+            this.partnerName = partnerName;
+            this.department = department;
+            this.partnerBirth = partnerBirth;
+            this.gender = gender;
+            this.relation = relation;
+            this.partnerDivision = partnerDivision;
+        }
+    }
 }

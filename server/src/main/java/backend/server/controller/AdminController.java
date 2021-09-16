@@ -1,41 +1,32 @@
 package backend.server.controller;
 
-import backend.server.DTO.PartnerDTO;
 import backend.server.DTO.admin.*;
 import backend.server.DTO.response.ResponseDTO;
-import backend.server.exception.ApiException;
-import backend.server.message.Message;
 import backend.server.service.admin.ActivityInfoService;
-import backend.server.service.admin.AdminService;
 import backend.server.service.admin.MemberInfoService;
+import backend.server.service.admin.PartnerInfoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
 public class AdminController {
 
-    private final AdminService adminService;
     private final MemberInfoService memberInfoService;
     private final ActivityInfoService activityInfoService;
+    private final PartnerInfoService partnerInfoService;
 
     // 학생정보조회
     @GetMapping("/admin/userinfo")
     public ResponseEntity<ResponseDTO> getMemberInfo(@RequestParam(value = "keyword") @Nullable String keyword) {
 
         List<AdminDTO.MemberInfoResDTO> memberInfo = memberInfoService.getMemberInfo(keyword);
-
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("조회 완료")
                 .data(memberInfo)
@@ -66,31 +57,13 @@ public class AdminController {
 
     // 파트너 정보 조회
     @GetMapping("/admin/partnerInfo")
-    public ResponseEntity<Message> partnerInfo(@RequestParam(value = "keyword") @Nullable String keyword,
+    public ResponseEntity<ResponseDTO> getPartnerInfo(@RequestParam(value = "keyword") @Nullable String keyword,
                                                @RequestParam(value = "partnerDetail") @Nullable String partnerDetail) {
 
-        List<PartnerInfoDTO> partnerList = adminService.partnerInfo(keyword, partnerDetail);
-
-        List<HashMap<String, Object>> data = partnerList.stream().map(partner -> {
-            HashMap<String, Object> value = new HashMap<>();
-
-            value.put("stdName", partner.getStdName());
-            value.put("stdId", partner.getStdId());
-            value.put("department", partner.getDepartment());
-            value.put("partnerName", partner.getPartnerName());
-            value.put("gender", partner.getPartnerGender());
-            value.put("partnerBirth", partner.getPartnerBirth());
-            value.put("relation", partner.getRelationship());
-            value.put("partnerDivision", partner.getPartnerDivision());
-
-            return value;
-
-        }).collect(Collectors.toList());
-
-        Message resBody = new Message();
-        resBody.setData(data);
-        resBody.setMessage("조회 완료");
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        List<AdminDTO.PartnerInfoResDTO> partners = partnerInfoService.getPartnerInfo(keyword, partnerDetail);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("조회 완료")
+                .data(partners)
+                .build());
     }
 }

@@ -3,12 +3,9 @@ package backend.server.repository.querydsl;
 import backend.server.DTO.admin.AdminDTO;
 import backend.server.DTO.admin.MapCaptureDTO;
 import backend.server.entity.*;
-import backend.server.exception.activityService.ActivityNotFoundException;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -123,5 +120,23 @@ public class AdminQueryRepository {
                 .from(activity)
                 .where(activity.activityId.eq(activityId))
                 .fetchOne();
+    }
+
+    public List<AdminDTO.PartnerInfoResDTO> findPartnerInfo(String keyword, String partnerDetail) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.or(eqName(keyword)).or(eqStdId(keyword)).and(eqPartnerDetail(partnerDetail));
+
+        return queryFactory.select(Projections.constructor(AdminDTO.PartnerInfoResDTO.class,
+                member.stdId, member.name, member.department, partner.partnerName,
+                partner.partnerBirth, partner.gender, partner.relationship, partner.partnerDivision))
+                .from(partner)
+                .leftJoin(member).on(member.eq(partner.member))
+                .where(booleanBuilder)
+                .orderBy(member.name.asc())
+                .fetch();
+    }
+
+    public BooleanExpression eqPartnerDetail(String partnerDetail) {
+        return partner.partnerDetail.eq(partnerDetail);
     }
 }
