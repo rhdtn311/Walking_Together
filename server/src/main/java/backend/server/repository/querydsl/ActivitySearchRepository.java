@@ -12,7 +12,7 @@ public interface ActivitySearchRepository {
 
 //    public List<Tuple> activityDetail(Long activityId);
 
-    public List<Tuple> feed(String stdId, String sort);
+//    public List<Tuple> feed(String stdId, String sort);
 
     public Tuple feedDetail(Long activityId);
 

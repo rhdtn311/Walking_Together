@@ -1,4 +1,4 @@
-package backend.server.service;
+package backend.server.service.feed;
 
 import backend.server.DTO.CertificationDTO;
 import backend.server.DTO.feed.FeedDTO;
@@ -10,6 +10,7 @@ import backend.server.repository.ActivityRepository;
 import backend.server.repository.CertificationRepository;
 import backend.server.repository.MapCaptureRepository;
 import backend.server.repository.UserRepository;
+import backend.server.repository.querydsl.FeedQueryRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,28 +27,7 @@ public class FeedService {
     private final ActivityRepository activityRepository;
     private final CertificationRepository certificationRepository;
     private final MapCaptureRepository mapCaptureRepository;
-
-    // 피드
-    public List<FeedDTO> feedMain(String stdId, String sort) {
-
-        List<Tuple> tuples = activityRepository.feed(stdId, sort);
-        System.out.println(tuples);
-        List<FeedDTO> result = new ArrayList<>();
-
-        tuples.forEach( tuple -> {
-            FeedDTO dto = FeedDTO.builder()
-                    .activityStatus(tuple.get(0, Integer.class))
-                    .distance(tuple.get(1, Long.class))
-                    .partnerName(tuple.get(2, String.class))
-                    .activityDate(tuple.get(3, LocalDate.class))
-                    .activityDivision(tuple.get(4, Integer.class))
-                    .activityId(tuple.get(5, Long.class))
-                    .build();
-            result.add(dto);
-        });
-
-        return result;
-    }
+    private final FeedQueryRepository feedQueryRepository;
 
     // 피드 상세
     public FeedDetailDTO feedDetail(Long activityId) {

@@ -22,35 +22,7 @@ public class ActivitySearchRepositoryImpl extends QuerydslRepositorySupport impl
     // 활동 상세 조회 ( 나중에 )
 
     // 피드 메인
-    @Override
-    public List<Tuple> feed(String stdId, String sort) {
 
-        QMember member = QMember.member;
-        QActivity activity = QActivity.activity;
-        QPartner partner = QPartner.partner;
-
-        JPQLQuery<Activity> jpqlQuery = from(activity);
-        jpqlQuery.leftJoin(member).on(member.eq(activity.member));
-        jpqlQuery.leftJoin(partner).on(partner.eq(activity.partner));
-
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(activity.activityStatus, activity.distance, partner.partnerName,
-                activity.activityDate,activity.activityDivision, activity.activityId);
-
-        tuple.where(activity.activityId.gt(0L));
-        tuple.where(activity.member.stdId.eq(stdId));
-
-        tuple.orderBy(activity.activityStatus.desc());
-
-        if (sort.equals("desc")) {
-            tuple.orderBy(activity.activityDate.desc());
-        } else if (sort.equals("asc")) {
-            tuple.orderBy(activity.activityDate.asc());
-        }
-
-        List<Tuple> result = tuple.fetch();
-
-        return result;
-    }
 
     // 피드 상세
     @Override

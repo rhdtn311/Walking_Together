@@ -2,9 +2,11 @@ package backend.server.controller;
 
 import backend.server.DTO.feed.FeedDTO;
 import backend.server.DTO.feed.FeedDetailDTO;
+import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
-import backend.server.service.FeedService;
+import backend.server.service.feed.FeedMainService;
+import backend.server.service.feed.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,19 +24,18 @@ import java.util.Map;
 public class FeedController {
 
     private final FeedService feedService;
+    private final FeedMainService feedMainService;
 
     // 피드 메인
     @GetMapping("/feed")
-    public ResponseEntity<Message> feedMain(@RequestParam(value = "stdId") String stdId,
-                                            @RequestParam(value = "sort") String sort) {
+    public ResponseEntity<ResponseDTO> getFeedMain(@RequestParam(value = "stdId") String stdId,
+                                                   @RequestParam(value = "sort") String sort) {
+        List<FeedDTO.FeedMainResDTO> feedMain = feedMainService.getFeedMain(stdId, sort);
 
-        List<FeedDTO> feedDTO = feedService.feedMain(stdId, sort);
-
-        Message resBody = new Message();
-        resBody.setData(feedDTO);
-        resBody.setMessage("조회 완료");
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("조회 완료")
+                .data(feedMain)
+                .build());
     }
 
     // 피드 상세
