@@ -1,9 +1,11 @@
 package backend.server.DTO.feed;
 
+import backend.server.DTO.common.MapCaptureDTO;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -44,6 +46,34 @@ public class FeedDTO {
             this.activityDate = activityDate;
             this.activityDivision = activityDivision;
             this.partnerName = partnerName;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class FeedDetailResDTO {
+        private LocalDate activityDate;
+        private String partnerName;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private int activityDivision;
+        private String review;
+
+        private List<MapCaptureDTO.MapCaptureResDTO> mapPicture;
+
+        @Builder
+        public FeedDetailResDTO(LocalDate activityDate, String partnerName, LocalDateTime startTime,
+                                LocalDateTime endTime, int activityDivision, String review) {
+            this.activityDate = activityDate;
+            this.partnerName = partnerName;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.activityDivision = activityDivision;
+            this.review = review;
+        }
+
+        public void setMapPicture(List<MapCaptureDTO.MapCaptureResDTO> mapPicture) {
+            this.mapPicture = mapPicture;
         }
     }
 }

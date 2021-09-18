@@ -23,27 +23,7 @@ public class ActivitySearchRepositoryImpl extends QuerydslRepositorySupport impl
 
     // 피드 메인
 
-
     // 피드 상세
-    @Override
-    public Tuple feedDetail(Long activityId) {
-        QMember member = QMember.member;
-        QActivity activity = QActivity.activity;
-        QPartner partner = QPartner.partner;
-        QMapCapture mapCapture = QMapCapture.mapCapture;
-
-        JPQLQuery<Activity> jpqlQuery = from(activity);
-        jpqlQuery.leftJoin(member).on(member.eq(activity.member));
-        jpqlQuery.leftJoin(partner).on(partner.eq(activity.partner));
-        jpqlQuery.leftJoin(mapCapture).on(activity.activityId.eq(mapCapture.activityId));
-
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(activity.activityDate, activity.partner.partnerName, activity.startTime, activity.endTime,
-                activity.activityDivision, activity.review);
-
-        tuple.where(activity.activityId.eq(activityId));
-
-        return tuple.fetch().get(0);
-    }
 
     // 진행 중인 활동이 있는지 확인
     @Override

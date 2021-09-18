@@ -14,7 +14,7 @@ public interface ActivitySearchRepository {
 
 //    public List<Tuple> feed(String stdId, String sort);
 
-    public Tuple feedDetail(Long activityId);
+//    public Tuple feedDetail(Long activityId);
 
     public boolean findDoingActivity(String stdId);
 }

@@ -5,6 +5,7 @@ import backend.server.DTO.feed.FeedDetailDTO;
 import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
+import backend.server.service.feed.FeedDetailService;
 import backend.server.service.feed.FeedMainService;
 import backend.server.service.feed.FeedService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class FeedController {
 
     private final FeedService feedService;
     private final FeedMainService feedMainService;
+    private final FeedDetailService feedDetailService;
 
     // 피드 메인
     @GetMapping("/feed")
@@ -40,18 +42,13 @@ public class FeedController {
 
     // 피드 상세
     @GetMapping("/feed/detail")
-    public ResponseEntity<Message> feedDetail(@RequestParam("activityId") Long activityId) {
+    public ResponseEntity<ResponseDTO> feedDetail(@RequestParam("activityId") Long activityId) {
+        FeedDTO.FeedDetailResDTO feedDetail = feedDetailService.getFeedDetail(activityId);
 
-        FeedDetailDTO data = feedService.feedDetail(activityId);
-        if(data == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 활동입니다.", 404L);
-        }
-
-        Message resBody = new Message();
-        resBody.setData(data);
-        resBody.setMessage("조회 완료");
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("조회 완료")
+                .data(feedDetail)
+                .build());
     }
 
     // 소감문

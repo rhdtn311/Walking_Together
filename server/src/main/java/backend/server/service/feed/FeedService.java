@@ -1,23 +1,17 @@
 package backend.server.service.feed;
 
 import backend.server.DTO.CertificationDTO;
-import backend.server.DTO.feed.FeedDTO;
 import backend.server.DTO.feed.FeedDetailDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.Certification;
-import backend.server.entity.MapCapture;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.CertificationRepository;
 import backend.server.repository.MapCaptureRepository;
-import backend.server.repository.UserRepository;
 import backend.server.repository.querydsl.FeedQueryRepository;
-import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -29,31 +23,6 @@ public class FeedService {
     private final MapCaptureRepository mapCaptureRepository;
     private final FeedQueryRepository feedQueryRepository;
 
-    // 피드 상세
-    public FeedDetailDTO feedDetail(Long activityId) {
-
-        Optional<Activity> activityOptional = activityRepository.findById(activityId);
-
-        if(activityOptional.isEmpty()) {
-            return null;
-        }
-
-        Tuple result = activityRepository.feedDetail(activityId);
-
-        List<MapCapture> mapPicture = mapCaptureRepository.findAllByActivityId(activityId);
-
-        FeedDetailDTO dto = FeedDetailDTO.builder()
-                .activityDate(result.get(0, LocalDate.class))
-                .partnerName(result.get(1, String.class))
-                .startTime(result.get(2, LocalDateTime.class))
-                .endTime(result.get(3, LocalDateTime.class))
-                .activityDivision(result.get(4, Integer.class))
-                .review(result.get(5, String.class))
-                .mapPicture(mapPicture)
-                .build();
-
-        return dto;
-    }
 
     @Transactional
     public Long activityReview(Long activityId, FeedDetailDTO feedDTO) {
