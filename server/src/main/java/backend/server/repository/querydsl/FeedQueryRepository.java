@@ -20,7 +20,7 @@ public class FeedQueryRepository {
 
     private final JPQLQueryFactory queryFactory;
 
-    public List<FeedDTO.FeedMainResDTO> findFeedMainInfo(String stdId, String sort) {
+    public List<FeedDTO.FeedMainResDTO> findFeedMain(String stdId, String sort) {
 
         return  queryFactory.select(Projections.constructor(FeedDTO.FeedMainResDTO.class,
                 activity.activityId, activity.activityStatus, activity.distance, activity.activityDate,
@@ -39,6 +39,8 @@ public class FeedQueryRepository {
         }
         return member.stdId.eq(stdId);
     }
+
+//    public List<FeedDTO.FeedDetailResDTO> findFeedDetailInfo
 }
 
 

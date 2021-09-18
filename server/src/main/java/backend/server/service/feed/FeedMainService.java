@@ -15,6 +15,6 @@ public class FeedMainService {
 
     // 피드
     public List<FeedDTO.FeedMainResDTO> getFeedMain(String stdId, String sort) {
-        return feedQueryRepository.findFeedMainInfo(stdId, sort);
+        return feedQueryRepository.findFeedMain (stdId, sort);
     }
 }
