@@ -1,7 +1,7 @@
 package backend.server.repository.querydsl;
 
 import backend.server.DTO.admin.AdminDTO;
-import backend.server.DTO.admin.MapCaptureDTO;
+import backend.server.DTO.common.MapCaptureDTO;
 import backend.server.entity.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;

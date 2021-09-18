@@ -1,4 +1,4 @@
-package backend.server.DTO.admin;
+package backend.server.DTO.common;
 
 import backend.server.entity.MapCapture;
 import lombok.Builder;

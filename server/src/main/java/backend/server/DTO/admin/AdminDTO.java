@@ -1,6 +1,6 @@
 package backend.server.DTO.admin;
 
-import backend.server.entity.MapCapture;
+import backend.server.DTO.common.MapCaptureDTO;
 import lombok.*;
 
 import java.time.LocalDate;

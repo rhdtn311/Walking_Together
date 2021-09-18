@@ -1,6 +1,6 @@
 package backend.server.entity;
 
-import backend.server.DTO.admin.MapCaptureDTO;
+import backend.server.DTO.common.MapCaptureDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
