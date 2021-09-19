@@ -13,7 +13,11 @@ public enum ErrorCode {
     ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_TIME(502L, "활동이 비정상적으로 종료되었고 시간을 충족시키지 못했습니다.", 400),
     ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_DISTANCE(503L,"활동이 비정상적으로 종료되었고 거리를 충족시키지 못했습니다.",400),
     ACTIVITY_DONE_PHOTO_NOT_SEND(405L, "종료 사진이 전송되지 않았습니다.", 400),
-    ACTIVITY_MAP_PHOTO_NOT_SEND(406L, "맵 경로 사진이 전송되지 않았습니다.", 400);
+    ACTIVITY_MAP_PHOTO_NOT_SEND(406L, "맵 경로 사진이 전송되지 않았습니다.", 400),
+
+    // Feed
+    REVIEW_NOT_RECEIVE(405L, "소감문을 작성해주세요.", 405),
+    ACTIVE_ACTIVITY_NOT_WRITE_REVIEW(406L, "진행 중인 활동은 소감문 작성이 불가능합니다.", 400);
 
     private final Long code;
     private final String message;

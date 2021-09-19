@@ -4,6 +4,8 @@ import backend.server.DTO.CertificationDTO;
 import backend.server.DTO.feed.FeedDetailDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.Certification;
+import backend.server.exception.activityService.ActivityNotFoundException;
+import backend.server.exception.feedService.ActiveActivityNotWriteReviewException;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.CertificationRepository;
 import backend.server.repository.MapCaptureRepository;
@@ -22,32 +24,6 @@ public class FeedService {
     private final CertificationRepository certificationRepository;
     private final MapCaptureRepository mapCaptureRepository;
     private final FeedQueryRepository feedQueryRepository;
-
-
-    @Transactional
-    public Long activityReview(Long activityId, FeedDetailDTO feedDTO) {
-
-        Optional<Activity> activityOptional = activityRepository.findById(activityId);
-
-        if(activityOptional.isEmpty()) {
-            return 404L;
-        }
-
-        if (feedDTO.getReview() == null) {
-            return 405L;
-        }
-
-        Activity activity = activityOptional.get();
-
-        if(activity.getActivityStatus() == 1) {
-            return 406L;
-        }
-
-        activity.changeReview(feedDTO.getReview());
-        System.out.println(feedDTO.getReview());
-
-        return activityId;
-    }
 
     @Transactional
     public Map<String, Object> getCertification(String from, String to, String stdId) {

@@ -33,6 +33,7 @@ public class Activity extends BaseEntity {
     @JoinColumn(name = "partner_id")
     private Partner partner;
 
+    @Column(columnDefinition = "text")
     private String review;  // 소감문
 
     private LocalDate activityDate; // 활동 날짜

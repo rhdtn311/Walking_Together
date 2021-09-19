@@ -4,9 +4,11 @@ import backend.server.DTO.feed.FeedDTO;
 import backend.server.DTO.feed.FeedDetailDTO;
 import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.ApiException;
+import backend.server.exception.feedService.ReviewNotReceiveException;
 import backend.server.message.Message;
 import backend.server.service.feed.FeedDetailService;
 import backend.server.service.feed.FeedMainService;
+import backend.server.service.feed.FeedReviewService;
 import backend.server.service.feed.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ public class FeedController {
     private final FeedService feedService;
     private final FeedMainService feedMainService;
     private final FeedDetailService feedDetailService;
+    private final FeedReviewService feedReviewService;
 
     // 피드 메인
     @GetMapping("/feed")
@@ -53,31 +56,32 @@ public class FeedController {
 
     // 소감문
     @PostMapping("/feed/detail/review")
-    public ResponseEntity<Message> feedReview(@RequestParam(value="activityId") Long activityId,
+    public ResponseEntity<ResponseDTO> writeFeedReview(@RequestParam(value="activityId") Long activityId,
                                           @RequestParam(value = "review") @Nullable String review) {
 
-        FeedDetailDTO dto = FeedDetailDTO.builder()
-                .review(review).build();
-
-        Long result = feedService.activityReview(activityId, dto);
-
-        if(result == 404L) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 활동입니다.", 400L);
+        feedReviewService.writeActivityReview(activityId, review);
+        if (review == null) {
+            throw new ReviewNotReceiveException();
         }
 
-        if(result ==405L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "소감문을 작성해주세요.", 405L);
-        }
-
-        if(result ==406L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "진행 중인 활동은 소감문 작성이 불가능합니다.", 406L);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("소감문 저장 완료");
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("소감문 저장 완료")
+                .data(activityId)
+                .build());
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // 인증서
     @PostMapping("/feed/certification")
