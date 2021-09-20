@@ -1,17 +1,14 @@
 package backend.server.controller;
 
+import backend.server.DTO.common.CertificationDTO;
 import backend.server.DTO.feed.FeedDTO;
-import backend.server.DTO.feed.FeedDetailDTO;
 import backend.server.DTO.response.ResponseDTO;
-import backend.server.exception.ApiException;
 import backend.server.exception.feedService.ReviewNotReceiveException;
-import backend.server.message.Message;
+import backend.server.service.feed.FeedCertificationService;
 import backend.server.service.feed.FeedDetailService;
 import backend.server.service.feed.FeedMainService;
 import backend.server.service.feed.FeedReviewService;
-import backend.server.service.feed.FeedService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,17 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
 public class FeedController {
 
-    private final FeedService feedService;
     private final FeedMainService feedMainService;
     private final FeedDetailService feedDetailService;
     private final FeedReviewService feedReviewService;
+    private final FeedCertificationService feedCertificationService;
 
     // 피드 메인
     @GetMapping("/feed")
@@ -58,7 +56,6 @@ public class FeedController {
     @PostMapping("/feed/detail/review")
     public ResponseEntity<ResponseDTO> writeFeedReview(@RequestParam(value="activityId") Long activityId,
                                           @RequestParam(value = "review") @Nullable String review) {
-
         feedReviewService.writeActivityReview(activityId, review);
         if (review == null) {
             throw new ReviewNotReceiveException();
@@ -70,25 +67,18 @@ public class FeedController {
                 .build());
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     // 인증서
     @PostMapping("/feed/certification")
-    public Map<String, Object> createCertification(String stdId, String from, String to) {
+    public ResponseEntity<ResponseDTO> createCertification(String stdId, String from, String to) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDate fromDate = LocalDate.parse(from, formatter);
+        LocalDate toDate = LocalDate.parse(to, formatter);
 
-        Map<String, Object> certification = feedService.getCertification(from, to, stdId);
+        FeedDTO.CertificationResDTO certification = feedCertificationService.getCertification(fromDate, toDate, stdId);
 
-        return certification;
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("발급 완료")
+                .data(certification)
+                .build());
     }
 }

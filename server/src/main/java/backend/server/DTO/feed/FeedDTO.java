@@ -1,5 +1,6 @@
 package backend.server.DTO.feed;
 
+import backend.server.DTO.common.CertificationDTO;
 import backend.server.DTO.common.MapCaptureDTO;
 import lombok.*;
 
@@ -75,5 +76,45 @@ public class FeedDTO {
         public void setMapPicture(List<MapCaptureDTO.MapCaptureResDTO> mapPicture) {
             this.mapPicture = mapPicture;
         }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    public static class CertificationResDTO {
+        List<CertificationDTO> eachCertificationInfos;
+        String ordinaryTimes;
+        String careTimes;
+        String totalTime;
+
+        @Builder
+        public CertificationResDTO(List<CertificationDTO> certificationDTOList) {
+            this.eachCertificationInfos = certificationDTOList;
+
+            this.ordinaryTimes = getOrdinaryTime(certificationDTOList);
+            this.careTimes = getCareTime(certificationDTOList);
+            this.totalTime = getTotalTime(certificationDTOList);
+        }
+
+        public String getOrdinaryTime(List<CertificationDTO> certificationDTOList) {
+            int hours = certificationDTOList.stream().mapToInt(dto -> dto.getOrdinaryTime().getHour()).sum();
+            int minutes = certificationDTOList.stream().mapToInt(dto -> dto.getOrdinaryTime().getMinute()).sum();
+
+            return String.format("%02d", (hours + (minutes / 60))) + ":" + String.format("%02d", minutes % 60);
+        }
+
+        public String getCareTime(List<CertificationDTO> certificationDTOList) {
+            int hours = certificationDTOList.stream().mapToInt(dto -> dto.getCareTime().getHour()).sum();
+            int minutes = certificationDTOList.stream().mapToInt(dto -> dto.getCareTime().getMinute()).sum();
+
+            return String.format("%02d", (hours + (minutes / 60))) + ":" + String.format("%02d", minutes % 60);
+        }
+
+        public String getTotalTime(List<CertificationDTO> certificationDTOList) {
+            int hours = certificationDTOList.stream().mapToInt(dto -> dto.getOrdinaryTime().getHour() + dto.getCareTime().getHour()).sum();
+            int minutes = certificationDTOList.stream().mapToInt(dto -> dto.getOrdinaryTime().getMinute() + dto.getCareTime().getMinute()).sum();
+
+            return String.format("%02d", (hours + (minutes / 60))) + ":" + String.format("%02d", minutes % 60);
+        }
+
     }
 }

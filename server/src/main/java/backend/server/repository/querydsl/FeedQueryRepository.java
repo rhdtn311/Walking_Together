@@ -1,7 +1,9 @@
 package backend.server.repository.querydsl;
 
+import backend.server.DTO.common.CertificationDTO;
 import backend.server.DTO.common.MapCaptureDTO;
 import backend.server.DTO.feed.FeedDTO;
+import backend.server.entity.Certification;
 import backend.server.entity.MapCapture;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -10,12 +12,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.thymeleaf.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static backend.server.entity.QMember.member;
 import static backend.server.entity.QActivity.activity;
 import static backend.server.entity.QPartner.partner;
 import static backend.server.entity.QMapCapture.mapCapture;
+import static backend.server.entity.QCertification.certification;
 
 @RequiredArgsConstructor
 @Repository
@@ -71,6 +75,26 @@ public class FeedQueryRepository {
             return null;
         }
         return activity.activityId.eq(activityId);
+    }
+
+    public List<CertificationDTO> findCertification(LocalDate from, LocalDate to, String stdId) {
+        List<Certification> certificationList = queryFactory.select(certification)
+                .from(certification)
+                .where(eqCertificationStdId(stdId).and(betweenDate(from, to)))
+                .fetch();
+
+        return CertificationDTO.toDTOList(certificationList);
+    }
+
+    public BooleanExpression eqCertificationStdId(String stdId) {
+        if (StringUtils.isEmpty(stdId)) {
+            return null;
+        }
+        return certification.stdId.eq(stdId);
+    }
+
+    public BooleanExpression betweenDate(LocalDate from, LocalDate to) {
+        return certification.activityDate.between(from, to);
     }
 }
 
