@@ -149,7 +149,7 @@ public class FileUploadService {
     // 프로필 사진 삭제
     public void deleteProfilePictures(String stdId) {
 
-        MemberProfilePictures profilePictures = memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId);
+        MemberProfilePictures profilePictures = memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId).get();
 
         s3Service.deleteFile(profilePictures.getProfilePictureName());
     }

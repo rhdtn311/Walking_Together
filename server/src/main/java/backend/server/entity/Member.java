@@ -1,5 +1,6 @@
 package backend.server.entity;
 
+import backend.server.DTO.myPage.MyPageDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -85,5 +86,13 @@ public class Member extends BaseEntity {
         } else {
             this.totalTime -= totalMinutes;
         }
+    }
+
+    public MyPageDTO.MyPageMainResDTO toMyPageMainResDTO() {
+        return MyPageDTO.MyPageMainResDTO.builder()
+                .name(this.name)
+                .department(this.department)
+                .totalTime(this.totalTime)
+                .build();
     }
 }

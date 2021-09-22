@@ -1,13 +1,15 @@
 package backend.server.controller;
 
+import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.DTO.myPage.MyPageMemberDTO;
 import backend.server.DTO.myPage.MyPagePartnerDTO;
+import backend.server.DTO.response.ResponseDTO;
 import backend.server.entity.MemberProfilePictures;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
 import backend.server.repository.MemberProfilePicturesRepository;
-import backend.server.s3.FileUploadService;
-import backend.server.service.MyPageService;
+import backend.server.service.mypage.MyPageMainService;
+import backend.server.service.mypage.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.sound.midi.MetaMessage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,34 +30,16 @@ import java.util.Map;
 public class MyPageController {
 
     private final MyPageService myPageService;
-    private final MemberProfilePicturesRepository profilePicturesRepository;
+    private final MyPageMainService myPageMainService;
 
     @GetMapping("/mypage")
-    public ResponseEntity<Message> myPageMain(@RequestParam(value = "stdId") String stdId) {
+    public ResponseEntity<ResponseDTO> getMyPageMain(@RequestParam(value = "stdId") String stdId) {
+        MyPageDTO.MyPageMainResDTO member = myPageMainService.getMyPageMain(stdId);
 
-        MyPageMemberDTO member = myPageService.myPageMain(stdId);
-
-        if (member == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND,"일치하는 회원이 없습니다.", 400L);
-        }
-
-        MemberProfilePictures profilePicture = profilePicturesRepository.findMemberProfilePicturesByStdId(stdId);
-
-        System.out.println(profilePicture);
-        Map<String, Object> data = new HashMap<>();
-        data.put("name", member.getName());
-        data.put("department", member.getDepartment());
-        data.put("totalTime", member.getTotalTime());
-        if(profilePicture!=null) {
-            data.put("profilePicture", profilePicture.getProfilePictureUrl());
-        } else {
-            data.put("profilePicture", null);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("불러오기 성공");
-        resBody.setData(data);
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("조회 성공")
+                .data(member)
+                .build());
     }
 
     // 마이페이지-변경

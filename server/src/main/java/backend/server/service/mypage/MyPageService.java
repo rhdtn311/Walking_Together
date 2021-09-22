@@ -1,4 +1,4 @@
-package backend.server.service;
+package backend.server.service.mypage;
 
 import backend.server.DTO.myPage.MyPageMemberDTO;
 import backend.server.DTO.myPage.MyPagePartnerDTO;
@@ -28,31 +28,6 @@ public class MyPageService {
     private final FileUploadService fileUploadService;
 
     private final PasswordEncoder passwordEncoder;
-
-    // 마이페이지 메인
-    @Transactional(readOnly = true)
-    public MyPageMemberDTO myPageMain(String stdId) {
-        Optional<Member> memberByStdId = userRepository.findMemberByStdId(stdId);
-
-        if(memberByStdId.isEmpty()) {
-            return null;
-        }
-
-        Member memberEntity = memberByStdId.get();
-        MyPageMemberDTO member = memberToDTO(memberEntity);
-
-        return member;
-    }
-
-    private MyPageMemberDTO memberToDTO(Member member) {
-
-        return MyPageMemberDTO.builder()
-                .name(member.getName())
-                .department(member.getDepartment())
-                .profilePicture(member.getProfilePicture())
-                .totalTime(member.getTotalTime())
-                .build();
-    }
 
     // 마이페이지 - 변경
     @Transactional
@@ -85,11 +60,11 @@ public class MyPageService {
         }
 
         if (profilePicture != null) {
-            if(memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId) == null) {
+            if (memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId).isEmpty()) {
                 fileUploadService.uploadProfilePictures(profilePicture, stdId);
             } else {
                 MemberProfilePictures profilePictures =
-                        memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId);
+                        memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId).get();
 
                 fileUploadService.deleteProfilePictures(stdId);
                 memberProfilePicturesRepository.delete(profilePictures);
