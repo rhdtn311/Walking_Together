@@ -1,23 +1,18 @@
 package backend.server.controller;
 
 import backend.server.DTO.myPage.MyPageDTO;
-import backend.server.DTO.myPage.MyPageMemberDTO;
 import backend.server.DTO.myPage.MyPagePartnerDTO;
 import backend.server.DTO.response.ResponseDTO;
-import backend.server.entity.MemberProfilePictures;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
-import backend.server.repository.MemberProfilePicturesRepository;
+import backend.server.service.mypage.MyPageChangeService;
 import backend.server.service.mypage.MyPageMainService;
 import backend.server.service.mypage.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -31,6 +26,7 @@ public class MyPageController {
 
     private final MyPageService myPageService;
     private final MyPageMainService myPageMainService;
+    private final MyPageChangeService myPageChangeService;
 
     @GetMapping("/mypage")
     public ResponseEntity<ResponseDTO> getMyPageMain(@RequestParam(value = "stdId") String stdId) {
@@ -44,22 +40,13 @@ public class MyPageController {
 
     // 마이페이지-변경
     @PostMapping("/mypage/change")
-    public ResponseEntity<Message> myPageChange(@RequestParam(value = "stdId") @Nullable String stdId,
-                                            @RequestParam(value = "password") @Nullable String password,
-                                            @RequestParam(value = "department") @Nullable String department,
-                                            @RequestParam(value = "profilePicture")@Nullable  MultipartFile profilePicture)
-    {
-        String updateResult = myPageService.update(stdId, password, department, profilePicture);
+    public ResponseEntity<ResponseDTO> changeMemberInfo (MyPageDTO.MyPageChangeReqDTO myPageChangeReqDTO) {
+        String changeMemberStdId = myPageChangeService.changeMemberInfo(myPageChangeReqDTO);
 
-        if (updateResult == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "회원 정보 찾을 수 없음", 400L);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("회원 정보 수정 완료");
-        resBody.setData(stdId);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("회원 정보 수정 완료")
+                .data(changeMemberStdId)
+                .build());
     }
 
     // 마이페이지 - 파트너

@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -119,14 +120,19 @@ public class FileUploadService {
     public void saveProfilePictures(String fileName, String stdId) {
 
         String fileUrl = s3Service.getFileUrl(fileName);
+        if (memberProfilePicturesRepository.existsMemberProfilePicturesByStdId(stdId)) {
+            MemberProfilePictures memberProfilePicture = memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId).get();
+            memberProfilePicture.changeFileName(fileName);
+            memberProfilePicture.changeFileUrl(fileUrl);
+        } else {
+            MemberProfilePictures entity = MemberProfilePictures.builder()
+                    .profilePictureName(fileName)
+                    .profilePictureUrl(fileUrl)
+                    .stdId(stdId)
+                    .build();
 
-        MemberProfilePictures entity = MemberProfilePictures.builder()
-                .profilePictureName(fileName)
-                .profilePictureUrl(fileUrl)
-                .stdId(stdId)
-                .build();
-
-        memberProfilePicturesRepository.save(entity);
+            memberProfilePicturesRepository.save(entity);
+        }
     }
 
     // 프로필 사진을 S3서버에 업로드
@@ -152,6 +158,11 @@ public class FileUploadService {
         MemberProfilePictures profilePictures = memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId).get();
 
         s3Service.deleteFile(profilePictures.getProfilePictureName());
+    }
+
+    public void updateProfilePictures(MultipartFile profilePicture, String stdId) {
+        deleteProfilePictures(stdId);
+        uploadProfilePictures(profilePicture, stdId);
     }
 
     // 파트너 사진 파일을 DB에 저장

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface MemberProfilePicturesRepository extends JpaRepository<MemberProfilePictures, Long> {
 
     public Optional<MemberProfilePictures> findMemberProfilePicturesByStdId(String stdId);
+
+    public boolean existsMemberProfilePicturesByStdId(String stdId);
 }

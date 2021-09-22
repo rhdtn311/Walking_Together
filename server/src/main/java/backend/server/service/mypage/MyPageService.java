@@ -1,8 +1,10 @@
 package backend.server.service.mypage;
 
+import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.DTO.myPage.MyPageMemberDTO;
 import backend.server.DTO.myPage.MyPagePartnerDTO;
 import backend.server.entity.*;
+import backend.server.exception.activityService.MemberNotFoundException;
 import backend.server.repository.*;
 import backend.server.s3.FileUploadService;
 import lombok.RequiredArgsConstructor;
@@ -28,52 +30,6 @@ public class MyPageService {
     private final FileUploadService fileUploadService;
 
     private final PasswordEncoder passwordEncoder;
-
-    // 마이페이지 - 변경
-    @Transactional
-    public String update(String stdId, String password, String department, MultipartFile profilePicture) {
-
-        Optional<Member> findMember = userRepository.findMemberByStdId(stdId);
-
-        if (findMember.isEmpty()) {
-            return null;
-        }
-
-        Member member = findMember.get();
-
-        String changePassword = null;
-        if (password != null) {
-            changePassword = passwordEncoder.encode(password);
-        }
-
-        MyPageMemberDTO memberDTO = MyPageMemberDTO.builder()
-                .department(department)
-                .password(changePassword)
-                .build();
-
-        if (password != null) {
-            member.changePassword(memberDTO.getPassword());
-        }
-
-        if (department != null) {
-            member.changeDepartment(memberDTO.getDepartment());
-        }
-
-        if (profilePicture != null) {
-            if (memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId).isEmpty()) {
-                fileUploadService.uploadProfilePictures(profilePicture, stdId);
-            } else {
-                MemberProfilePictures profilePictures =
-                        memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId).get();
-
-                fileUploadService.deleteProfilePictures(stdId);
-                memberProfilePicturesRepository.delete(profilePictures);
-                fileUploadService.uploadProfilePictures(profilePicture, stdId);
-            }
-        }
-
-        return stdId;
-    }
 
     // 마이페이지- 파트너 (파트너 리스트 가져오기)
     @Transactional(readOnly = true)
