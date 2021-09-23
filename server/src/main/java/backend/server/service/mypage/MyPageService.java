@@ -5,6 +5,7 @@ import backend.server.DTO.myPage.MyPageMemberDTO;
 import backend.server.DTO.myPage.MyPagePartnerDTO;
 import backend.server.entity.*;
 import backend.server.exception.activityService.MemberNotFoundException;
+import backend.server.exception.activityService.PartnerNotFoundException;
 import backend.server.repository.*;
 import backend.server.repository.querydsl.MyPageQueryRepository;
 import backend.server.s3.FileUploadService;
@@ -33,27 +34,6 @@ public class MyPageService {
     private final FileUploadService fileUploadService;
 
     private final PasswordEncoder passwordEncoder;
-
-    // 마이페이지 - 파트너 세부 정보
-    @Transactional(readOnly = true)
-    public MyPagePartnerDTO myPagePartnerDetail(Long partnerId) {
-
-        Optional<Partner> partnerInformation = partnerRepository.getPartnerInformation(partnerId);
-
-        if (partnerInformation.isEmpty()) {
-            return null;
-        }
-        Partner partner = partnerInformation.get();
-
-        return MyPagePartnerDTO.builder()
-                .partnerName(partner.getPartnerName())
-                .partnerDetail(partner.getPartnerDetail())
-                .partnerBirth(partner.getPartnerBirth())
-                .gender(partner.getGender())
-                .selectionReason(partner.getSelectionReason())
-                .relationship(partner.getRelationship())
-                .build();
-    }
 
     // 마이페이지 - 파트너 생성
     @Transactional

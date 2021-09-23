@@ -1,5 +1,6 @@
 package backend.server.DTO.myPage;
 
+import backend.server.entity.Partner;
 import lombok.*;
 import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -78,7 +79,35 @@ public class MyPageDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class MyPageDetailResDTO {
+    public static class MyPagePartnerDetailResDTO {
+        private String partnerName;
+        private String partnerDetail;
+        private String partnerBirth;
+        private String gender;
+        private String selectionReason;
+        private String relationship;
 
+        @Builder
+        public MyPagePartnerDetailResDTO(String partnerName, String partnerDetail, String partnerBirth,
+                                         String gender, String selectionReason, String relationship) {
+            this.partnerName = partnerName;
+            this.partnerDetail = partnerDetail;
+            this.partnerBirth = partnerBirth;
+            this.gender = gender;
+            this.selectionReason = selectionReason;
+            this.relationship = relationship;
+        }
+
+        public static MyPagePartnerDetailResDTO partnerToMyPagePartnerDetailResDTO(Partner partner) {
+            return MyPagePartnerDetailResDTO
+                    .builder()
+                    .partnerName(partner.getPartnerName())
+                    .partnerDetail(partner.getPartnerDetail())
+                    .partnerBirth(partner.getPartnerBirth())
+                    .gender(partner.getGender())
+                    .selectionReason(partner.getSelectionReason())
+                    .relationship(partner.getRelationship())
+                    .build();
+        }
     }
 }

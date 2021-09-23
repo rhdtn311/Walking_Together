@@ -63,27 +63,13 @@ public class MyPageController {
 
     // 마이페이지 -파트너 detail
     @GetMapping("/mypage/partnerInfo/detail")
-    public ResponseEntity<Message> myPagePartnerDetail(@RequestParam(value = "partnerId") Long partnerId) {
+    public ResponseEntity<ResponseDTO> getMyPagePartnerDetail(@RequestParam(value = "partnerId") Long partnerId) {
+        MyPageDTO.MyPagePartnerDetailResDTO myPagePartnerDetail = myPagePartnerInfoService.getMyPagePartnerDetail(partnerId);
 
-        MyPagePartnerDTO myPagePartnerInfo = myPageService.myPagePartnerDetail(partnerId);
-
-        if(myPagePartnerInfo == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "파트너가 존재하지 않습니다.", 400L);
-        }
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("partnerName", myPagePartnerInfo.getPartnerName());
-        data.put("partnerDetail", myPagePartnerInfo.getPartnerDetail());
-        data.put("partnerBirth", myPagePartnerInfo.getPartnerBirth());
-        data.put("gender", myPagePartnerInfo.getGender());
-        data.put("selectionReason", myPagePartnerInfo.getSelectionReason());
-        data.put("relationship", myPagePartnerInfo.getRelationship());
-
-        Message resBody = new Message();
-        resBody.setMessage("파트너 세부 조회 완료");
-        resBody.setData(data);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("파트너 세부 조회 완료")
+                .data(myPagePartnerDetail)
+                .build());
     }
 
     // 마이페이지 - 파트너 생성
