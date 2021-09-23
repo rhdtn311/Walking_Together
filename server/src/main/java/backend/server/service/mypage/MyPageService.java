@@ -6,6 +6,7 @@ import backend.server.DTO.myPage.MyPagePartnerDTO;
 import backend.server.entity.*;
 import backend.server.exception.activityService.MemberNotFoundException;
 import backend.server.repository.*;
+import backend.server.repository.querydsl.MyPageQueryRepository;
 import backend.server.s3.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,29 +28,11 @@ public class MyPageService {
     private final MemberProfilePicturesRepository memberProfilePicturesRepository;
     private final PartnerPhotosRepository partnerPhotosRepository;
 
+    private final MyPageQueryRepository myPageQueryRepository;
+
     private final FileUploadService fileUploadService;
 
     private final PasswordEncoder passwordEncoder;
-
-    // 마이페이지- 파트너 (파트너 리스트 가져오기)
-    @Transactional(readOnly = true)
-    public List<MyPagePartnerDTO> myPagePartnerInfo(String stdId) {
-
-        List<List<Object>> partners = userRepository.getPartnerList(stdId);
-        List<MyPagePartnerDTO> partnerList = new ArrayList<>();
-
-        partners.forEach(partner -> {
-            MyPagePartnerDTO myPagePartnerDTO = new MyPagePartnerDTO();
-            myPagePartnerDTO.setPartnerName(partner.get(0).toString());
-            myPagePartnerDTO.setPartnerDetail(partner.get(1).toString());
-            myPagePartnerDTO.setPartnerBirth(partner.get(2).toString());
-            myPagePartnerDTO.setPartnerId((Long)partner.get(3));
-
-            partnerList.add(myPagePartnerDTO);
-        });
-
-        return partnerList;
-    }
 
     // 마이페이지 - 파트너 세부 정보
     @Transactional(readOnly = true)

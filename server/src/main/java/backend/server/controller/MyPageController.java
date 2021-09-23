@@ -7,6 +7,7 @@ import backend.server.exception.ApiException;
 import backend.server.message.Message;
 import backend.server.service.mypage.MyPageChangeService;
 import backend.server.service.mypage.MyPageMainService;
+import backend.server.service.mypage.MyPagePartnerInfoService;
 import backend.server.service.mypage.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final MyPageMainService myPageMainService;
     private final MyPageChangeService myPageChangeService;
+    private final MyPagePartnerInfoService myPagePartnerInfoService;
 
     @GetMapping("/mypage")
     public ResponseEntity<ResponseDTO> getMyPageMain(@RequestParam(value = "stdId") String stdId) {
@@ -51,33 +53,12 @@ public class MyPageController {
 
     // 마이페이지 - 파트너
     @GetMapping("/mypage/partnerInfo")
-    public Map<String, Object> myPagePartnerInfo(@RequestParam(value = "stdId") String stdId) {
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", 200);
-        response.put("message", "파트너 리스트 출력 완료");
-
-        List<MyPagePartnerDTO> myPagePartners = myPageService.myPagePartnerInfo(stdId);
-
-        if(myPagePartners.isEmpty()) {
-            throw new ApiException(HttpStatus.NO_CONTENT, "파트너가 존재하지 않습니다.", 204L);
-        }
-
-        List<Map<String,Object>> partnerList = new ArrayList<>();
-
-        myPagePartners.forEach(p -> {
-            HashMap<String, Object> partner = new HashMap<>();
-            partner.put("partnerId", p.getPartnerId());
-            partner.put("partnerName", p.getPartnerName());
-            partner.put("partnerDetail", p.getPartnerDetail());
-            partner.put("partnerBirth", p.getPartnerBirth());
-
-            partnerList.add(partner);
-        });
-
-        response.put("partnerList", partnerList);
-
-        return response;
+    public ResponseEntity<ResponseDTO> myPagePartnerInfo(@RequestParam(value = "stdId") String stdId) {
+        List<MyPageDTO.MyPageListResDTO> partnerList = myPagePartnerInfoService.getPartnerList(stdId);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("파트너 리스트 출력 완료")
+                .data(partnerList)
+                .build());
     }
 
     // 마이페이지 -파트너 detail
@@ -157,6 +138,7 @@ public class MyPageController {
 
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer birth = stringBuffer.append(partnerBirth);
+
         birth.replace(4,5,"/");
         birth.replace(7,8,"/");
 

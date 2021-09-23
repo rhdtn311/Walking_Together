@@ -1,12 +1,12 @@
 package backend.server.DTO.myPage;
 
-import backend.server.entity.Member;
 import lombok.*;
 import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 public class MyPageDTO {
 
@@ -56,6 +56,23 @@ public class MyPageDTO {
 
         public boolean isProfilePicturePresent() {
             return this.getProfilePicture() != null;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class MyPageListResDTO {
+        private String partnerName;
+        private Long partnerId;
+        private String partnerDetail;
+        private String partnerBirth;
+
+        @Builder
+        public MyPageListResDTO(String partnerName, Long partnerId, String partnerDetail, String partnerBirth) {
+            this.partnerName = partnerName;
+            this.partnerId = partnerId;
+            this.partnerDetail = partnerDetail;
+            this.partnerBirth = partnerBirth;
         }
     }
 }
