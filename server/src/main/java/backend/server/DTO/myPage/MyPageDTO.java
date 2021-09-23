@@ -61,18 +61,24 @@ public class MyPageDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class MyPageListResDTO {
+    public static class MyPagePartnerListResDTO {
         private String partnerName;
         private Long partnerId;
         private String partnerDetail;
         private String partnerBirth;
 
         @Builder
-        public MyPageListResDTO(String partnerName, Long partnerId, String partnerDetail, String partnerBirth) {
+        public MyPagePartnerListResDTO(String partnerName, Long partnerId, String partnerDetail, String partnerBirth) {
             this.partnerName = partnerName;
             this.partnerId = partnerId;
             this.partnerDetail = partnerDetail;
             this.partnerBirth = partnerBirth;
         }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class MyPageDetailResDTO {
+
     }
 }

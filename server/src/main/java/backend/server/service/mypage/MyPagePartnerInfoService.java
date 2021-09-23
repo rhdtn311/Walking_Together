@@ -15,7 +15,7 @@ public class MyPagePartnerInfoService {
     private final MyPageQueryRepository myPageQueryRepository;
 
     @Transactional(readOnly = true)
-    public List<MyPageDTO.MyPageListResDTO> getPartnerList(String stdId) {
+    public List<MyPageDTO.MyPagePartnerListResDTO> getPartnerList(String stdId) {
         return myPageQueryRepository.findPartnerList(stdId);
     }
 }

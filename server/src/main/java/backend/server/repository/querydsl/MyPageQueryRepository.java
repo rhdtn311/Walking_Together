@@ -19,8 +19,8 @@ public class MyPageQueryRepository {
 
     private final JPQLQueryFactory queryFactory;
 
-    public List<MyPageDTO.MyPageListResDTO> findPartnerList(String stdId) {
-        return queryFactory.select(Projections.constructor(MyPageDTO.MyPageListResDTO.class,
+    public List<MyPageDTO.MyPagePartnerListResDTO> findPartnerList(String stdId) {
+        return queryFactory.select(Projections.constructor(MyPageDTO.MyPagePartnerListResDTO.class,
                 partner.partnerName, partner.partnerId, partner.partnerDetail, partner.partnerBirth))
                 .from(partner)
                 .leftJoin(member).on(member.eq(partner.member))

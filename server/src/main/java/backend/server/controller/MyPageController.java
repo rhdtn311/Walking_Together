@@ -54,7 +54,7 @@ public class MyPageController {
     // 마이페이지 - 파트너
     @GetMapping("/mypage/partnerInfo")
     public ResponseEntity<ResponseDTO> myPagePartnerInfo(@RequestParam(value = "stdId") String stdId) {
-        List<MyPageDTO.MyPageListResDTO> partnerList = myPagePartnerInfoService.getPartnerList(stdId);
+        List<MyPageDTO.MyPagePartnerListResDTO> partnerList = myPagePartnerInfoService.getPartnerList(stdId);
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("파트너 리스트 출력 완료")
                 .data(partnerList)
