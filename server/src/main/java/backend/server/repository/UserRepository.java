@@ -27,6 +27,8 @@ public interface UserRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findMemberByStdId(String stdId);
 
+    boolean existsMemberByStdId(String stdId);
+
     @Query("SELECT p.partnerName, p.partnerDetail, p.partnerBirth, p.partnerId FROM Partner p LEFT JOIN p.member WHERE p.member.stdId = :stdId")
     List<List<Object>> getPartnerList(@Param("stdId") String stdId);
 }

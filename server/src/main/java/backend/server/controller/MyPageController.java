@@ -5,10 +5,7 @@ import backend.server.DTO.myPage.MyPagePartnerDTO;
 import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
-import backend.server.service.mypage.MyPageChangeService;
-import backend.server.service.mypage.MyPageMainService;
-import backend.server.service.mypage.MyPagePartnerInfoService;
-import backend.server.service.mypage.MyPageService;
+import backend.server.service.mypage.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +26,7 @@ public class MyPageController {
     private final MyPageMainService myPageMainService;
     private final MyPageChangeService myPageChangeService;
     private final MyPagePartnerInfoService myPagePartnerInfoService;
+    private final PartnerCreationService partnerCreationService;
 
     @GetMapping("/mypage")
     public ResponseEntity<ResponseDTO> getMyPageMain(@RequestParam(value = "stdId") String stdId) {
@@ -74,39 +72,13 @@ public class MyPageController {
 
     // 마이페이지 - 파트너 생성
     @PostMapping("/partner/create")
-    public ResponseEntity<Message> createPartner(@RequestParam(value = "stdId") String stdId,
-                                             @RequestParam(value = "partnerName") String partnerName,
-                                             @RequestParam(value = "partnerDetail") String partnerDetail,
-                                             @RequestParam(value = "partnerPhoto") MultipartFile partnerPhoto,
-                                             @RequestParam(value = "selectionReason") String selectionReason,
-                                             @RequestParam(value = "relationship") String relationship,
-                                             @RequestParam(value = "gender") String gender,
-                                             @RequestParam(value = "partnerBirth") String partnerBirth) {
+    public ResponseEntity<ResponseDTO> createPartner(MyPageDTO.PartnerCreationReqDTO partnerCreationReqDTO) {
+        Long savedPartnerId = partnerCreationService.createPartner(partnerCreationReqDTO);
 
-        StringBuffer stringBuffer = new StringBuffer();
-        StringBuffer birth = stringBuffer.append(partnerBirth);
-        birth.replace(4,5,"/");
-        birth.replace(7,8,"/");
-
-        MyPagePartnerDTO savePartner = MyPagePartnerDTO.builder()
-                .stdId(stdId)
-                .partnerName(partnerName)
-                .partnerDetail(partnerDetail)
-                .partnerBirth(birth.toString())
-                .selectionReason(selectionReason)
-                .relationship(relationship)
-                .gender(gender)
-                .build();
-
-        Long result = myPageService.createPartner(savePartner, partnerPhoto);
-        if(result == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다.", 400L);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("파트너 저장 완료");
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("파트너 저장 완료")
+                .data(savedPartnerId)
+                .build());
     }
 
     // 마이페이지 - 파트너 정보 수정

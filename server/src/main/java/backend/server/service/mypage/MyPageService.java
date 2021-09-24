@@ -35,51 +35,6 @@ public class MyPageService {
 
     private final PasswordEncoder passwordEncoder;
 
-    // 마이페이지 - 파트너 생성
-    @Transactional
-    public Long createPartner (MyPagePartnerDTO partnerDTO, MultipartFile partnerPhoto) {
-
-        Partner partner = partnerDtoToEntity(partnerDTO);
-        // 파트너 정보 저장 (사진 제외)
-        Partner savedPartner = partnerRepository.save(partner);
-
-        // 파트너 사진이 필수이면 없어도 됌
-        if (partnerPhoto != null) {
-            fileUploadService.uploadPartnerPhoto(partnerPhoto, savedPartner.getPartnerId());
-        }
-
-        return partner.getPartnerId();
-    }
-
-    private Partner partnerDtoToEntity(MyPagePartnerDTO partnerDTO) {
-
-        String stdId = partnerDTO.getStdId();
-        Optional<Member> member = userRepository.findMemberByStdId(stdId);
-
-        if(member.isEmpty()) {
-            return null;
-        }
-
-        int partnerDivision;
-
-        if (partnerDTO.getPartnerDetail().equals("o")) {
-            partnerDivision = 0;
-        } else {
-            partnerDivision = 1;
-        }
-
-        return Partner.builder()
-                .member(Member.builder().stdId(partnerDTO.getStdId()).build())
-                .partnerName(partnerDTO.getPartnerName())
-                .partnerBirth(partnerDTO.getPartnerBirth())
-                .gender(partnerDTO.getGender())
-                .selectionReason(partnerDTO.getSelectionReason())
-                .partnerDetail(partnerDTO.getPartnerDetail())
-                .relationship(partnerDTO.getRelationship())
-                .partnerDivision(partnerDivision)
-                .build();
-    }
-
     // 파트너 수정
     @Transactional
     public Long updatePartner(MyPagePartnerDTO partnerDTO, MultipartFile partnerPhoto) {

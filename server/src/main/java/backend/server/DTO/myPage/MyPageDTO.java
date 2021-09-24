@@ -1,5 +1,6 @@
 package backend.server.DTO.myPage;
 
+import backend.server.entity.Member;
 import backend.server.entity.Partner;
 import lombok.*;
 import org.springframework.lang.Nullable;
@@ -108,6 +109,41 @@ public class MyPageDTO {
                     .selectionReason(partner.getSelectionReason())
                     .relationship(partner.getRelationship())
                     .build();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PartnerCreationReqDTO {
+        private String stdId;
+        private String partnerName;
+        private String partnerDetail;
+        private MultipartFile partnerPhoto;
+        private String selectionReason;
+        private String relationship;
+        private String gender;
+        private String partnerBirth;
+
+        public Partner partnerCreationReqDTOToPartner() {
+            return Partner.builder()
+                    .member(Member.builder().stdId(this.stdId).build())
+                    .partnerName(this.partnerName)
+                    .partnerBirth(partnerBirthReplace())
+                    .gender(this.gender)
+                    .selectionReason(this.selectionReason)
+                    .partnerDetail(this.partnerDetail)
+                    .relationship(this.relationship)
+                    .partnerDivision(this.partnerDetail.equals("o") ? 0 : 1)
+                    .build();
+        }
+
+        public String partnerBirthReplace() {
+            return this.partnerBirth.replace('-','/');
+        }
+
+        public boolean isPartnerPhoto() {
+            return this.partnerPhoto != null;
         }
     }
 }
