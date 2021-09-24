@@ -35,65 +35,6 @@ public class MyPageService {
 
     private final PasswordEncoder passwordEncoder;
 
-    // 파트너 수정
-    @Transactional
-    public Long updatePartner(MyPagePartnerDTO partnerDTO, MultipartFile partnerPhoto) {
-
-        Optional<Partner> savedPartner = partnerRepository.findById(partnerDTO.getPartnerId());
-
-        if(savedPartner.isEmpty()) {
-            return null;
-        }
-
-        Partner partner = savedPartner.get();
-        System.out.println(partner);
-
-        if(partnerDTO.getPartnerDetail() != null) {
-            partner.changePartnerDetail(partnerDTO.getPartnerDetail());
-        }
-
-        if(partnerDTO.getPartnerName() != null) {
-            System.out.println("파트너 이름");
-            partner.changePartnerName(partnerDTO.getPartnerName());
-            System.out.println(partnerDTO.getPartnerName());
-            System.out.println(partner.getPartnerName());
-        }
-
-        if(partnerDTO.getPartnerBirth() != null) {
-
-            StringBuffer stringBuffer = new StringBuffer();
-            StringBuffer birth = stringBuffer.append(partnerDTO.getPartnerBirth());
-
-            birth.replace(4,5,"/");
-            birth.replace(7,8,"/");
-
-            partner.changePartnerBirth(birth.toString());
-        }
-
-        if(partnerDTO.getSelectionReason() != null) {
-            partner.changePartnerSelectionReason(partnerDTO.getSelectionReason());
-        }
-
-        if(partnerDTO.getRelationship() != null) {
-            partner.changePartnerRelationship(partnerDTO.getRelationship());
-        }
-
-        if(partnerDTO.getGender() != null) {
-            partner.changePartnerGender(partnerDTO.getGender());
-        }
-
-        if (partnerPhoto != null) {
-            PartnerPhotos partnerPhotos = partnerPhotosRepository.findPartnerPhotosByPartnerId(partnerDTO.getPartnerId());
-
-            fileUploadService.deletePartnerPhoto(partnerDTO.getPartnerId());
-            partnerPhotosRepository.delete(partnerPhotos);
-
-            fileUploadService.uploadPartnerPhoto(partnerPhoto, partnerDTO.getPartnerId());
-        }
-
-        return partnerDTO.getPartnerId();
-    }
-
     public Long deletePartner(Long partnerId) {
 
         // 파트너가 활동을 가지고 있으면 삭제 불가능

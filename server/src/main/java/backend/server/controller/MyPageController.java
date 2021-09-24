@@ -27,6 +27,7 @@ public class MyPageController {
     private final MyPageChangeService myPageChangeService;
     private final MyPagePartnerInfoService myPagePartnerInfoService;
     private final PartnerCreationService partnerCreationService;
+    private final PartnerInfoChangeService partnerInfoChangeService;
 
     @GetMapping("/mypage")
     public ResponseEntity<ResponseDTO> getMyPageMain(@RequestParam(value = "stdId") String stdId) {
@@ -83,44 +84,13 @@ public class MyPageController {
 
     // 마이페이지 - 파트너 정보 수정
     @PostMapping("/partner/change")
-    public ResponseEntity<Message> changePartner(@RequestParam(value = "partnerId") String partnerId,
-                              @RequestParam(value = "partnerName") @Nullable String partnerName,
-                              @RequestParam(value = "partnerDetail") @Nullable String partnerDetail,
-                              @RequestParam(value = "selectionReason") @Nullable String selectionReason,
-                              @RequestParam(value = "relationship") @Nullable String relationship,
-                              @RequestParam(value = "gender") @Nullable String gender,
-                              @RequestParam(value = "partnerBirth") @Nullable String partnerBirth,
-                              @RequestParam(value = "partnerPhoto") @Nullable MultipartFile partnerPhoto)
-    {
-        Long partnerIdU = Long.parseLong(partnerId);
+    public ResponseEntity<ResponseDTO> changePartnerInfo(MyPageDTO.PartnerInfoChangeReqDTO partnerInfoChangeReqDTO) {
+        Long partnerId = partnerInfoChangeService.changePartnerInfo(partnerInfoChangeReqDTO);
 
-        StringBuffer stringBuffer = new StringBuffer();
-        StringBuffer birth = stringBuffer.append(partnerBirth);
-
-        birth.replace(4,5,"/");
-        birth.replace(7,8,"/");
-
-        MyPagePartnerDTO updatePartner = MyPagePartnerDTO.builder()
-                .partnerId(partnerIdU)
-                .partnerName(partnerName)
-                .partnerDetail(partnerDetail)
-                .partnerBirth(birth.toString())
-                .selectionReason(selectionReason)
-                .relationship(relationship)
-                .gender(gender)
-                .build();
-
-        Long updateResult = myPageService.updatePartner(updatePartner, partnerPhoto);
-
-        if(updateResult == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND,"존재하지 않는 파트너입니다.", 400L);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("파트너 정보가 성공적으로 변경되었습니다.");
-        resBody.setData(partnerId);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("파트너 정보가 성공적으로 변경되었습니다.")
+                .data(partnerId)
+                .build());
     }
 
     // 마이페이지 - 파트너 삭제

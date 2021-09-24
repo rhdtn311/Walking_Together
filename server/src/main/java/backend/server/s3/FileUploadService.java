@@ -167,16 +167,20 @@ public class FileUploadService {
 
     // 파트너 사진 파일을 DB에 저장
     public void savePartnerPhoto(String fileName, Long partnerId) {
-
         String fileUrl = s3Service.getFileUrl(fileName);
+        if (partnerPhotosRepository.existsPartnerPhotosByPartnerId(partnerId)) {
+            PartnerPhotos partnerPhoto = partnerPhotosRepository.findPartnerPhotosByPartnerId(partnerId);
+            partnerPhoto.changeFileName(fileName);
+            partnerPhoto.changeFileUrl(fileUrl);
+        } else {
+            PartnerPhotos entity = PartnerPhotos.builder()
+                    .partnerId(partnerId)
+                    .partnerPhotoUrl(fileUrl)
+                    .partnerPhotoName(fileName)
+                    .build();
 
-        PartnerPhotos entity = PartnerPhotos.builder()
-                .partnerId(partnerId)
-                .partnerPhotoUrl(fileUrl)
-                .partnerPhotoName(fileName)
-                .build();
-
-        partnerPhotosRepository.save(entity);
+            partnerPhotosRepository.save(entity);
+        }
     }
 
     // 파트너 사진 파일을 S3서버에 업로드
@@ -199,10 +203,13 @@ public class FileUploadService {
 
     // 파트너 사진 삭제
     public void deletePartnerPhoto(Long partnerId) {
-
         PartnerPhotos partnerPhoto = partnerPhotosRepository.findPartnerPhotosByPartnerId(partnerId);
-
         s3Service.deleteFile(partnerPhoto.getPartnerPhotoName());
+    }
+
+    public void updatePartnerPhoto (MultipartFile partnerPicture, Long partnerId) {
+        deletePartnerPhoto(partnerId);
+        uploadPartnerPhoto(partnerPicture, partnerId);
     }
 
     // 활동 이미지 사진을 DB에 저장

@@ -25,4 +25,12 @@ public class PartnerPhotos {
 
     // join 할 파트너Id
     private Long partnerId;
+
+    public void changeFileUrl(String partnerPhotoUrl) {
+        this.partnerPhotoUrl = partnerPhotoUrl;
+    }
+
+    public void changeFileName(String partnerPhotoName) {
+        this.partnerPhotoName = partnerPhotoName;
+    }
 }

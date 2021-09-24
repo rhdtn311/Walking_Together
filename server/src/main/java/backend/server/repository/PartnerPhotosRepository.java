@@ -8,4 +8,6 @@ public interface PartnerPhotosRepository extends JpaRepository<PartnerPhotos, Lo
 
     public PartnerPhotos findPartnerPhotosByPartnerId(Long partnerId);
 
+    boolean existsPartnerPhotosByPartnerId(Long partnerId);
+
 }

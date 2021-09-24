@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 public class MyPageDTO {
 
@@ -144,6 +143,52 @@ public class MyPageDTO {
 
         public boolean isPartnerPhoto() {
             return this.partnerPhoto != null;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PartnerInfoChangeReqDTO {
+        private String partnerId;
+        private String partnerName;
+        private String partnerDetail;
+        private String selectionReason;
+        private String relationship;
+        private String gender;
+        private String partnerBirth;
+        private MultipartFile partnerPhoto;
+
+        public boolean isPartnerNamePresent() {
+            return this.partnerName != null;
+        }
+
+        public boolean isPartnerDetailPresent() {
+            return this.partnerDetail != null;
+        }
+
+        public boolean isSelectionReasonPresent() {
+            return this.selectionReason != null;
+        }
+
+        public boolean isRelationshipPresent() {
+            return this.relationship != null;
+        }
+
+        public boolean isGenderPresent() {
+            return this.gender != null;
+        }
+
+        public boolean isPartnerBirthPresent() {
+            return this.partnerBirth != null;
+        }
+
+        public boolean isPartnerPhotoPresent() {
+            return this.partnerPhoto != null;
+        }
+
+        public String partnerBirthReplace() {
+            return this.partnerBirth.replace('-', '/');
         }
     }
 }
