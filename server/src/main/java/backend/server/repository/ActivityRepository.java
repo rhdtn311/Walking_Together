@@ -17,5 +17,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>, Activ
     @Query("select p from Partner p left join p.member where p.member.stdId = :stdId")
     List<Partner> getPartnerList(@Param("stdId") String stdId);
 
-    Optional<List<Activity>> findActivitiesByPartner_PartnerId(Long partnerId);
+
+    boolean existsActivitiesByPartner_PartnerId(Long partnerId);
 }

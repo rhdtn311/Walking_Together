@@ -22,12 +22,12 @@ import java.util.Map;
 @RestController
 public class MyPageController {
 
-    private final MyPageService myPageService;
     private final MyPageMainService myPageMainService;
     private final MyPageChangeService myPageChangeService;
     private final MyPagePartnerInfoService myPagePartnerInfoService;
     private final PartnerCreationService partnerCreationService;
     private final PartnerInfoChangeService partnerInfoChangeService;
+    private final PartnerDeleteService partnerDeleteService;
 
     @GetMapping("/mypage")
     public ResponseEntity<ResponseDTO> getMyPageMain(@RequestParam(value = "stdId") String stdId) {
@@ -95,22 +95,20 @@ public class MyPageController {
 
     // 마이페이지 - 파트너 삭제
     @GetMapping("/partner/delete")
-    public ResponseEntity<Message> deletePartner(@RequestParam(value = "partnerId") Long partnerId) {
+    public ResponseEntity<ResponseDTO> deletePartner(@RequestParam(value = "partnerId") Long partnerId) {
+        Long deletePartnerId = partnerDeleteService.deletePartner(partnerId);
 
-        Long result = myPageService.deletePartner(partnerId);
-
-        Message resBody = new Message();
-        resBody.setMessage("파트너를 성공적으로 삭제했습니다.");
-        resBody.setData(partnerId);
-
-        if (result == 400L) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "활동을 가지고 있는 파트너입니다.", 400L);
-        }
-
-        if (result == 404L) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 파트너입니다.", 404L);
-        }
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("파트너를 성공적으로 삭제했습니다.")
+                .data(deletePartnerId)
+                .build());
     }
 }
+
+
+
+
+
+
+
+

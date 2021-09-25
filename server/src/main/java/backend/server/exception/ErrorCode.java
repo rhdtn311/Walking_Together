@@ -17,7 +17,10 @@ public enum ErrorCode {
 
     // Feed
     REVIEW_NOT_RECEIVE(405L, "소감문을 작성해주세요.", 405),
-    ACTIVE_ACTIVITY_NOT_WRITE_REVIEW(406L, "진행 중인 활동은 소감문 작성이 불가능합니다.", 400);
+    ACTIVE_ACTIVITY_NOT_WRITE_REVIEW(406L, "진행 중인 활동은 소감문 작성이 불가능합니다.", 400),
+
+    // MyPage
+    PARTNER_HAVE_ACTIVITY(400L, "활동을 가지고 있는 파트너입니다.", 400);
 
     private final Long code;
     private final String message;
