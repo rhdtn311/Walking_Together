@@ -1,4 +1,4 @@
-package backend.server.service;
+package backend.server.service.notice;
 
 import backend.server.DTO.notice.NoticeAttachedFilesDTO;
 import backend.server.DTO.notice.NoticeDTO;
@@ -13,6 +13,7 @@ import backend.server.entity.QNotice;
 import backend.server.repository.NoticeAttachedFilesRepository;
 import backend.server.repository.NoticeImagesRepository;
 import backend.server.repository.NoticeRepository;
+import backend.server.repository.querydsl.NoticeQueryRepository;
 import backend.server.s3.S3Service;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -31,51 +32,9 @@ import java.util.function.Function;
 @Service
 public class NoticeService {
 
-    private final S3Service s3Service;
     private final NoticeRepository noticeRepository;
     private final NoticeImagesRepository imagesRepository;
     private final NoticeAttachedFilesRepository attachedFilesRepository;
-
-    public PageResultDTO<NoticeListDTO, Notice> getList(PageRequestDTO requestDTO) {
-
-        Pageable pageable = requestDTO.getPageable(Sort.by("noticeId").descending());
-
-        // 검색 조건 처리
-        BooleanBuilder booleanBuilder = getSearch(requestDTO);
-
-        Page<Notice> result = noticeRepository.findAll(booleanBuilder, pageable);
-
-        // Function<input type, result type>
-        Function<Notice, NoticeListDTO> fn = (entity -> entityToDto(entity));
-
-        return new PageResultDTO<>(result, fn);
-    }
-
-    // 검색 처리(where)
-    private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
-
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-
-        QNotice qNotice = QNotice.notice;
-
-        String keyword = requestDTO.getKeyword();
-
-        BooleanExpression expression = qNotice.noticeId.gt(0L);
-
-        booleanBuilder.and(expression);
-
-        // 검색 조건
-        BooleanBuilder conditionBuilder = new BooleanBuilder();
-
-        if(keyword != null) {
-            conditionBuilder.or(qNotice.content.contains(keyword));
-            conditionBuilder.or(qNotice.title.contains(keyword));
-        }
-
-        booleanBuilder.and(conditionBuilder);
-
-        return booleanBuilder;
-    }
 
     private NoticeListDTO entityToDto(Notice notice) {
 

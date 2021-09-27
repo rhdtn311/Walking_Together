@@ -1,5 +1,6 @@
 package backend.server.entity;
 
+import backend.server.DTO.notice.NoticeDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,15 @@ public class Notice extends BaseEntity {
 
     public void changeContent(String content) {
         this.content = content;
+    }
+
+    public NoticeDTO.NoticeListResDTO noticeToNoticeListResDTO() {
+        return NoticeDTO.NoticeListResDTO.builder()
+                .noticeId(this.getNoticeId())
+                .title(this.getTitle())
+                .content(this.getContent())
+                .date(this.getModDate())
+                .build();
     }
 
 }

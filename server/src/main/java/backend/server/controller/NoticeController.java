@@ -1,15 +1,18 @@
 package backend.server.controller;
 
-import backend.server.DTO.notice.FormData;
 import backend.server.DTO.notice.NoticeDTO;
 import backend.server.DTO.notice.NoticeListDTO;
 import backend.server.DTO.page.PageRequestDTO;
 import backend.server.DTO.page.PageResultDTO;
+import backend.server.DTO.response.ResponseDTO;
 import backend.server.entity.Notice;
 import backend.server.exception.ApiException;
+import backend.server.exception.noticeService.DataNotFoundInPageException;
 import backend.server.message.Message;
+import backend.server.repository.querydsl.NoticeQueryRepository;
 import backend.server.s3.FileUploadService;
-import backend.server.service.NoticeService;
+import backend.server.service.notice.NoticeListService;
+import backend.server.service.notice.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,38 +33,21 @@ public class NoticeController {
 
     private final NoticeService noticeService;
     private final FileUploadService fileUploadService;
+    private final NoticeListService noticeListService;
 
     // 공지사항 게시물 출력
     @PostMapping("/noticeList")
-    public Map<String, Object> list(@RequestBody PageRequestDTO pageRequestDTO) {
-
-        PageResultDTO<NoticeListDTO, Notice> result = noticeService.getList(pageRequestDTO);
-        Map<String, Object> response = new HashMap<>();
-
-        if(result.getTotalPage() < pageRequestDTO.getPage()) {
-            response.put("code", 400);
-            response.put("message", "해당 페이지에 데이터가 존재하지 않습니다.");
-            return response;
+    public ResponseEntity<ResponseDTO> getNoticeList(@RequestBody PageRequestDTO pageRequestDTO) {
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> pageResultDTO = noticeListService.findNoticeList(pageRequestDTO);
+        if(pageResultDTO.getTotalPage() < pageRequestDTO.getPage()) {
+            throw new DataNotFoundInPageException();
         }
 
-        Map<String, Object> pageInfo = new HashMap<>();
-
-        pageInfo.put("page", result.getPage());
-        pageInfo.put("totalPage", result.getTotalPage());
-        pageInfo.put("start", result.getStart());
-        pageInfo.put("end", result.getEnd());
-        pageInfo.put("prev",result.isPrev());
-        pageInfo.put("next", result.isNext());
-        pageInfo.put("pageList", result.getPageList());
-
-        response.put("status", 200);
-        response.put("message", "성공");
-        response.put("data", result.getDtoList());
-        response.put("pageInfo", pageInfo);
-
-        return response;
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("게시글 조회 완료")
+                .data(pageResultDTO)
+                .build());
     }
-
 
     // 공지사항 등록 (이미지, 첨부파일 받아서 다른 DB에 각각 저장)
     @PostMapping("/admin/createpost")

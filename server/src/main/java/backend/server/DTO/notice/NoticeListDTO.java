@@ -12,10 +12,7 @@ import java.time.LocalDateTime;
 public class NoticeListDTO {
 
     private Long noticeId;
-
     private String title;
-
     private String content;
-
     private LocalDateTime date;
 }

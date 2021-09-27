@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 public class PageResultDTO<DTO,ENTITY> {
 
     // DTO 리스트
-    private List<DTO> dtoList;
+    private List<DTO> pageDataList;
 //
 //    // page 리스트
 //    private HashMap<String, Object> pageInfo;
@@ -39,23 +39,13 @@ public class PageResultDTO<DTO,ENTITY> {
     public  PageResultDTO(Page<ENTITY> result, Function<ENTITY, DTO> fn) {   // Function<EN, DTO>는 엔티티 객체들을 DTO로 변환
 
         // 생성된 Page객체를 DTO로 바꾸고 List 형태로 변환
-        dtoList = result.stream().map(fn).collect(Collectors.toList());
+        pageDataList = result.stream().map(fn).collect(Collectors.toList());
 
         // 전체 페이지
         totalPage = result.getTotalPages();
 
         // 1~n번 까지의 페이지 리스트를 생성
         makePageList(result.getPageable());
-
-//        pageInfo.put("pageNum", page);
-//        pageInfo.put("totalPage", totalPage);
-//        pageInfo.put("size", size);
-//        pageInfo.put("start", start);
-//        pageInfo.put("end",end);
-//        pageInfo.put("prev", prev);
-//        pageInfo.put("next",next);
-//        pageInfo.put("pageList", pageList);
-
     }
 
     private void makePageList(Pageable pageable) {
