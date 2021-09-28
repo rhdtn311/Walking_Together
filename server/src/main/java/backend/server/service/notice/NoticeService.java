@@ -43,30 +43,6 @@ public class NoticeService {
         return dto;
     }
 
-    // 게시물 DB에 저장
-    public Long saveNotice(NoticeDTO.NoticeCreationReqDTO noticeCreationReqDTO) {
-        Notice notice = noticeCreationReqDTO.toNotice();
-        noticeRepository.save(notice);
-
-        if (noticeCreationReqDTO.isImageFilesPresent()) {
-            noticeCreationReqDTO.getImageFiles().forEach(imageFile -> {
-                if (imageFile.getSize()!= 0) {
-                    fileUploadService.uploadImage(imageFile, notice.getNoticeId());
-                }
-            });
-        }
-
-        if (noticeCreationReqDTO.isAttachedFilesPresent()) {
-            noticeCreationReqDTO.getAttachedFiles().forEach(attachedFile -> {
-                if (attachedFile.getSize() != 0) {
-                    fileUploadService.uploadAttached(attachedFile, notice.getNoticeId());
-                }
-            });
-        }
-
-        return notice.getNoticeId();
-    }
-
     public NoticeListDTO detailNotice(Long noticeId) {
         Optional<Notice> notice = noticeRepository.findNoticeByNoticeId(noticeId);
 

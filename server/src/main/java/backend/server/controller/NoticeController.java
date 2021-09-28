@@ -11,6 +11,7 @@ import backend.server.exception.noticeService.DataNotFoundInPageException;
 import backend.server.message.Message;
 import backend.server.repository.querydsl.NoticeQueryRepository;
 import backend.server.s3.FileUploadService;
+import backend.server.service.notice.NoticeCreationService;
 import backend.server.service.notice.NoticeDetailService;
 import backend.server.service.notice.NoticeListService;
 import backend.server.service.notice.NoticeService;
@@ -36,6 +37,7 @@ public class NoticeController {
     private final FileUploadService fileUploadService;
     private final NoticeListService noticeListService;
     private final NoticeDetailService noticeDetailService;
+    private final NoticeCreationService noticeCreationService;
 
     // 공지사항 게시물 출력
     @PostMapping("/noticeList")
@@ -65,7 +67,7 @@ public class NoticeController {
     // 공지사항 등록 (이미지, 첨부파일 받아서 다른 DB에 각각 저장)
     @PostMapping("/admin/createpost")
     public ResponseEntity<ResponseDTO> createNotice(NoticeDTO.NoticeCreationReqDTO noticeCreationReqDTO) {
-        Long noticeId = noticeService.saveNotice(noticeCreationReqDTO);
+        Long noticeId = noticeCreationService.saveNotice(noticeCreationReqDTO);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("게시글 업로드 완료")
