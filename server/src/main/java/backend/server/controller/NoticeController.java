@@ -11,6 +11,7 @@ import backend.server.exception.noticeService.DataNotFoundInPageException;
 import backend.server.message.Message;
 import backend.server.repository.querydsl.NoticeQueryRepository;
 import backend.server.s3.FileUploadService;
+import backend.server.service.notice.NoticeDetailService;
 import backend.server.service.notice.NoticeListService;
 import backend.server.service.notice.NoticeService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final FileUploadService fileUploadService;
     private final NoticeListService noticeListService;
+    private final NoticeDetailService noticeDetailService;
 
     // 공지사항 게시물 출력
     @PostMapping("/noticeList")
@@ -46,6 +48,17 @@ public class NoticeController {
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("게시글 조회 완료")
                 .data(pageResultDTO)
+                .build());
+    }
+
+    // 공지사항 게시물 상세
+    @GetMapping("/notice")
+    public ResponseEntity<ResponseDTO> detailNotice(@RequestParam(value = "noticeId") Long noticeId) {
+        NoticeDTO.NoticeDetailResDTO noticeDetail = noticeDetailService.getNoticeDetail(noticeId);
+
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("공지사항 게시물 조회 완료")
+                .data(noticeDetail)
                 .build());
     }
 
@@ -86,34 +99,7 @@ public class NoticeController {
         return new ResponseEntity<>(resBody, null, HttpStatus.OK);
     }
 
-    // 공지사항 게시물 상세
-    @GetMapping("/notice")
-    public ResponseEntity<Message> detailNotice(@RequestParam(value = "noticeId") Long noticeId) {
 
-        Message resBody = new Message();
-
-        NoticeListDTO noticeDTO = noticeService.detailNotice(noticeId);
-        if (noticeDTO == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다.", 400L);
-        }
-
-        List<ArrayList<String>> noticeFiles = noticeService.detailNoticeFiles(noticeId);
-
-        ArrayList<String> imageFilesUrls = noticeFiles.get(0);
-        ArrayList<String> attachedFilesUrls = noticeFiles.get(1);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("title", noticeDTO.getTitle());
-        response.put("content", noticeDTO.getContent());
-        response.put("createTime", noticeDTO.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-        response.put("noticeId", noticeDTO.getNoticeId());
-        response.put("imageFiles", imageFilesUrls);
-        response.put("attachedFiles", attachedFilesUrls);
-
-        resBody.setData(response);
-        resBody.setMessage("불러오기 성공");
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
-    }
 
     // 공지사항 게시물 수정
     @GetMapping("/admin/update")

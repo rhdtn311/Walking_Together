@@ -4,29 +4,19 @@ import backend.server.DTO.notice.NoticeAttachedFilesDTO;
 import backend.server.DTO.notice.NoticeDTO;
 import backend.server.DTO.notice.NoticeImagesDTO;
 import backend.server.DTO.notice.NoticeListDTO;
-import backend.server.DTO.page.PageRequestDTO;
-import backend.server.DTO.page.PageResultDTO;
 import backend.server.entity.Notice;
 import backend.server.entity.NoticeAttachedFiles;
 import backend.server.entity.NoticeImages;
-import backend.server.entity.QNotice;
 import backend.server.repository.NoticeAttachedFilesRepository;
 import backend.server.repository.NoticeImagesRepository;
 import backend.server.repository.NoticeRepository;
 import backend.server.repository.querydsl.NoticeQueryRepository;
-import backend.server.s3.S3Service;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service
@@ -35,6 +25,7 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final NoticeImagesRepository imagesRepository;
     private final NoticeAttachedFilesRepository attachedFilesRepository;
+    private final NoticeQueryRepository noticeQueryRepository;
 
     private NoticeListDTO entityToDto(Notice notice) {
 
@@ -55,9 +46,7 @@ public class NoticeService {
         return notice.getNoticeId();
     }
 
-    // 공지사항 게시물 상세 (Notice 받아오기)
     public NoticeListDTO detailNotice(Long noticeId) {
-
         Optional<Notice> notice = noticeRepository.findNoticeByNoticeId(noticeId);
 
         if(notice.isEmpty()) {
@@ -69,7 +58,7 @@ public class NoticeService {
 
         return dto;
     }
-
+//
     // 공지사항 게시물 상세 (Files and Images)
     public List<ArrayList<String>> detailNoticeFiles(Long noticeId) {
 

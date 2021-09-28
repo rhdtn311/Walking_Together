@@ -23,7 +23,8 @@ public enum ErrorCode {
     PARTNER_HAVE_ACTIVITY(400L, "활동을 가지고 있는 파트너입니다.", 400),
 
     // Notice
-    DATA_NOT_FOUND_IN_PAGE(400L, "해당 페이지에 데이터가 존재하지 않습니다.", 400);
+    DATA_NOT_FOUND_IN_PAGE(400L, "해당 페이지에 데이터가 존재하지 않습니다.", 404),
+    NOTICE_NOT_FOUND(400L, "존재하지 않는 게시물입니다.", 404);
 
     private final Long code;
     private final String message;
