@@ -1,7 +1,9 @@
 package backend.server.DTO.notice;
 
 import backend.server.entity.Notice;
+import backend.server.entity.NoticeAttachedFiles;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -70,6 +72,31 @@ public class NoticeDTO {
 
         public void setImageFiles(List<String> imageFiles) {
             this.imageFiles = imageFiles;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class NoticeCreationReqDTO {
+        private String title;
+        private String content;
+        private List<MultipartFile> attachedFiles;
+        private List<MultipartFile> imageFiles;
+
+        public Notice toNotice() {
+            return Notice.builder()
+                    .title(this.title)
+                    .content(this.content)
+                    .build();
+        }
+
+        public boolean isAttachedFilesPresent() {
+            return this.attachedFiles != null;
+        }
+
+        public boolean isImageFilesPresent() {
+            return this.imageFiles != null;
         }
     }
 }

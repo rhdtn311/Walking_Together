@@ -64,42 +64,14 @@ public class NoticeController {
 
     // 공지사항 등록 (이미지, 첨부파일 받아서 다른 DB에 각각 저장)
     @PostMapping("/admin/createpost")
-    public ResponseEntity<Message> uploadImage(@RequestParam(value="attachedFiles") @Nullable List<MultipartFile> attachedFiles,
-                                               @RequestParam(value="imageFiles") @Nullable List<MultipartFile> imageFiles,
-                                               @RequestParam(value="title") String title,
-                                               @RequestParam(value="content") String content)
-    {
+    public ResponseEntity<ResponseDTO> createNotice(NoticeDTO.NoticeCreationReqDTO noticeCreationReqDTO) {
+        Long noticeId = noticeService.saveNotice(noticeCreationReqDTO);
 
-        Message resBody = new Message();
-        resBody.setMessage("게시글 업로드 완료");
-
-        NoticeDTO noticeDto = NoticeDTO.builder()
-        .title(title)
-        .content(content)
-        .build();
-        
-        Long noticeId = noticeService.saveNotice(noticeDto);
-
-        if (imageFiles != null) {
-            for (MultipartFile file : imageFiles) {
-                if (file.getSize() != 0) {
-                    fileUploadService.uploadImage(file, noticeId);
-                }
-            }
-        }
-
-        if(attachedFiles != null) {
-            for (MultipartFile file : attachedFiles) {
-                if (file.getSize() != 0) {
-                    fileUploadService.uploadAttached(file, noticeId);
-                }
-            }
-        }
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("게시글 업로드 완료")
+                .data(noticeId)
+                .build());
     }
-
-
 
     // 공지사항 게시물 수정
     @GetMapping("/admin/update")

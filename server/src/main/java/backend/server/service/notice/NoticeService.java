@@ -11,8 +11,10 @@ import backend.server.repository.NoticeAttachedFilesRepository;
 import backend.server.repository.NoticeImagesRepository;
 import backend.server.repository.NoticeRepository;
 import backend.server.repository.querydsl.NoticeQueryRepository;
+import backend.server.s3.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,8 @@ public class NoticeService {
     private final NoticeAttachedFilesRepository attachedFilesRepository;
     private final NoticeQueryRepository noticeQueryRepository;
 
+    private final FileUploadService fileUploadService;
+
     private NoticeListDTO entityToDto(Notice notice) {
 
         NoticeListDTO dto = NoticeListDTO.builder()
@@ -40,9 +44,26 @@ public class NoticeService {
     }
 
     // 게시물 DB에 저장
-    public Long saveNotice(NoticeDTO dto) {
-        Notice notice = dto.dtoToEntity();
+    public Long saveNotice(NoticeDTO.NoticeCreationReqDTO noticeCreationReqDTO) {
+        Notice notice = noticeCreationReqDTO.toNotice();
         noticeRepository.save(notice);
+
+        if (noticeCreationReqDTO.isImageFilesPresent()) {
+            noticeCreationReqDTO.getImageFiles().forEach(imageFile -> {
+                if (imageFile.getSize()!= 0) {
+                    fileUploadService.uploadImage(imageFile, notice.getNoticeId());
+                }
+            });
+        }
+
+        if (noticeCreationReqDTO.isAttachedFilesPresent()) {
+            noticeCreationReqDTO.getAttachedFiles().forEach(attachedFile -> {
+                if (attachedFile.getSize() != 0) {
+                    fileUploadService.uploadAttached(attachedFile, notice.getNoticeId());
+                }
+            });
+        }
+
         return notice.getNoticeId();
     }
 
