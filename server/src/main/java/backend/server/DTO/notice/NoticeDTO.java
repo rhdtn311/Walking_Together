@@ -123,4 +123,23 @@ public class NoticeDTO {
             this.attachedFiles = attachedFiles;
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class NoticeModifyReqDTO {
+        private String title;
+        private String content;
+        private Long noticeId;
+        List<MultipartFile> attachedFiles;
+        List<MultipartFile> imageFiles;
+
+        public boolean isAttachedFilesPresent() {
+            return this.attachedFiles != null;
+        }
+
+        public boolean isImageFilesPresent() {
+            return this.imageFiles != null;
+        }
+    }
 }

@@ -86,49 +86,13 @@ public class NoticeController {
 
     // 공지사항 게시물 수정
     @PostMapping("/admin/update")
-    public ResponseEntity<Message> update(@RequestParam(value = "imageFiles") @Nullable List<MultipartFile> imageFiles,
-                                          @RequestParam(value = "attachedFiles") @Nullable List<MultipartFile> attachedFiles,
-                                          @RequestParam(value = "title") String title,
-                                          @RequestParam(value = "content") String content,
-                                          @RequestParam(value = "noticeId") Long noticeId){
+    public ResponseEntity<ResponseDTO> modifyNoticeInfo(NoticeDTO.NoticeModifyReqDTO noticeModifyReqDTO){
+        Long noticeId = noticeModifyService.modifyNoticeInfo(noticeModifyReqDTO);
 
-        NoticeDTO noticeDTO = NoticeDTO.builder()
-                .noticeId(noticeId)
-                .title(title)
-                .content(content)
-                .build();
-
-        String result = noticeService.update(noticeDTO);
-        if(result == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다.", 400L);
-        }
-
-        fileUploadService.deleteImageFile(noticeId);
-        noticeService.deleteImages(noticeId);
-        fileUploadService.deleteAttachedFile(noticeId);
-        noticeService.deleteAttachedFiles(noticeId);
-
-        if(imageFiles != null) {
-            for (MultipartFile file : imageFiles) {
-                if (file.getSize() != 0) {
-                    fileUploadService.uploadImage(file, noticeId);
-                }
-            }
-        }
-
-        if(attachedFiles != null) {
-            for (MultipartFile file : attachedFiles) {
-                if (file.getSize() != 0) {
-                    fileUploadService.uploadAttached(file, noticeId);
-                }
-            }
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("수정 완료");
-        resBody.setData(noticeId);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("게시글 수정 완료")
+                .data(noticeId)
+                .build());
     }
 
     // 공지사항 게시물 삭제

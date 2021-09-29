@@ -10,4 +10,8 @@ import java.util.List;
 public interface NoticeAttachedFilesRepository extends JpaRepository<NoticeAttachedFiles, Long> {
 
     public List<NoticeAttachedFiles> findNoticeAttachedFilesByNoticeId(Long noticeId);
+
+    boolean existsNoticeAttachedFilesByNoticeId(Long noticeId);
+
+    NoticeAttachedFiles findFirstByNoticeId(Long noticeId);
 }

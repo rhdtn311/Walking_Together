@@ -30,14 +30,19 @@ public class FileUploadService {
     public void saveImage(String fileName, Long noticeId) {
 
         String fileUrl = s3Service.getFileUrl(fileName);
+        if (noticeImagesRepository.existsNoticeImagesByNoticeId(noticeId)) {
+            NoticeImages noticeImage = noticeImagesRepository.findFirstByNoticeId(noticeId);
+            noticeImage.changeImageName(fileName);
+            noticeImage.changeImageUrl(fileUrl);
+        } else {
+            NoticeImages entity = NoticeImages.builder()
+                    .noticeId(noticeId)
+                    .noticeImageUrl(fileUrl)
+                    .noticeImageName(fileName)
+                    .build();
 
-        NoticeImages entity = NoticeImages.builder()
-                .noticeId(noticeId)
-                .noticeImageUrl(fileUrl)
-                .noticeImageName(fileName)
-                .build();
-
-        noticeImagesRepository.save(entity);
+            noticeImagesRepository.save(entity);
+        }
     }
 
     // 공지사항 이미지 파일을 S3서버에 업로드
@@ -58,18 +63,27 @@ public class FileUploadService {
         } return s3Service.getFileUrl(fileName);
     }
 
+    public void updateImageFiles(MultipartFile image, Long noticeId) {
+        deleteImageFile(noticeId);
+        uploadImage(image, noticeId);
+    }
+
     // 첨부파일을 DB에 저장
     public void saveAttachedFiles(String fileName, Long noticeId) {
-
         String fileUrl = s3Service.getFileUrl(fileName);
+        if (noticeAttachedFilesRepository.existsNoticeAttachedFilesByNoticeId(noticeId)) {
+            NoticeAttachedFiles noticeAttachedFile = noticeAttachedFilesRepository.findFirstByNoticeId(noticeId);
+            noticeAttachedFile.changeFileName(fileName);
+            noticeAttachedFile.changeFileUrl(fileUrl);
+        } else {
+            NoticeAttachedFiles entity = NoticeAttachedFiles.builder()
+                    .noticeId(noticeId)
+                    .noticeAttachedFilesUrl(fileUrl)
+                    .noticeAttachedFileName(fileName)
+                    .build();
 
-        NoticeAttachedFiles entity = NoticeAttachedFiles.builder()
-                .noticeId(noticeId)
-                .noticeAttachedFilesUrl(fileUrl)
-                .noticeAttachedFileName(fileName)
-                .build();
-
-        noticeAttachedFilesRepository.save(entity);
+            noticeAttachedFilesRepository.save(entity);
+        }
     }
 
     // 첨부파일 S3서버에 업로드
@@ -87,6 +101,11 @@ public class FileUploadService {
             throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다. (%s)",
                     file.getOriginalFilename()));
         } return s3Service.getFileUrl(fileName);
+    }
+
+    public void updateAttached(MultipartFile file, Long noticeId) {
+        deleteAttachedFile(noticeId);
+        uploadAttached(file, noticeId);
     }
 
     // 파일이름을 + 시간으로 유니크하게 생성
@@ -110,7 +129,6 @@ public class FileUploadService {
     public void deleteAttachedFile(Long noticeId) {
 
         List<NoticeAttachedFiles> attachedFiles = noticeAttachedFilesRepository.findNoticeAttachedFilesByNoticeId(noticeId);
-
         attachedFiles.forEach(f -> {
             s3Service.deleteFile(f.getNoticeAttachedFileName());
         });

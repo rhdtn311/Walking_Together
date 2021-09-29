@@ -15,6 +15,7 @@ import backend.server.repository.querydsl.NoticeQueryRepository;
 import backend.server.s3.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -28,25 +29,20 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final NoticeImagesRepository imagesRepository;
     private final NoticeAttachedFilesRepository attachedFilesRepository;
+    private final FileUploadService fileUploadService;
     private final NoticeQueryRepository noticeQueryRepository;
 
-    // 게시물 수정 (title, content)
-    public String update(NoticeDTO dto) {
+    public void deleteImages(Long noticeId) {
+        List<NoticeImages> noticeImages = imagesRepository.findNoticeImagesByNoticeId(noticeId);
 
-        Optional<Notice> optNotice = noticeRepository.findById(dto.getNoticeId());
+        noticeImages.forEach(imagesRepository::delete);
+    }
 
-        if(optNotice.isEmpty()) {
-            return null;
-        }
+    public void deleteAttachedFiles(Long noticeId) {
+        List<NoticeAttachedFiles> noticeAttachedFiles = attachedFilesRepository.findNoticeAttachedFilesByNoticeId(noticeId);
 
-        Notice notice = optNotice.get();
+        noticeAttachedFiles.forEach(attachedFilesRepository::delete);
 
-        notice.changeTitle(dto.getTitle());
-        notice.changeContent(dto.getContent());
-
-        noticeRepository.save(notice);
-
-        return "pass";
     }
 
     // 공지사항 게시글 삭제
@@ -66,18 +62,5 @@ public class NoticeService {
         return "pass";
     }
 
-
-    public void deleteImages(Long noticeId) {
-        List<NoticeImages> noticeImages = imagesRepository.findNoticeImagesByNoticeId(noticeId);
-
-        noticeImages.forEach(imagesRepository::delete);
-    }
-
-    public void deleteAttachedFiles(Long noticeId) {
-        List<NoticeAttachedFiles> noticeAttachedFiles = attachedFilesRepository.findNoticeAttachedFilesByNoticeId(noticeId);
-
-        noticeAttachedFiles.forEach(attachedFilesRepository::delete);
-
-    }
 
 }

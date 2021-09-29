@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface NoticeRepository extends JpaRepository<Notice, Long>,QuerydslPredicateExecutor<Notice> {
 
-    Optional<Notice> findNoticeByNoticeId(Long noticeId);
+    Notice findNoticeByNoticeId(Long noticeId);
 
 }
