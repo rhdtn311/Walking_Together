@@ -7,6 +7,7 @@ import backend.server.DTO.notice.NoticeListDTO;
 import backend.server.entity.Notice;
 import backend.server.entity.NoticeAttachedFiles;
 import backend.server.entity.NoticeImages;
+import backend.server.exception.noticeService.NoticeNotFoundException;
 import backend.server.repository.NoticeAttachedFilesRepository;
 import backend.server.repository.NoticeImagesRepository;
 import backend.server.repository.NoticeRepository;
@@ -29,66 +30,23 @@ public class NoticeService {
     private final NoticeAttachedFilesRepository attachedFilesRepository;
     private final NoticeQueryRepository noticeQueryRepository;
 
-    private final FileUploadService fileUploadService;
+    // 게시물 수정 (title, content)
+    public String update(NoticeDTO dto) {
 
-    private NoticeListDTO entityToDto(Notice notice) {
+        Optional<Notice> optNotice = noticeRepository.findById(dto.getNoticeId());
 
-        NoticeListDTO dto = NoticeListDTO.builder()
-                .noticeId(notice.getNoticeId())
-                .title(notice.getTitle())
-                .content(notice.getContent())
-                .date(notice.getModDate())
-                .build();
-
-        return dto;
-    }
-
-    public NoticeListDTO detailNotice(Long noticeId) {
-        Optional<Notice> notice = noticeRepository.findNoticeByNoticeId(noticeId);
-
-        if(notice.isEmpty()) {
+        if(optNotice.isEmpty()) {
             return null;
         }
-        Notice entity = notice.get();
 
-        NoticeListDTO dto = entityToDto(entity);
+        Notice notice = optNotice.get();
 
-        return dto;
-    }
-//
-    // 공지사항 게시물 상세 (Files and Images)
-    public List<ArrayList<String>> detailNoticeFiles(Long noticeId) {
+        notice.changeTitle(dto.getTitle());
+        notice.changeContent(dto.getContent());
 
-        List<NoticeImages> noticeImages = imagesRepository.findNoticeImagesByNoticeId(noticeId);
-        NoticeImagesDTO imagesDTO = NoticeImagesDTO.builder()
-                .noticeImages(noticeImages)
-                .build();
+        noticeRepository.save(notice);
 
-        List<NoticeAttachedFiles> noticeFiles = attachedFilesRepository.findNoticeAttachedFilesByNoticeId(noticeId);
-        NoticeAttachedFilesDTO filesDTO = NoticeAttachedFilesDTO.builder()
-                .noticeFiles(noticeFiles)
-                .build();
-
-        ArrayList<String> noticeImagesURL = new ArrayList<>();
-        ArrayList<String> noticeFilesURL = new ArrayList<>();
-
-        imagesDTO.getNoticeImages().forEach(
-                i -> {
-                    noticeImagesURL.add(i.getNoticeImageUrl());
-                }
-        );
-
-        filesDTO.getNoticeFiles().forEach(
-                i -> {
-                    noticeFilesURL.add(i.getNoticeAttachedFilesUrl());
-                }
-        );
-
-        List<ArrayList<String>> result = new ArrayList<>();
-        result.add(noticeImagesURL);
-        result.add(noticeFilesURL);
-
-        return result;
+        return "pass";
     }
 
     // 공지사항 게시글 삭제
@@ -108,24 +66,6 @@ public class NoticeService {
         return "pass";
     }
 
-    // 게시물 수정 (title, content)
-    public String update(NoticeDTO dto) {
-
-        Optional<Notice> optNotice = noticeRepository.findById(dto.getNoticeId());
-
-        if(optNotice.isEmpty()) {
-            return null;
-        }
-
-        Notice notice = optNotice.get();
-
-        notice.changeTitle(dto.getTitle());
-        notice.changeContent(dto.getContent());
-
-        noticeRepository.save(notice);
-
-        return "pass";
-    }
 
     public void deleteImages(Long noticeId) {
         List<NoticeImages> noticeImages = imagesRepository.findNoticeImagesByNoticeId(noticeId);

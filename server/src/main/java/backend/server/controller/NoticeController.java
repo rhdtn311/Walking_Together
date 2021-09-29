@@ -11,10 +11,7 @@ import backend.server.exception.noticeService.DataNotFoundInPageException;
 import backend.server.message.Message;
 import backend.server.repository.querydsl.NoticeQueryRepository;
 import backend.server.s3.FileUploadService;
-import backend.server.service.notice.NoticeCreationService;
-import backend.server.service.notice.NoticeDetailService;
-import backend.server.service.notice.NoticeListService;
-import backend.server.service.notice.NoticeService;
+import backend.server.service.notice.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +35,7 @@ public class NoticeController {
     private final NoticeListService noticeListService;
     private final NoticeDetailService noticeDetailService;
     private final NoticeCreationService noticeCreationService;
+    private final NoticeModifyService noticeModifyService;
 
     // 공지사항 게시물 출력
     @PostMapping("/noticeList")
@@ -77,59 +75,22 @@ public class NoticeController {
 
     // 공지사항 게시물 수정
     @GetMapping("/admin/update")
-    public ResponseEntity<Message> updateNotice(@RequestParam(value = "noticeId") Long noticeId) {
+    public ResponseEntity<ResponseDTO> modifyNotice(@RequestParam(value = "noticeId") Long noticeId) {
+        NoticeDTO.NoticeModifyResDTO noticeModifyResDTO = noticeModifyService.getNoticeInfo(noticeId);
 
-        NoticeListDTO noticeDTO = noticeService.detailNotice(noticeId);
-
-        if (noticeDTO == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "해당 게시글이 존재하지 않습니다.", 400L);
-        }
-
-        List<ArrayList<String>> noticeFiles = noticeService.detailNoticeFiles(noticeId);
-
-        ArrayList<String> imageFilesUrls = noticeFiles.get(0);
-        ArrayList<String> attachedFilesUrls = noticeFiles.get(1);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("title", noticeDTO.getTitle());
-        response.put("content", noticeDTO.getContent());
-        response.put("imageFiles", imageFilesUrls);
-        response.put("attachedFiles", attachedFilesUrls);
-
-        Message resBody = new Message();
-        resBody.setMessage("불러오기 완료");
-        resBody.setData(response);
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
-    }
-
-    // 공지사항 게시물 삭제
-    @GetMapping("/admin/delete")
-    public ResponseEntity<Message> delete(@RequestParam(value = "noticeId") Long noticeId) {
-
-        fileUploadService.deleteImageFile(noticeId);
-        fileUploadService.deleteAttachedFile(noticeId);
-
-        String result = noticeService.delete(noticeId);
-
-        if(result == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다.", 400L);
-        }
-
-        Message resBody = new Message();
-        resBody.setMessage("삭제 완료");
-        resBody.setData(noticeId);
-
-        return new ResponseEntity<>(resBody,null,HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("게시글 조회 완료")
+                .data(noticeModifyResDTO)
+                .build());
     }
 
     // 공지사항 게시물 수정
     @PostMapping("/admin/update")
     public ResponseEntity<Message> update(@RequestParam(value = "imageFiles") @Nullable List<MultipartFile> imageFiles,
-                                      @RequestParam(value = "attachedFiles") @Nullable List<MultipartFile> attachedFiles,
-                                      @RequestParam(value = "title") String title,
-                                      @RequestParam(value = "content") String content,
-                                      @RequestParam(value = "noticeId") Long noticeId){
+                                          @RequestParam(value = "attachedFiles") @Nullable List<MultipartFile> attachedFiles,
+                                          @RequestParam(value = "title") String title,
+                                          @RequestParam(value = "content") String content,
+                                          @RequestParam(value = "noticeId") Long noticeId){
 
         NoticeDTO noticeDTO = NoticeDTO.builder()
                 .noticeId(noticeId)
@@ -170,6 +131,23 @@ public class NoticeController {
         return new ResponseEntity<>(resBody, null, HttpStatus.OK);
     }
 
+    // 공지사항 게시물 삭제
+    @GetMapping("/admin/delete")
+    public ResponseEntity<Message> delete(@RequestParam(value = "noticeId") Long noticeId) {
 
+        fileUploadService.deleteImageFile(noticeId);
+        fileUploadService.deleteAttachedFile(noticeId);
 
+        String result = noticeService.delete(noticeId);
+
+        if(result == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다.", 400L);
+        }
+
+        Message resBody = new Message();
+        resBody.setMessage("삭제 완료");
+        resBody.setData(noticeId);
+
+        return new ResponseEntity<>(resBody,null,HttpStatus.OK);
+    }
 }

@@ -73,4 +73,12 @@ public class NoticeQueryRepository {
     private BooleanExpression eqNoticeIdAndAttachedFiles(Long noticeId) {
         return noticeAttachedFiles.noticeId.eq(noticeId);
     }
+
+    public NoticeDTO.NoticeModifyResDTO findNoticeModify(Long noticeId) {
+            return jpqlQueryFactory
+                    .select(Projections.constructor(NoticeDTO.NoticeModifyResDTO.class, notice.title, notice.content))
+                    .from(notice)
+                    .where(eqNoticeIdAndNotice(noticeId))
+                    .fetchOne();
+    }
 }

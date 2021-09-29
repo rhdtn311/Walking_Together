@@ -99,4 +99,28 @@ public class NoticeDTO {
             return this.imageFiles != null;
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class NoticeModifyResDTO {
+        private String title;
+        private String content;
+
+        private List<String> attachedFiles;
+        private List<String> imageFiles;
+
+        @Builder
+        public NoticeModifyResDTO(String title, String content) {
+            this.title = title;
+            this.content = content;
+        }
+
+        public void setImageFiles(List<String> imageFiles) {
+            this.imageFiles = imageFiles;
+        }
+
+        public void setAttachedFiles(List<String> attachedFiles) {
+            this.attachedFiles = attachedFiles;
+        }
+    }
 }
