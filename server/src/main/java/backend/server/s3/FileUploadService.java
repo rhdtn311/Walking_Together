@@ -117,7 +117,6 @@ public class FileUploadService {
 
     // 이미지 파일 삭제
     public void deleteImageFile(Long noticeId) {
-
         List<NoticeImages> noticeImages = noticeImagesRepository.findNoticeImagesByNoticeId(noticeId);
 
         noticeImages.forEach(i -> {

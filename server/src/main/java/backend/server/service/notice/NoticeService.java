@@ -32,35 +32,5 @@ public class NoticeService {
     private final FileUploadService fileUploadService;
     private final NoticeQueryRepository noticeQueryRepository;
 
-    public void deleteImages(Long noticeId) {
-        List<NoticeImages> noticeImages = imagesRepository.findNoticeImagesByNoticeId(noticeId);
-
-        noticeImages.forEach(imagesRepository::delete);
-    }
-
-    public void deleteAttachedFiles(Long noticeId) {
-        List<NoticeAttachedFiles> noticeAttachedFiles = attachedFilesRepository.findNoticeAttachedFilesByNoticeId(noticeId);
-
-        noticeAttachedFiles.forEach(attachedFilesRepository::delete);
-
-    }
-
-    // 공지사항 게시글 삭제
-    public String delete(Long noticeId) {
-
-        Optional<Notice> findNotice = noticeRepository.findById(noticeId);
-
-        if(findNotice.isEmpty()) {
-            return null;
-        }
-
-        noticeRepository.delete(findNotice.get());
-
-        deleteImages(noticeId);
-        deleteAttachedFiles(noticeId);
-
-        return "pass";
-    }
-
 
 }
