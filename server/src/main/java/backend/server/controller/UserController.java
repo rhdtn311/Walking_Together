@@ -2,16 +2,16 @@ package backend.server.controller;
 
 import backend.server.DTO.FindPasswordDTO;
 import backend.server.DTO.UserDTO;
+import backend.server.DTO.response.ResponseDTO;
 import backend.server.entity.Member;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
-import backend.server.message.StatusEnum;
-import backend.server.service.UserService;
+import backend.server.service.user.SignUpService;
+import backend.server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,29 +26,17 @@ import static java.lang.Math.abs;
 public class UserController {
 
     private final UserService userService;
+    private final SignUpService signUpService;
 
 //     회원가입
     @PostMapping("/signup")
-    public ResponseEntity<Message> signup(@Valid @RequestBody UserDTO userDto) throws Exception {
+    public ResponseEntity<ResponseDTO> signup(@RequestBody UserDTO.SignUpReqDTO signUpReqDTO) {
+        String stdId = signUpService.signup(signUpReqDTO);
 
-        Message resBody = new Message();
-
-        if (userService.signup(userDto) == null) {
-            throw new ApiException(HttpStatus.CONFLICT, "중복된 회원입니다.", 409L);
-        }
-
-        if (userService.signup(userDto) == "emailDup") {
-            throw new ApiException(HttpStatus.CONFLICT, "중복된 이메일입니다.", 409L);
-        }
-
-        if (userService.signup(userDto) == "phoneNumberDup") {
-            throw new ApiException(HttpStatus.CONFLICT, "중복된 휴대폰번호 입니다.", 409L);
-        }
-
-        userService.signup(userDto);
-        resBody.setMessage("회원가입이 성공적으로 완료되었습니다.");
-
-        return new ResponseEntity<>(resBody, null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("회원가입이 성공적으로 완료되었습니다.")
+                .data(stdId)
+                .build());
     }
 
     // 회원가입시 인증코드 전송

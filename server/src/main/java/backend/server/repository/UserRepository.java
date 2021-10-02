@@ -13,6 +13,7 @@ public interface UserRepository extends JpaRepository<Member, Long> {
 
     // 쿼리가 수행될 때 Eager 조회로 authorities 정보를 가져오게 된다.
     @EntityGraph(attributePaths = "authorities")
+
     // stdId를 기준으로 User 정보를 가져올 때 권한 정보도 같이 가져옴
     Optional<Member> findOneWithAuthoritiesByStdId(String stdId);
 
@@ -28,6 +29,10 @@ public interface UserRepository extends JpaRepository<Member, Long> {
     Optional<Member> findMemberByStdId(String stdId);
 
     boolean existsMemberByStdId(String stdId);
+
+    boolean existsMemberByEmail(String email);
+
+    boolean existsMemberByPhoneNumber(String phoneNumber);
 
     @Query("SELECT p.partnerName, p.partnerDetail, p.partnerBirth, p.partnerId FROM Partner p LEFT JOIN p.member WHERE p.member.stdId = :stdId")
     List<List<Object>> getPartnerList(@Param("stdId") String stdId);

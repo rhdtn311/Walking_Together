@@ -3,6 +3,7 @@ package backend.server.entity;
 import backend.server.DTO.RankingDTO;
 import backend.server.DTO.myPage.MyPageDTO;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -19,7 +20,6 @@ import java.util.Set;
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity {
-
     @Id
     @Column(unique = true, nullable = false)
     private String stdId;   // 학번

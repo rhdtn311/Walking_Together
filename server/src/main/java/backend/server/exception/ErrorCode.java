@@ -24,7 +24,12 @@ public enum ErrorCode {
 
     // Notice
     DATA_NOT_FOUND_IN_PAGE(400L, "해당 페이지에 데이터가 존재하지 않습니다.", 404),
-    NOTICE_NOT_FOUND(400L, "존재하지 않는 게시물입니다.", 404);
+    NOTICE_NOT_FOUND(400L, "존재하지 않는 게시물입니다.", 404),
+
+    // User
+    STDID_DUPLICATION(409L, "중복된 회원입니다.", 409),
+    EMAIL_DUPLICATION(409L, "중복된 이메일입니다.", 409),
+    PHONE_NUMBER_DUPLICATION(409L, "중복된 휴대폰 번호입니다.", 409);
 
     private final Long code;
     private final String message;
