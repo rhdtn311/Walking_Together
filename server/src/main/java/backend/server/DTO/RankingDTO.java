@@ -6,14 +6,11 @@ import lombok.*;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RankingDTO {
 
     private String name;
-
     private String department;
-
     private String stdId;
-
     private Long totalDistance;
 }

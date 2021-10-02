@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,26 +24,23 @@ public class RankingService {
 
     private final UserRepository userRepository;
 
-
-    public List<RankingDTO> ranking() {
-
+    public List<RankingDTO> getRanking() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("distance").descending());
 
-        Page<Member> result = userRepository.findAll(pageable);
+        Page<Member> memberPage = userRepository.findAll(pageable);
 
-        List<RankingDTO> rankers = new ArrayList<>();
+        return memberToRankingDTOList(memberPage);
+    }
 
-        result.get().forEach( ranker -> {
-            RankingDTO dto = RankingDTO.builder()
-                    .name(ranker.getName())
-                    .department(ranker.getDepartment())
-                    .stdId(ranker.getStdId())
-                    .totalDistance(ranker.getDistance())
-                    .build();
-
-            rankers.add(dto);
-        });
-
-        return rankers;
+    public List<RankingDTO> memberToRankingDTOList(Page<Member> memberPage) {
+        return memberPage.stream().map(Member::toRankingDTO).collect(Collectors.toList());
     }
 }
+
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 package backend.server.entity;
 
+import backend.server.DTO.RankingDTO;
 import backend.server.DTO.myPage.MyPageDTO;
 import lombok.*;
 
@@ -93,6 +94,15 @@ public class Member extends BaseEntity {
                 .name(this.name)
                 .department(this.department)
                 .totalTime(this.totalTime)
+                .build();
+    }
+
+    public RankingDTO toRankingDTO() {
+        return RankingDTO.builder()
+                .stdId(this.stdId)
+                .name(this.name)
+                .department(this.department)
+                .totalDistance(this.distance)
                 .build();
     }
 }
