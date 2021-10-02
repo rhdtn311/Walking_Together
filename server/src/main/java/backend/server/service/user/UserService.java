@@ -1,19 +1,21 @@
-package backend.server.service;
+package backend.server.service.user;
 
 import backend.server.DTO.LoginDTO;
 import backend.server.DTO.MailDTO;
-import backend.server.DTO.UserDTO;
+import backend.server.DTO.user.UserDTO;
 import backend.server.entity.Member;
-import backend.server.entity.MemberRole;
+import backend.server.exception.userService.EmailDuplicationException;
 import backend.server.repository.UserRepository;
 import backend.server.security.util.SecurityUtil;
+import backend.server.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalTime;
 import java.util.Optional;
+
+import static java.lang.Math.abs;
 
 @RequiredArgsConstructor
 @Service
@@ -22,39 +24,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
-
-    // 회원가입
-    @Transactional
-    public String signup(UserDTO userDto) {
-        if (userRepository.findOneWithAuthoritiesByStdId(userDto.getStdId()).orElse(null) != null) {
-            return null;
-        }
-
-        if (userRepository.findMemberByEmail(userDto.getEmail()).orElse(null)!=null) {
-            return "emailDup";
-        }
-
-        if (userRepository.findMemberByPhoneNumber(userDto.getPhoneNumber()).orElse(null) != null) {
-            return "phoneNumberDup";
-        }
-
-        Member member = Member.builder()
-                .stdId(userDto.getStdId())
-                .name(userDto.getName())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .birth(userDto.getBirth())
-                .email(userDto.getEmail())
-                .totalTime(0)
-                .activate(true)
-                .department(userDto.getDepartment())
-                .phoneNumber(userDto.getPhoneNumber())
-                .distance(0L)
-                .build();
-
-        member.addMemberRole(MemberRole.ROLE_USER);
-
-        return userRepository.save(member).getStdId();
-    }
 
     // stdId 에 해당하는 user 객체와 권한 정보를 가져옴
     @Transactional(readOnly = true)
@@ -111,23 +80,6 @@ public class UserService {
 
         mailService.mailSend(sendMail);
         return tempPassword;    // 임시비밀번호
-    }
-
-    // 회원가입 메일 보내기
-    public String sendAuthNumber(String email, String authNum) {
-        Optional<Member> member = userRepository.findMemberByEmail(email);
-        if(member.isPresent()) {
-            return "409";
-        }
-
-        MailDTO sendAuthNum = MailDTO.builder()
-                .title("<< 인증 코드입니다. >>")
-                .message("인증 코드는 " + authNum + " 입니다.")
-                .address(email)
-                .build();
-
-        mailService.mailSend(sendAuthNum);
-        return email;
     }
 
     // 임시 비밀번호 생성 (7글자 무작위 단어 생성)

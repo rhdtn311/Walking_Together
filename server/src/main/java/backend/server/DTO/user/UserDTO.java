@@ -1,4 +1,4 @@
-package backend.server.DTO;
+package backend.server.DTO.user;
 
 import backend.server.entity.Member;
 import backend.server.entity.MemberRole;
@@ -73,6 +73,17 @@ public class UserDTO {
             member.addMemberRole(MemberRole.ROLE_USER);
 
             return member;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class VerificationNumberSendResDTO {
+        private String authNum;
+
+        @Builder
+        public VerificationNumberSendResDTO(String authNum) {
+            this.authNum = authNum;
         }
     }
 }
