@@ -6,6 +6,7 @@ import backend.server.DTO.response.ResponseDTO;
 import backend.server.entity.Member;
 import backend.server.exception.ApiException;
 import backend.server.message.Message;
+import backend.server.service.user.PasswordFineService;
 import backend.server.service.user.SignUpService;
 import backend.server.service.user.UserService;
 import backend.server.service.user.VerificationNumberSendService;
@@ -28,6 +29,7 @@ public class UserController {
     private final UserService userService;
     private final SignUpService signUpService;
     private final VerificationNumberSendService verificationNumberSendService;
+    private final PasswordFineService passwordFineService;
 
     // 회원가입
     @PostMapping("/signup")
@@ -67,24 +69,13 @@ public class UserController {
 
     // 비밀번호 찾기
     @PostMapping("/findpassword")
-    public ResponseEntity<Message> findPassword(@RequestBody FindPasswordDTO findPasswordDTO) {
+    public ResponseEntity<ResponseDTO> findPassword(@RequestBody UserDTO.PasswordFindReqDTO passwordFindReqDTO) {
+        UserDTO.PasswordFindResDTO passwordFindResDTO = passwordFineService.findPassword(passwordFindReqDTO);
 
-        String email = userService.findPassword(findPasswordDTO.getStdId(), findPasswordDTO.getName(),
-                findPasswordDTO.getBirth());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("email", email);
-
-        Message resBody = new Message();
-        resBody.setMessage("임시 비밀번호가 입력하신 이메일로 발송 되었습니다.");
-        resBody.setData(response);
-
-        if (email == "noMember") {
-
-            throw new ApiException(HttpStatus.NOT_FOUND,"일치하는 정보가 없습니다." ,400L);
-        }
-
-        return new ResponseEntity<>(resBody,null, HttpStatus.OK);
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .message("임시 비밀번호가 입력하신 이메일로 발송 되었습니다.")
+                .data(passwordFindResDTO)
+                .build());
     }
 
     @GetMapping("/authenticTest")

@@ -86,4 +86,24 @@ public class UserDTO {
             this.authNum = authNum;
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PasswordFindReqDTO {
+        private String birth;
+        private String name;
+        private String stdId;
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PasswordFindResDTO {
+        private String email;
+
+        @Builder
+        public PasswordFindResDTO(String email) {
+            this.email = email;
+        }
+    }
 }

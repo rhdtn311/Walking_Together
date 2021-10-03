@@ -31,4 +31,12 @@ public class MailDTO {
         Random random = new Random();
         return String.valueOf(abs(random.nextInt())).substring(0, 7);
     }
+
+    public static MailDTO setFindPasswordMail(String email, String tempPassword) {
+        return MailDTO.builder()
+                .title("<< WalkingTogether 임시 비밀번호입니다. >>")
+                .message("임시 비밀번호는 " + tempPassword + " 입니다.")
+                .address(email)
+                .build();
+    }
 }
