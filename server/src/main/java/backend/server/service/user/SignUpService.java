@@ -1,6 +1,6 @@
 package backend.server.service.user;
 
-import backend.server.DTO.UserDTO;
+import backend.server.DTO.user.UserDTO;
 import backend.server.entity.Member;
 import backend.server.exception.userService.EmailDuplicationException;
 import backend.server.exception.userService.PhoneNumberDuplicationException;
