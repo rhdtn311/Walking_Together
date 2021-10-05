@@ -24,7 +24,7 @@ public class FeedReviewService {
         }
 
         Activity activity = activityOptional.get();
-        if (activity.getActivityStatus() == 1) {
+        if (activity.isActive()) {
             throw new ActiveActivityNotWriteReviewException();
         }
 

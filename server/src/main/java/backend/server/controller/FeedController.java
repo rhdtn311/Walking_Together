@@ -56,14 +56,15 @@ public class FeedController {
     @PostMapping("/feed/detail/review")
     public ResponseEntity<ResponseDTO> writeFeedReview(@RequestParam(value="activityId") Long activityId,
                                           @RequestParam(value = "review") @Nullable String review) {
-        feedReviewService.writeActivityReview(activityId, review);
         if (review == null) {
             throw new ReviewNotReceiveException();
         }
 
+        Long reviewActivityId = feedReviewService.writeActivityReview(activityId, review);
+
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("소감문 저장 완료")
-                .data(activityId)
+                .data(reviewActivityId)
                 .build());
     }
 
