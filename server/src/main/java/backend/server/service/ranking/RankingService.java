@@ -1,4 +1,4 @@
-package backend.server.service;
+package backend.server.service.ranking;
 
 import backend.server.DTO.RankingDTO;
 import backend.server.DTO.page.PageRequestDTO;

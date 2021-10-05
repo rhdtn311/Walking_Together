@@ -2,7 +2,7 @@ package backend.server.controller;
 
 import backend.server.DTO.RankingDTO;
 import backend.server.DTO.response.ResponseDTO;
-import backend.server.service.RankingService;
+import backend.server.service.ranking.RankingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
