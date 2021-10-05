@@ -1,12 +1,10 @@
 package backend.server.entity;
 
-import backend.server.DTO.RankingDTO;
+import backend.server.DTO.ranking.RankingDTO;
 import backend.server.DTO.myPage.MyPageDTO;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

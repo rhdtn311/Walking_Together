@@ -2,7 +2,7 @@ package backend.server.controller;
 
 import backend.server.DTO.activity.ActivityDTO;
 import backend.server.DTO.activity.PartnerDTO;
-import backend.server.DTO.TokenDTO;
+import backend.server.DTO.auth.TokenDTO;
 import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.ErrorCode;
 import backend.server.exception.activityService.*;

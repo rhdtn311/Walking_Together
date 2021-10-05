@@ -1,6 +1,6 @@
 package backend.server.service.user;
 
-import backend.server.DTO.MailDTO;
+import backend.server.DTO.user.MailDTO;
 import backend.server.DTO.user.UserDTO;
 import backend.server.exception.userService.EmailDuplicationException;
 import backend.server.repository.UserRepository;

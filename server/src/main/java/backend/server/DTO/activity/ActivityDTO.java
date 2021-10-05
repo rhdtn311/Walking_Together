@@ -15,30 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class ActivityDTO {
-
-    private String partnerName;
-
-    private String partnerDetail;
-
-    private MultipartFile startPhoto;
-
-    private Long partnerId;
-
-    private String stdId;
-
-    private LocalDate activityDate;
-
-    private int activityDivision;
-
-    private int activityStatus;
-
-    private String partnerBirth;
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

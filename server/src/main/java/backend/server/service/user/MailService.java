@@ -1,6 +1,6 @@
 package backend.server.service.user;
 
-import backend.server.DTO.MailDTO;
+import backend.server.DTO.user.MailDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

@@ -1,22 +1,13 @@
 package backend.server.controller;
 
 import backend.server.DTO.myPage.MyPageDTO;
-import backend.server.DTO.myPage.MyPagePartnerDTO;
 import backend.server.DTO.response.ResponseDTO;
-import backend.server.exception.ApiException;
-import backend.server.message.Message;
 import backend.server.service.mypage.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController

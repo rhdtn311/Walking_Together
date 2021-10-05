@@ -2,48 +2,10 @@ package backend.server.DTO.user;
 
 import backend.server.entity.Member;
 import backend.server.entity.MemberRole;
-import com.sun.istack.NotNull;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.validation.constraints.Size;
-
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-// 회원가입시 사용
 public class UserDTO {
-
-    @NotNull
-    @Size(min = 3, max = 50)
-    private String stdId;
-
-    @NotNull
-    @Size(min = 3, max = 100)
-    private String password;
-
-    @NotNull
-    private String name;
-
-    @NotNull
-    private String email;
-
-    @NotNull
-    private String phoneNumber;
-
-    @NotNull
-    private String birth;
-
-    @NotNull
-    private String department;
-
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,4 +1,4 @@
-package backend.server.DTO;
+package backend.server.DTO.auth;
 
 import com.sun.istack.NotNull;
 import lombok.*;

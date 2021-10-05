@@ -1,7 +1,7 @@
 package backend.server.service.activity;
 
 import backend.server.DTO.activity.ActivityDTO;
-import backend.server.DTO.TokenDTO;
+import backend.server.DTO.auth.TokenDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.Member;
 import backend.server.exception.activityService.ActivityAlreadyDoneException;

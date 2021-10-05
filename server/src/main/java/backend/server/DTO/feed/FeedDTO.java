@@ -8,25 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class FeedDTO {
-
-    private int activityStatus;
-
-    private Long distance;
-
-    private String partnerName;
-
-    private LocalDate activityDate;
-
-    private int activityDivision;
-
-    private Long activityId;
-
     @Getter
     @NoArgsConstructor
     public static class FeedMainResDTO {

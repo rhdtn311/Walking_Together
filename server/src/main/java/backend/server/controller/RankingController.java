@@ -1,6 +1,6 @@
 package backend.server.controller;
 
-import backend.server.DTO.RankingDTO;
+import backend.server.DTO.ranking.RankingDTO;
 import backend.server.DTO.response.ResponseDTO;
 import backend.server.service.ranking.RankingService;
 import lombok.RequiredArgsConstructor;
