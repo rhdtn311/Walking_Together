@@ -3,7 +3,6 @@ package backend.server.controller;
 import backend.server.DTO.auth.CrossPageValidationResDTO;
 import backend.server.DTO.auth.LoginDTO;
 import backend.server.DTO.auth.TokenDTO;
-import backend.server.DTO.response.ResponseDTO;
 import backend.server.security.jwt.JwtFilter;
 import backend.server.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;

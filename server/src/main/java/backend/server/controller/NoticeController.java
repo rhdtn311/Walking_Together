@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class NoticeController {
 
-    private final NoticeService noticeService;
     private final NoticeListService noticeListService;
     private final NoticeDetailService noticeDetailService;
     private final NoticeCreationService noticeCreationService;
@@ -38,7 +37,7 @@ public class NoticeController {
 
     // 공지사항 게시물 상세
     @GetMapping("/notice")
-    public ResponseEntity<ResponseDTO> detailNotice(@RequestParam(value = "noticeId") Long noticeId) {
+    public ResponseEntity<ResponseDTO> getNoticeDetail(@RequestParam(value = "noticeId") Long noticeId) {
         NoticeDTO.NoticeDetailResDTO noticeDetail = noticeDetailService.getNoticeDetail(noticeId);
 
         return ResponseEntity.ok(ResponseDTO.builder()

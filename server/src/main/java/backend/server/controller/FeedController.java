@@ -1,6 +1,5 @@
 package backend.server.controller;
 
-import backend.server.DTO.common.CertificationDTO;
 import backend.server.DTO.feed.FeedDTO;
 import backend.server.DTO.response.ResponseDTO;
 import backend.server.exception.feedService.ReviewNotReceiveException;
