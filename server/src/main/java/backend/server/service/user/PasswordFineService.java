@@ -5,7 +5,6 @@ import backend.server.DTO.user.UserDTO;
 import backend.server.entity.Member;
 import backend.server.exception.activityService.MemberNotFoundException;
 import backend.server.repository.UserRepository;
-import backend.server.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class PasswordFineService {
 
         MailDTO passwordFindDTO = MailDTO.setFindPasswordMail(email, tempPassword);
 
-        mailService.mailSend(passwordFindDTO);
+        mailService.sendMail(passwordFindDTO);
 
         return tempPassword;
     }

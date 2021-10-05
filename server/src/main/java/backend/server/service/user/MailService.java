@@ -1,4 +1,4 @@
-package backend.server.service;
+package backend.server.service.user;
 
 import backend.server.DTO.MailDTO;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class MailService {
     @Value("${spring.mail.username}")
     private static final String FROM_ADDRESS = "admin@walking2gether.com";
 
-    public void mailSend(MailDTO mailDto) {
+    public void sendMail(MailDTO mailDto) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailDto.getAddress());
         message.setFrom(MailService.FROM_ADDRESS);
