@@ -11,6 +11,7 @@ import backend.server.exception.activityService.PartnerNotFoundException;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.UserRepository;
+import backend.server.repository.querydsl.ActivityQueryRepository;
 import backend.server.s3.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,15 +28,14 @@ public class ActivityCreationService {
     private final ActivityRepository activityRepository;
     private final PartnerRepository partnerRepository;
     private final UserRepository userRepository;
+    private final ActivityQueryRepository activityQueryRepository;
+
     private final FileUploadService fileUploadService;
 
     // 활동 생성 화면
     @Transactional(readOnly = true)
     public List<PartnerDTO.PartnerListRes> createActivity(String stdId) {
-
-        boolean doingActivity = activityRepository.findDoingActivity(stdId);
-
-        if (doingActivity) {
+        if (activityQueryRepository.existsActiveActivity(stdId)) {
             throw new ActivityAlreadyInProgressException();
         }
 
@@ -56,7 +56,6 @@ public class ActivityCreationService {
     // 활동 생성 완료
     @Transactional
     public Long createActivityDone(ActivityDTO.ActivityCreationReq activityCreationReq) {
-
         Optional<Partner> partnerOpt = partnerRepository.findById(activityCreationReq.getPartnerId());
         if (partnerOpt.isEmpty()) {
             throw new PartnerNotFoundException();
