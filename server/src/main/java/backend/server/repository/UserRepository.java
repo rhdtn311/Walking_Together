@@ -20,12 +20,6 @@ public interface UserRepository extends JpaRepository<Member, Long> {
     // 학번으로 회원 찾기
     Optional<Member> findMemberByStdIdAndNameAndBirth(String stdId, String name, String birth);
 
-    // 이메일로 회원 찾기
-    Optional<Member> findMemberByEmail(String email);
-
-    // 휴대폰 번호로 회원 찾기
-    Optional<Member> findMemberByPhoneNumber(String phoneNumber);
-
     Optional<Member> findMemberByStdId(String stdId);
 
     boolean existsMemberByStdId(String stdId);
@@ -33,7 +27,4 @@ public interface UserRepository extends JpaRepository<Member, Long> {
     boolean existsMemberByEmail(String email);
 
     boolean existsMemberByPhoneNumber(String phoneNumber);
-
-    @Query("SELECT p.partnerName, p.partnerDetail, p.partnerBirth, p.partnerId FROM Partner p LEFT JOIN p.member WHERE p.member.stdId = :stdId")
-    List<List<Object>> getPartnerList(@Param("stdId") String stdId);
 }

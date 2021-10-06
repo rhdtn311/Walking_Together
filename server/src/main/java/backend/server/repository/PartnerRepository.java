@@ -13,8 +13,6 @@ public interface PartnerRepository extends JpaRepository<Partner, Long> {
 
     Optional<Partner> findPartnerByPartnerId(Long partnerId);
 
-    Optional<Partner> findPartnerByActivity_ActivityId(Long activityID);
-
     boolean existsPartnerByPartnerId(Long partnerId);
 }
 
