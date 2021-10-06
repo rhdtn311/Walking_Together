@@ -1,12 +1,13 @@
 package backend.server.service.mypage;
 
+import backend.server.DTO.s3.fileDelete.FileDeleteDTO;
 import backend.server.entity.Partner;
 import backend.server.exception.activityService.PartnerNotFoundException;
 import backend.server.exception.mypageService.PartnerHaveActivityException;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerPhotosRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.s3.FileUploadService;
+import backend.server.s3.FileDeleteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,8 @@ public class PartnerDeleteService {
 
     private final PartnerRepository partnerRepository;
     private final ActivityRepository activityRepository;
-    private final FileUploadService fileUploadService;
     private final PartnerPhotosRepository partnerPhotosRepository;
+    private final FileDeleteService fileDeleteService;
 
     public Long deletePartner(Long partnerId) {
         // 파트너가 활동을 가지고 있으면 삭제 불가능
@@ -30,7 +31,7 @@ public class PartnerDeleteService {
             throw new PartnerNotFoundException();
         }
 
-        fileUploadService.deletePartnerPhoto(partnerId);
+        fileDeleteService.deleteFile(partnerPhotosRepository, new FileDeleteDTO(partnerId));
         partnerPhotosRepository.delete(partnerPhotosRepository.findPartnerPhotosByPartnerId(partnerId));
 
         Partner partner = partnerRepository.findById(partnerId).get();

@@ -1,8 +1,11 @@
 package backend.server.service.mypage;
 
 import backend.server.DTO.myPage.MyPageDTO;
+import backend.server.DTO.s3.fileUpload.PartnerProfileImageFileUploadDTO;
 import backend.server.entity.Partner;
+import backend.server.entity.PartnerPhotos;
 import backend.server.exception.activityService.MemberNotFoundException;
+import backend.server.repository.PartnerPhotosRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.UserRepository;
 import backend.server.s3.FileUploadService;
@@ -16,6 +19,7 @@ public class PartnerCreationService {
 
     private final UserRepository userRepository;
     private final PartnerRepository partnerRepository;
+    private final PartnerPhotosRepository partnerPhotosRepository;
 
     private final FileUploadService fileUploadService;
 
@@ -27,10 +31,21 @@ public class PartnerCreationService {
         Partner partner = partnerCreationReqDTO.partnerCreationReqDTOToPartner();
         Partner savedPartner = partnerRepository.save(partner);
 
-        if (partnerCreationReqDTO.isPartnerPhoto()) {
-            fileUploadService.uploadPartnerPhoto(partnerCreationReqDTO.getPartnerPhoto(), savedPartner.getPartnerId());
+        if (partnerCreationReqDTO.isPartnerPhotoPresent()) {
+            PartnerProfileImageFileUploadDTO partnerProfileImageFileUploadDTO = new PartnerProfileImageFileUploadDTO(partnerCreationReqDTO.getPartnerPhoto());
+            String fileUrl = fileUploadService.uploadFileToS3(partnerProfileImageFileUploadDTO);
+            savePartnerPhoto(savedPartner.getPartnerId(), partnerProfileImageFileUploadDTO.getFileName(), fileUrl);
         }
 
-        return partner.getPartnerId();
+        return savedPartner.getPartnerId();
+    }
+
+    private void savePartnerPhoto(Long partnerId, String fileName, String fileUrl) {
+        PartnerPhotos partnerPhoto = PartnerPhotos.builder()
+                .partnerId(partnerId)
+                .partnerPhotoName(fileName)
+                .partnerPhotoUrl(fileUrl)
+                .build();
+        partnerPhotosRepository.save(partnerPhoto);
     }
 }

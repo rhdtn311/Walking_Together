@@ -141,7 +141,7 @@ public class MyPageDTO {
             return this.partnerBirth.replace('-','/');
         }
 
-        public boolean isPartnerPhoto() {
+        public boolean isPartnerPhotoPresent() {
             return this.partnerPhoto != null;
         }
     }

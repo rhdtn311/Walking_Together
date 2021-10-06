@@ -1,7 +1,8 @@
 package backend.server.DTO.notice;
 
+import backend.server.DTO.s3.fileUpload.NoticeAttachedFileUploadDTO;
+import backend.server.DTO.s3.fileUpload.NoticeImageFileUploadDTO;
 import backend.server.entity.Notice;
-import backend.server.entity.NoticeAttachedFiles;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -78,6 +79,14 @@ public class NoticeDTO {
 
         public boolean isImageFilesPresent() {
             return this.imageFiles != null;
+        }
+
+        public NoticeImageFileUploadDTO ImageFileToFileUploadDTO() {
+            return new NoticeImageFileUploadDTO(this.imageFiles.get(0));
+        }
+
+        public NoticeAttachedFileUploadDTO AttachedFileToFileUploadDTO() {
+            return new NoticeAttachedFileUploadDTO(this.attachedFiles.get(0));
         }
     }
 

@@ -1,5 +1,6 @@
 package backend.server.entity;
 
+import backend.server.DTO.s3.fileDelete.FileDeleteDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,4 +33,7 @@ public class NoticeImages {
         this.noticeImageName = imageName;
     }
 
+    public FileDeleteDTO toFileDeleteDTO() {
+        return new FileDeleteDTO(noticeId);
+    }
 }

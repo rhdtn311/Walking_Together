@@ -2,12 +2,15 @@ package backend.server.service.activity;
 
 import backend.server.DTO.activity.ActivityDTO;
 import backend.server.DTO.auth.TokenDTO;
+import backend.server.DTO.s3.fileUpload.ActivityEndImageFileUploadDTO;
 import backend.server.entity.Activity;
+import backend.server.entity.ActivityCheckImages;
 import backend.server.entity.Member;
 import backend.server.exception.activityService.ActivityAlreadyDoneException;
 import backend.server.exception.activityService.ActivityDonePhotoNotSendException;
 import backend.server.exception.activityService.ActivityMapPhotoNotSendException;
 import backend.server.exception.activityService.ActivityNotFoundException;
+import backend.server.repository.ActivityCheckImagesRepository;
 import backend.server.repository.ActivityRepository;
 import backend.server.s3.FileUploadService;
 import backend.server.security.jwt.TokenProvider;
@@ -21,10 +24,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ActivityEndService {
-    private final FileUploadService fileUploadService;
+
     private final MapCaptureSaveService mapCaptureSaveService;
     private final CertificationSaveService certificationSaveService;
     private final ActivityRepository activityRepository;
+    private final FileUploadService fileUploadService;
+    private final ActivityCheckImagesRepository activityCheckImagesRepository;
 
     private final TokenProvider tokenProvider;
 
@@ -50,7 +55,9 @@ public class ActivityEndService {
 
         if (activityEndReq.getCheckNormalQuit() == 0) {
             if (activityEndReq.getEndPhoto() != null) {
-                fileUploadService.uploadMapImages(activityEndReq.getEndPhoto(),activityEndReq.getActivityId(), "end");
+                ActivityEndImageFileUploadDTO activityEndImageFileUploadDTO = new ActivityEndImageFileUploadDTO(activityEndReq.getEndPhoto());
+                String fileUrl = fileUploadService.uploadFileToS3(activityEndImageFileUploadDTO);
+                saveActivityEndImage(activity.getActivityId(), fileUrl, activityEndImageFileUploadDTO.getFileName());
             } else {
                 throw new ActivityDonePhotoNotSendException();
             }
@@ -78,6 +85,16 @@ public class ActivityEndService {
         certificationSaveService.saveCertification(member, activity);
 
         return activityEndReq.getActivityId();
+    }
+
+    private void saveActivityEndImage(Long activityId, String fileUrl, String fileName) {
+        ActivityCheckImages activityCheckImage = ActivityCheckImages.builder()
+                .activityId(activityId)
+                .imageUrl(fileUrl)
+                .imageName(fileName)
+                .build();
+
+        activityCheckImagesRepository.save(activityCheckImage);
     }
 
     public String tokenToStdId(TokenDTO tokenDTO) {

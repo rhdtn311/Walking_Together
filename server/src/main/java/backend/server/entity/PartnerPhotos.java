@@ -1,5 +1,6 @@
 package backend.server.entity;
 
+import backend.server.DTO.s3.fileDelete.FileDeleteDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
