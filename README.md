@@ -53,5 +53,6 @@ https://www.figma.com/file/Zsm56YCTXfQ1rad6z9stx1/Walking2gether-UI
 
 ### 5. 핵심 기능 및 메뉴얼
 
-[WT_manual.pdf](https://github.com/sunpl13/Walking_Together/files/6645239/WT_manual.pdf
+[확인](https://github.com/sunpl13/Walking_Together/files/6645239/WT_manual.pdf
+)
 
