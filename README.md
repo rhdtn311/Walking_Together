@@ -1,21 +1,17 @@
-
-
-
-
 # <img src="C:\Users\태현\Desktop\walking2gether\Walking_Together\client\public\images\thumbnail128.png" style="zoom: 33%;" /> WalkingTogether🚶‍♂️🚶‍♀️
 
 ### 1. 제작 기간 & 참여 인원
 
 - 2021년 1월 15일 ~ 2021년 6월 15일 (~ 진행중)
-- Front-end
-  - 김정수 (https://github.com/sunpl13)
-  - 신소정 (https://github.com/shinsojeong)
-- Back-end
-  - 공태현 (https://github.com/rhdtn311)
+- **Front-end**
+  - [김정수](https://github.com/sunpl13)
+  - [신소정](https://github.com/shinsojeong)
+- **Back-end**
+  - [공태현](https://github.com/rhdtn311)
 
 ### 2. 사용 기술
 
-- Front-end
+- **Front-end**
   - axios
   - lodash
   - pdfmake
@@ -26,7 +22,7 @@
   - redux
   - redux-thunk
   - sass
-- Back-end
+- **Back-end**
   - Java 11
   - Spring boot 2.4.3
   - Gradle
@@ -36,7 +32,7 @@
 - Test
   - Postman
   - Jmeter
-- Deploy
+- **Deploy**
   - AWS S3, CloudFront (Front-end)
   - Linux2, AWS EC2 with clb (Back-end)
   - RDS (MariaDB)
@@ -55,4 +51,3 @@
 
 [확인](https://github.com/sunpl13/Walking_Together/files/6645239/WT_manual.pdf
 )
-
