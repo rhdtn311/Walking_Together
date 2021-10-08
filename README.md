@@ -44,7 +44,7 @@
 
 ### 3. 어플리케이션 UI
 
-https://www.figma.com/file/Zsm56YCTXfQ1rad6z9stx1/Walking2gether-UI
+[확인](https://www.figma.com/file/Zsm56YCTXfQ1rad6z9stx1/Walking2gether-UI)
 
 ### 4. ERD 설계
 
