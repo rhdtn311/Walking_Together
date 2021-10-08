@@ -11,7 +11,13 @@
 - **Back-end**
   - [공태현](https://github.com/rhdtn311)
 
-### 2. 사용 기술
+### 2. 개발 동기
+
+1. COVID-19로 인해 코로나 이전(2019년) 대비 2020년 자원봉사율이 52% 감소
+2. 주변 대학 동기들이 졸업 요건 중 필수인 봉사활동에 대해 많은 걱정이 있었음
+3. 현 상황에서도 실천 가능한 봉사활동 방법을 고민하던 끝에 대학교 사회 봉사단에 근무하던 친구들과 해당 앱을 구현하기로 결정
+
+### 3. 사용 기술
 
 - **Front-end**
   - axios
@@ -40,16 +46,16 @@
   - RDS (MariaDB)
   - Route 53
 
-### 3. 어플리케이션 UI
+### 4. 어플리케이션 UI
 
 [확인](https://www.figma.com/file/Zsm56YCTXfQ1rad6z9stx1/Walking2gether-UI)
 
-### 4. ERD 설계
+### 5. ERD 설계
 
 ![WalkingTogetherERD](https://user-images.githubusercontent.com/68289543/136584541-7685f354-c76d-43b0-83a5-d73736d2ad1e.png)
 
 
-### 5. 핵심 기능 및 메뉴얼
+### 6. 핵심 기능 및 메뉴얼
 
 [확인](https://github.com/sunpl13/Walking_Together/files/6645239/WT_manual.pdf
 )
