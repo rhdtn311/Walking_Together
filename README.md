@@ -1,6 +1,6 @@
 # <img src="C:\Users\태현\Desktop\walking2gether\Walking_Together\client\public\images\thumbnail128.png" style="zoom: 33%;" /> WalkingTogether🚶‍♂️🚶‍♀️
 
-🌐 [웹사이트 링크](www.walking2gether.com)
+🌐 [웹사이트 링크](https://www.walking2gether.com)
 
 ### 1. 제작 기간 & 참여 인원
 
