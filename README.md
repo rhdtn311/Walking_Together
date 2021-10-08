@@ -44,11 +44,12 @@
 
 ### 3. 어플리케이션 UI
 
-file:///C:/Users/%ED%83%9C%ED%98%84/Desktop/walkingtogether%20%EC%9E%90%EB%A3%8C%EB%93%A4/%ED%8F%AC%ED%8A%B8%ED%8F%B4%EB%A6%AC%EC%98%A4%20UI.html
+https://www.figma.com/file/Zsm56YCTXfQ1rad6z9stx1/Walking2gether-UI
 
 ### 4. ERD 설계
 
-![](C:\Users\태현\Desktop\walkingtogether 자료들\WalkingTogetherERD.png)
+![WalkingTogetherERD](https://user-images.githubusercontent.com/68289543/136584541-7685f354-c76d-43b0-83a5-d73736d2ad1e.png)
+
 
 ### 5. 핵심 기능 및 메뉴얼
 
