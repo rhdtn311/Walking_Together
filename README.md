@@ -29,7 +29,7 @@
   - Spring data JPA
   - Querydsl
   - MariaDB
-- Test
+- **Test**
   - Postman
   - Jmeter
 - **Deploy**
