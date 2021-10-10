@@ -36,7 +36,9 @@
   - sass
 - **Back-end**
   - Java 11
+  - Java Mail Sender
   - Spring boot 2.4.3
+  - Spring security 5:3.0.4
   - Gradle
   - Spring data JPA
   - Querydsl
