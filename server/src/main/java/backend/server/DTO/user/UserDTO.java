@@ -6,6 +6,8 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserDTO {
+
+    @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
