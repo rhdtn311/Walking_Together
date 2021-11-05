@@ -2,7 +2,7 @@ package backend.server.controller;
 
 import backend.server.DTO.user.UserDTO;
 import backend.server.DTO.response.ResponseDTO;
-import backend.server.service.user.PasswordFineService;
+import backend.server.service.user.PasswordFindService;
 import backend.server.service.user.SignUpService;
 import backend.server.service.user.VerificationNumberSendService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class UserController {
 
     private final SignUpService signUpService;
     private final VerificationNumberSendService verificationNumberSendService;
-    private final PasswordFineService passwordFineService;
+    private final PasswordFindService passwordFindService;
 
     // 회원가입
     @PostMapping("/signup")
@@ -43,7 +43,7 @@ public class UserController {
     // 비밀번호 찾기
     @PostMapping("/findpassword")
     public ResponseEntity<ResponseDTO> findPassword(@RequestBody UserDTO.PasswordFindReqDTO passwordFindReqDTO) {
-        UserDTO.PasswordFindResDTO passwordFindResDTO = passwordFineService.findPassword(passwordFindReqDTO);
+        UserDTO.PasswordFindResDTO passwordFindResDTO = passwordFindService.findPassword(passwordFindReqDTO);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("임시 비밀번호가 입력하신 이메일로 발송 되었습니다.")

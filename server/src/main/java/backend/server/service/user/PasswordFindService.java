@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class PasswordFineService {
+public class PasswordFindService {
 
     private final UserRepository userRepository;
 
