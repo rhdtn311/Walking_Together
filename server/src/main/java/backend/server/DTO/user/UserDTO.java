@@ -51,6 +51,7 @@ public class UserDTO {
         }
     }
 
+    @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
