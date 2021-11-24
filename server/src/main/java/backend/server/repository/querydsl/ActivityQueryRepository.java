@@ -21,7 +21,6 @@ public class ActivityQueryRepository {
                 .where(member.stdId.eq(stdId))
                 .where(activity.activityStatus.eq(1))
                 .fetchFirst();
-        System.out.println(findActivity);
 
         return findActivity != null;
     }
