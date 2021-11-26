@@ -72,7 +72,13 @@ public class Member extends BaseEntity {
     // 총 거리 증가
     public void addDistance(Long distance) {this.distance += distance;}
     // 총 거리 감소
-    public void minusDistance(Long distance) {this.distance -= distance;}
+    public void minusDistance(Long distance) {
+        this.distance -= distance;
+
+        if (this.distance < 0) {
+            this.distance = 0L;
+        }
+    }
 
     // 총 환산 시간 수정
     public void changeTotalTime(Activity activity, String cal) {
@@ -84,6 +90,10 @@ public class Member extends BaseEntity {
             this.totalTime += totalMinutes;
         } else {
             this.totalTime -= totalMinutes;
+        }
+
+        if (this.totalTime < 0) {
+            this.totalTime = 0;
         }
     }
 
