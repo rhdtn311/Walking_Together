@@ -1,13 +1,17 @@
-package backend.server.repository.querydsl;
+package backend.server.service.admin;
 
 import backend.server.DTO.admin.AdminDTO;
+import backend.server.DTO.common.MapCaptureDTO;
 import backend.server.entity.Activity;
+import backend.server.entity.MapCapture;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
+import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.ActivityRepository;
+import backend.server.repository.MapCaptureRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.UserRepository;
-import org.assertj.core.api.Assertions;
+import backend.server.repository.querydsl.AdminQueryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -25,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-class AdminQueryRepositoryTest {
+class ActivityInfoServiceTest {
 
     @Autowired
     AdminQueryRepository adminQueryRepository;
@@ -38,6 +43,12 @@ class AdminQueryRepositoryTest {
 
     @Autowired
     PartnerRepository partnerRepository;
+
+    @Autowired
+    MapCaptureRepository mapCaptureRepository;
+
+    @Autowired
+    ActivityInfoService activityInfoService;
 
     static Member member1;
     static Member member2;
@@ -94,6 +105,8 @@ class AdminQueryRepositoryTest {
                 .activityDate(LocalDate.of(2022, 1, 1))
                 .startTime(LocalDateTime.of(2022, 1, 1, 10, 0, 0))
                 .endTime(LocalDateTime.of(2022, 1, 1, 12, 0, 0))
+                .review("좋은 활동1이었습니다.")
+                .distance(5000L)
                 .build();
 
         activity2 = Activity.builder()
@@ -103,12 +116,69 @@ class AdminQueryRepositoryTest {
                 .activityDate(LocalDate.of(2022, 5, 1))
                 .startTime(LocalDateTime.of(2022, 5, 1, 10, 0, 0))
                 .endTime(LocalDateTime.of(2022, 5, 1, 12, 0, 0))
+                .review("좋은 활동2였습니다.")
+                .distance(6000L)
                 .build();
 
-        activityRepository.save(activity1);
-        activityRepository.save(activity2);
+        Activity savedActivity1 = activityRepository.save(activity1);
+        Activity savedActivity2 = activityRepository.save(activity2);
 
+        for (int i = 0; i < 2; i++) {
+            List<String> latList = new ArrayList<>();
+            List<String> lonList = new ArrayList<>();
+            List<String> timestampList = new ArrayList<>();
+
+            createMapCaptures(latList, lonList, timestampList);
+
+            if (i == 0) {
+                for (int j = 0; j < 10; j++) {
+                    MapCapture mapCapture = MapCapture.builder()
+                            .activityId(savedActivity1.getActivityId())
+                            .lat(latList.get(j))
+                            .lon(lonList.get(j))
+                            .timestamp(timestampList.get(j))
+                            .build();
+
+                    mapCaptureRepository.save(mapCapture);
+                }
+
+            } else {
+                for (int j = 0; j < 10; j++) {
+                    MapCapture mapCapture = MapCapture.builder()
+                            .activityId(savedActivity2.getActivityId())
+                            .lat(latList.get(j))
+                            .lon(lonList.get(j))
+                            .timestamp(timestampList.get(j))
+                            .build();
+
+                    mapCaptureRepository.save(mapCapture);
+                }
+            }
+        }
     }
+
+    double makeNumber() {
+        return Math.random();
+    }
+
+    void createMapCaptures(List<String> latList, List<String> lonList, List<String> timestampList) {
+        // MapCapture 저장
+
+        // 무작위로 lat, lon, timestamp를 각각 10개씩 생성 후 각각 검증에 사용할 list에 넣어줌
+        for (int i = 0; i < 30; i++) {
+            if (i >= 0 && i < 10) {
+                String lat = String.valueOf(makeNumber() * 100);
+                latList.add(lat);
+            } else if (i >= 10 && i < 20) {
+                String lon = String.valueOf(makeNumber() * 100);
+                lonList.add(lon);
+            } else {
+                String timestamp = String.valueOf((long) (makeNumber() * 10000000000000L));
+                timestampList.add(timestamp);
+            }
+        }
+    }
+
 
     @Test
     @DisplayName("활동을 한 회원의 name이 keyword와 같은 경우 ")
@@ -143,7 +213,7 @@ class AdminQueryRepositoryTest {
         assertThat(findActivity1.getActivityDate()).isEqualTo(activity1.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         assertThat(findActivity1.getStartTime()).isEqualTo(activity1.getStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         assertThat(findActivity1.getEndTime()).isEqualTo(activity1.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
-        assertThat(findActivity1.getTotalDistance()).isSameAs(activity1.getDistance());
+        assertThat(findActivity1.getTotalDistance()).isEqualTo(activity1.getDistance());
 
         assertThat(findActivityList2.size()).isEqualTo(1);
         assertThat(findActivity2.getStdName()).isEqualTo(member2.getName());
@@ -152,7 +222,7 @@ class AdminQueryRepositoryTest {
         assertThat(findActivity2.getActivityDate()).isEqualTo(activity2.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         assertThat(findActivity2.getStartTime()).isEqualTo(activity2.getStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         assertThat(findActivity2.getEndTime()).isEqualTo(activity2.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
-        assertThat(findActivity2.getTotalDistance()).isSameAs(activity2.getDistance());
+        assertThat(findActivity2.getTotalDistance()).isEqualTo(activity2.getDistance());
     }
 
     @Test
@@ -203,7 +273,7 @@ class AdminQueryRepositoryTest {
         assertThat(findActivity1.getActivityDate()).isEqualTo(activity1.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         assertThat(findActivity1.getStartTime()).isEqualTo(activity1.getStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         assertThat(findActivity1.getEndTime()).isEqualTo(activity1.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
-        assertThat(findActivity1.getTotalDistance()).isSameAs(activity1.getDistance());
+        assertThat(findActivity1.getTotalDistance()).isEqualTo(activity1.getDistance());
 
         assertThat(findActivityList2.size()).isEqualTo(1);
         assertThat(findActivity2.getStdName()).isEqualTo(member2.getName());
@@ -212,7 +282,7 @@ class AdminQueryRepositoryTest {
         assertThat(findActivity2.getActivityDate()).isEqualTo(activity2.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         assertThat(findActivity2.getStartTime()).isEqualTo(activity2.getStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         assertThat(findActivity2.getEndTime()).isEqualTo(activity2.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
-        assertThat(findActivity2.getTotalDistance()).isSameAs(activity2.getDistance());
+        assertThat(findActivity2.getTotalDistance()).isEqualTo(activity2.getDistance());
     }
 
     @Test
@@ -263,7 +333,7 @@ class AdminQueryRepositoryTest {
         assertThat(findActivityDivision0.getActivityDate()).isEqualTo(activity1.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         assertThat(findActivityDivision0.getStartTime()).isEqualTo(activity1.getStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         assertThat(findActivityDivision0.getEndTime()).isEqualTo(activity1.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
-        assertThat(findActivityDivision0.getTotalDistance()).isSameAs(activity1.getDistance());
+        assertThat(findActivityDivision0.getTotalDistance()).isEqualTo(activity1.getDistance());
 
         assertThat(findActivityList2.size()).isEqualTo(1);
         assertThat(findActivityDivision1.getStdName()).isEqualTo(member2.getName());
@@ -272,7 +342,7 @@ class AdminQueryRepositoryTest {
         assertThat(findActivityDivision1.getActivityDate()).isEqualTo(activity2.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         assertThat(findActivityDivision1.getStartTime()).isEqualTo(activity2.getStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         assertThat(findActivityDivision1.getEndTime()).isEqualTo(activity2.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
-        assertThat(findActivityDivision1.getTotalDistance()).isSameAs(activity2.getDistance());
+        assertThat(findActivityDivision1.getTotalDistance()).isEqualTo(activity2.getDistance());
     }
 
     @Test
@@ -306,7 +376,7 @@ class AdminQueryRepositoryTest {
         assertThat(findFromA1To.getActivityDate()).isEqualTo(activity1.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         assertThat(findFromA1To.getStartTime()).isEqualTo(activity1.getStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         assertThat(findFromA1To.getEndTime()).isEqualTo(activity1.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
-        assertThat(findFromA1To.getTotalDistance()).isSameAs(activity1.getDistance());
+        assertThat(findFromA1To.getTotalDistance()).isEqualTo(activity1.getDistance());
 
         assertThat(findActivityList2.size()).isEqualTo(1);
         assertThat(findFromA2To.getStdName()).isEqualTo(member2.getName());
@@ -315,6 +385,65 @@ class AdminQueryRepositoryTest {
         assertThat(findFromA2To.getActivityDate()).isEqualTo(activity2.getActivityDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         assertThat(findFromA2To.getStartTime()).isEqualTo(activity2.getStartTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         assertThat(findFromA2To.getEndTime()).isEqualTo(activity2.getEndTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
-        assertThat(findFromA2To.getTotalDistance()).isSameAs(activity2.getDistance());
+        assertThat(findFromA2To.getTotalDistance()).isEqualTo(activity2.getDistance());
+    }
+
+    @Test
+    @DisplayName("활동 세부 조회 시 정상적으로 조회되는지 확인")
+    void findActivityDetailInfo() {
+
+        // when
+        List<MapCapture> activity1MapCaptures = mapCaptureRepository.findAllByActivityId(activity1.getActivityId());
+        List<MapCapture> activity2MapCaptures = mapCaptureRepository.findAllByActivityId(activity2.getActivityId());
+
+        AdminDTO.ActivityDetailInfoResDTO activity1DetailInfo = adminQueryRepository.findActivityDetailInfo(activity1.getActivityId());
+        AdminDTO.ActivityDetailInfoResDTO activity2DetailInfo = adminQueryRepository.findActivityDetailInfo(activity2.getActivityId());
+
+        // then
+        assertThat(activity1DetailInfo.getStdName()).isEqualTo(member1.getName());
+        assertThat(activity1DetailInfo.getDepartment()).isEqualTo(member1.getDepartment());
+        assertThat(activity1DetailInfo.getStdId()).isEqualTo(member1.getStdId());
+        assertThat(activity1DetailInfo.getPartnerName()).isEqualTo(partner1.getPartnerName());
+        assertThat(activity1DetailInfo.getReview()).isEqualTo(activity1.getReview());
+        assertThat(activity1DetailInfo.getActivityDate()).isEqualTo(activity1.getActivityDate());
+        assertThat(activity1DetailInfo.getStartTime()).isEqualTo(activity1.getStartTime());
+        assertThat(activity1DetailInfo.getEndTime()).isEqualTo(activity1.getEndTime());
+        assertThat(activity1DetailInfo.getTotalDistance()).isEqualTo(activity1.getDistance());
+
+        List<MapCaptureDTO.MapCaptureResDTO> mapPicture1 = activity1DetailInfo.getMapPicture();
+        for (int i = 0; i < 10; i++) {
+
+            assertThat(mapPicture1.get(i).getLat()).isEqualTo(activity1MapCaptures.get(i).getLat());
+            assertThat(mapPicture1.get(i).getLon()).isEqualTo(activity1MapCaptures.get(i).getLon());
+            assertThat(mapPicture1.get(i).getTimestamp()).isEqualTo(activity1MapCaptures.get(i).getTimestamp());
+
+        }
+
+        assertThat(activity2DetailInfo.getStdName()).isEqualTo(member2.getName());
+        assertThat(activity2DetailInfo.getDepartment()).isEqualTo(member2.getDepartment());
+        assertThat(activity2DetailInfo.getStdId()).isEqualTo(member2.getStdId());
+        assertThat(activity2DetailInfo.getPartnerName()).isEqualTo(partner2.getPartnerName());
+        assertThat(activity2DetailInfo.getReview()).isEqualTo(activity2.getReview());
+        assertThat(activity2DetailInfo.getActivityDate()).isEqualTo(activity2.getActivityDate());
+        assertThat(activity2DetailInfo.getStartTime()).isEqualTo(activity2.getStartTime());
+        assertThat(activity2DetailInfo.getEndTime()).isEqualTo(activity2.getEndTime());
+        assertThat(activity2DetailInfo.getTotalDistance()).isEqualTo(activity2.getDistance());
+
+        List<MapCaptureDTO.MapCaptureResDTO> mapPicture2 = activity2DetailInfo.getMapPicture();
+        for (int i = 0; i < 10; i++) {
+
+            assertThat(mapPicture2.get(i).getLat()).isEqualTo(activity2MapCaptures.get(i).getLat());
+            assertThat(mapPicture2.get(i).getLon()).isEqualTo(activity2MapCaptures.get(i).getLon());
+            assertThat(mapPicture2.get(i).getTimestamp()).isEqualTo(activity2MapCaptures.get(i).getTimestamp());
+        }
+    }
+
+    @Test
+    @DisplayName("비즈니스 예외 : 조회하려는 활동이 없을 경우 ActivityNotFoundException 처리 확인")
+    void activityNotFoundException() {
+
+        assertThrows(ActivityNotFoundException.class, () ->
+                activityInfoService.getActivityDetailInfo(0L)
+        );
     }
 }
