@@ -23,7 +23,7 @@ public class LoginDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class LoginSuccessResDTO {
+    public static class LoginSuccessResDTO extends LoginDTO{
         private String stdId;
         private String token;
 
@@ -38,7 +38,7 @@ public class LoginDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PUBLIC)
-    public static class LoginFailResDTO {
+    public static class LoginFailResDTO extends LoginDTO {
         private final boolean success = false;
     }
 }
