@@ -63,7 +63,7 @@ public class AdminQueryRepository {
                 .and(betweenDate(activityInfoReqDTO.getFromDate(), activityInfoReqDTO.getToDate()))
                 .and(eqActivityDivision(activityInfoReqDTO.getActivityDivision()));
 
-        return  queryFactory.select(Projections.constructor(AdminDTO.ActivityInfoQueryDTO.class,
+        return  queryFactory.select(Projections.constructor(AdminDTO.ActivityInfoResDTO.class,
                 activity.activityId, member.stdId, partner.partnerName, member.name, member.department,
                 activity.activityDate, activity.startTime, activity.endTime, activity.distance))
                 .from(activity)
@@ -71,9 +71,7 @@ public class AdminQueryRepository {
                 .leftJoin(partner).on(partner.eq(activity.partner))
                 .where(booleanBuilder)
                 .orderBy(member.name.asc())
-                .fetch()
-                .stream().map(AdminDTO.ActivityInfoQueryDTO::toActivityInfoResDTO)
-                .collect(Collectors.toList());
+                .fetch();
     }
 
     public BooleanExpression eqActivityDivision(int activityDivision) {
