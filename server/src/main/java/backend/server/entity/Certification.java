@@ -41,20 +41,4 @@ public class Certification {
     private String stdId;
 
     private Long activityId;
-
-    public CertificationDTO toDTO() {
-        return CertificationDTO.builder()
-                .certificationId(this.certificationId)
-                .activityDate(this.activityDate)
-                .partnerName(this.partnerName)
-                .department(this.department)
-                .name(this.name)
-                .startTime(this.startTime)
-                .ordinaryTime(this.ordinaryTime)
-                .careTime(this.careTime)
-                .endTime(this.endTime)
-                .distance(this.distance)
-                .stdId(this.stdId)
-                .build();
-    }
 }

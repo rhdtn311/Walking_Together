@@ -27,6 +27,15 @@ public class NoticeDTO {
             this.content = content;
             this.date = date;
         }
+
+        public static NoticeListResDTO entityToDto(Notice notice) {
+            return NoticeListResDTO.builder()
+                    .noticeId(notice.getNoticeId())
+                    .title(notice.getTitle())
+                    .content(notice.getContent())
+                    .date(notice.getModDate())
+                    .build();
+        }
     }
 
     @Getter

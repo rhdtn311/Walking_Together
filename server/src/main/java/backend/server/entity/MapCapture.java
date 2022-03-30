@@ -29,14 +29,4 @@ public class MapCapture {
 
     // join 할 활동 id
     private Long activityId;
-
-    public MapCaptureDTO.MapCaptureResDTO toDTO() {
-        return MapCaptureDTO.MapCaptureResDTO.builder()
-                .activityId(this.activityId)
-                .mapCaptureId(this.mapCaptureId)
-                .lat(this.lat)
-                .lon(this.lon)
-                .timestamp(this.timestamp)
-                .build();
-    }
 }

@@ -28,7 +28,7 @@ public class RankingService {
     }
 
     public List<RankingDTO> memberToRankingDTOList(Page<Member> memberPage) {
-        return memberPage.stream().map(Member::toRankingDTO).collect(Collectors.toList());
+        return memberPage.stream().map(RankingDTO::entityToDto).collect(Collectors.toList());
     }
 }
 

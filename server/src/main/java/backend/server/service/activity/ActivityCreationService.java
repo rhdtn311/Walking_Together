@@ -38,7 +38,7 @@ public class ActivityCreationService {
 
     // 활동 생성 화면
     @Transactional(readOnly = true)
-    public List<PartnerDTO.PartnerListRes> createActivity(String stdId) {
+    public List<PartnerDTO.PartnerListResDTO> createActivity(String stdId) {
         if (activityQueryRepository.existsActiveActivity(stdId)) {
             throw new ActivityAlreadyInProgressException();
         }
@@ -52,9 +52,9 @@ public class ActivityCreationService {
         return createPartnerList(partners);
     }
 
-    public List<PartnerDTO.PartnerListRes> createPartnerList(List<Partner> partners) {
+    public List<PartnerDTO.PartnerListResDTO> createPartnerList(List<Partner> partners) {
 
-        return partners.stream().map(Partner::toPartnerListResDTO).collect(Collectors.toList());
+        return partners.stream().map(PartnerDTO.PartnerListResDTO::entityToDto).collect(Collectors.toList());
     }
 
     // 활동 생성 완료

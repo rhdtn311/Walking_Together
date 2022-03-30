@@ -11,8 +11,6 @@ import javax.validation.constraints.NotNull;
 
 public class MyPageDTO {
 
-    private static PasswordEncoder passwordEncoder;
-
     @Getter
     @NoArgsConstructor
     public static class MyPageMainResDTO {
@@ -31,6 +29,14 @@ public class MyPageDTO {
 
         public void setProfilePicture(String profilePicture) {
             this.profilePicture = profilePicture;
+        }
+
+        public static MyPageMainResDTO entityToDto(Member member) {
+            return MyPageMainResDTO.builder()
+                    .name(member.getName())
+                    .department(member.getDepartment())
+                    .totalTime(member.getTotalTime())
+                    .build();
         }
     }
 

@@ -33,7 +33,4 @@ public class NoticeImages {
         this.noticeImageName = imageName;
     }
 
-    public FileDeleteDTO toFileDeleteDTO() {
-        return new FileDeleteDTO(noticeId);
-    }
 }

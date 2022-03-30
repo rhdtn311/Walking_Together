@@ -27,7 +27,7 @@ public class MyPageMainService {
             throw new MemberNotFoundException();
         }
         Member member = memberOptional.get();
-        MyPageDTO.MyPageMainResDTO myPageMainResDTO = member.toMyPageMainResDTO();
+        MyPageDTO.MyPageMainResDTO myPageMainResDTO = MyPageDTO.MyPageMainResDTO.entityToDto(member);
 
         Optional<MemberProfilePictures> profilePictureOptional = memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId);
         myPageMainResDTO.setProfilePicture(profilePictureOptional.isEmpty() ? null : profilePictureOptional.get().getProfilePictureUrl());

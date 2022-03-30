@@ -28,7 +28,7 @@ public class Member extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String email;   // 이메일
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private String password;    // 비밀번호
 
     private String birth;   // 생년월일
@@ -70,7 +70,10 @@ public class Member extends BaseEntity {
     }
 
     // 총 거리 증가
-    public void addDistance(Long distance) {this.distance += distance;}
+    public void addDistance(Long distance) {
+        this.distance += distance;
+    }
+
     // 총 거리 감소
     public void minusDistance(Long distance) {
         this.distance -= distance;
@@ -95,22 +98,5 @@ public class Member extends BaseEntity {
         if (this.totalTime < 0) {
             this.totalTime = 0;
         }
-    }
-
-    public MyPageDTO.MyPageMainResDTO toMyPageMainResDTO() {
-        return MyPageDTO.MyPageMainResDTO.builder()
-                .name(this.name)
-                .department(this.department)
-                .totalTime(this.totalTime)
-                .build();
-    }
-
-    public RankingDTO toRankingDTO() {
-        return RankingDTO.builder()
-                .stdId(this.stdId)
-                .name(this.name)
-                .department(this.department)
-                .totalDistance(this.distance)
-                .build();
     }
 }

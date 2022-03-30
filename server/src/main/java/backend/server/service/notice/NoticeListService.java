@@ -29,6 +29,6 @@ public class NoticeListService {
 
         Page<Notice> result = noticeRepository.findAll(booleanBuilder, pageable);
 
-        return new PageResultDTO<>(result, Notice::noticeToNoticeListResDTO);
+        return new PageResultDTO<>(result, NoticeDTO.NoticeListResDTO::entityToDto);
     }
 }

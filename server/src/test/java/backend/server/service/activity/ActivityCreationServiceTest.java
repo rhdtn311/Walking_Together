@@ -95,7 +95,7 @@ class ActivityCreationServiceTest {
         partnerRepository.save(partner2);
 
         // when
-        List<PartnerDTO.PartnerListRes> partnerList
+        List<PartnerDTO.PartnerListResDTO> partnerList
                 = activityCreationService.createActivity(member.getStdId());
 
         // then

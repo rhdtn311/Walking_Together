@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "notice_attached_files")
-public class NoticeAttachedFiles {
+public class  NoticeAttachedFiles {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long noticeAttachedFilesId;

@@ -28,7 +28,7 @@ public class ActivityController {
     @GetMapping("/activity/create")
     public ResponseEntity<ResponseDTO> createActivity(@RequestParam(value = "stdId") String stdId) {
 
-        List<PartnerDTO.PartnerListRes> partnerListRes = activityCreationService.createActivity(stdId);
+        List<PartnerDTO.PartnerListResDTO> partnerListRes = activityCreationService.createActivity(stdId);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("파트너 리스트 불러오기 완료")
@@ -88,5 +88,4 @@ public class ActivityController {
     public String tokenToStdId(@RequestBody TokenDTO tokenDTO) {
         return activityEndService.tokenToStdId(tokenDTO);
     }
-
 }

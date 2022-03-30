@@ -1,15 +1,15 @@
 package backend.server.DTO.activity;
 
 import backend.server.entity.Partner;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 public class PartnerDTO {
 
+    @Builder
+    @AllArgsConstructor
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class PartnerListRes {
+    public static class PartnerListResDTO {
 
         private Long partnerId;
         private String partnerName;
@@ -17,12 +17,14 @@ public class PartnerDTO {
         private String partnerBirth;
         private int partnerDivision;
 
-        public PartnerListRes(Partner partner) {
-            this.partnerId = partner.getPartnerId();
-            this.partnerName = partner.getPartnerName();
-            this.partnerDetail = partner.getPartnerDetail();
-            this.partnerBirth = partner.getPartnerBirth();
-            this.partnerDivision = partner.getPartnerDivision();
+        public static PartnerListResDTO entityToDto(Partner partner) {
+            return PartnerListResDTO.builder()
+                    .partnerId(partner.getPartnerId())
+                    .partnerName(partner.getPartnerName())
+                    .partnerDetail(partner.getPartnerDetail())
+                    .partnerBirth(partner.getPartnerBirth())
+                    .partnerDivision(partner.getPartnerDivision())
+                    .build();
         }
     }
 }

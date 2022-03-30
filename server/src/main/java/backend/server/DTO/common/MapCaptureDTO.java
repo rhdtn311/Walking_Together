@@ -28,9 +28,19 @@ public class MapCaptureDTO {
             this.activityId = activityId;
         }
 
+        public static MapCaptureResDTO entityToDto(MapCapture mapCapture) {
+            return MapCaptureResDTO.builder()
+                    .activityId(mapCapture.getActivityId())
+                    .mapCaptureId(mapCapture.getMapCaptureId())
+                    .lat(mapCapture.getLat())
+                    .lon(mapCapture.getLon())
+                    .timestamp(mapCapture.getTimestamp())
+                    .build();
+        }
+
         public static List<MapCaptureResDTO> toDTOList(List<MapCapture> mapCaptures) {
             return mapCaptures.stream()
-                    .map(MapCapture::toDTO)
+                    .map(MapCaptureResDTO::entityToDto)
                     .collect(Collectors.toList());
         }
 

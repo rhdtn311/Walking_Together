@@ -44,9 +44,25 @@ public class CertificationDTO {
             this.stdId = stdId;
     }
 
+    public static CertificationDTO entityToDto(Certification certification) {
+            return CertificationDTO.builder()
+                    .certificationId(certification.getCertificationId())
+                    .activityDate(certification.getActivityDate())
+                    .partnerName(certification.getPartnerName())
+                    .department(certification.getDepartment())
+                    .name(certification.getName())
+                    .startTime(certification.getStartTime())
+                    .ordinaryTime(certification.getOrdinaryTime())
+                    .careTime(certification.getCareTime())
+                    .endTime(certification.getEndTime())
+                    .distance(certification.getDistance())
+                    .stdId(certification.getStdId())
+                    .build();
+    }
+
     public static List<CertificationDTO> toDTOList(List<Certification> certificationList) {
             return certificationList.stream()
-                    .map(Certification::toDTO)
+                    .map(CertificationDTO::entityToDto)
                     .collect(Collectors.toList());
     }
 }

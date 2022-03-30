@@ -44,7 +44,6 @@ public class Partner {
 
     public void changePartnerName(String partnerName) {
         this.partnerName = partnerName;
-        System.out.println("파트너 이름 변경");
     }
 
     public void changePartnerDetail(String partnerDetail) {
@@ -73,7 +72,4 @@ public class Partner {
         this.partnerBirth = partnerBirth;
     }
 
-    public PartnerDTO.PartnerListRes toPartnerListResDTO() {
-        return new PartnerDTO.PartnerListRes(this);
-    }
 }

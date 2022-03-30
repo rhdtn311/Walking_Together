@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "notice")
-public class Notice extends BaseEntity {
+public class  Notice extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long noticeId;
@@ -29,15 +29,6 @@ public class Notice extends BaseEntity {
 
     public void changeContent(String content) {
         this.content = content;
-    }
-
-    public NoticeDTO.NoticeListResDTO noticeToNoticeListResDTO() {
-        return NoticeDTO.NoticeListResDTO.builder()
-                .noticeId(this.getNoticeId())
-                .title(this.getTitle())
-                .content(this.getContent())
-                .date(this.getModDate())
-                .build();
     }
 
 }

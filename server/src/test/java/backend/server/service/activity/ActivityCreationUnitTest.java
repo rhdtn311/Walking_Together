@@ -34,7 +34,7 @@ public class ActivityCreationUnitTest {
         List<Partner> partnerList = new ArrayList<>(List.of(partner1, partner2, partner3));
 
         // when
-        List<PartnerDTO.PartnerListRes> partnerDTOList = activityCreationService.createPartnerList(partnerList);
+        List<PartnerDTO.PartnerListResDTO> partnerDTOList = activityCreationService.createPartnerList(partnerList);
 
         // then
         Assertions.assertThat(partnerDTOList.size()).isEqualTo(3);
