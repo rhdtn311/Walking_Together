@@ -138,7 +138,7 @@ public class AdminDTO {
         private int partnerDivision;
 
         @Builder
-        public PartnerInfoResDTO(String stdId, String stdName, String partnerName, String department,
+        public PartnerInfoResDTO(String stdId, String stdName, String department, String partnerName,
                                  String partnerBirth, String gender, String relation, int partnerDivision) {
             this.stdId = stdId;
             this.stdName = stdName;

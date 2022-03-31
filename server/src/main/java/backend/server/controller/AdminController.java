@@ -58,7 +58,7 @@ public class AdminController {
     // 파트너 정보 조회
     @GetMapping("/admin/partnerInfo")
     public ResponseEntity<ResponseDTO> getPartnerInfo(@RequestParam(value = "keyword") @Nullable String keyword,
-                                               @RequestParam(value = "partnerDetail") @Nullable String partnerDetail) {
+                                               @RequestParam(value = "partnerDetail") String partnerDetail) {
 
         List<AdminDTO.PartnerInfoResDTO> partners = partnerInfoService.getPartnerInfo(keyword, partnerDetail);
         return ResponseEntity.ok(ResponseDTO.builder()
