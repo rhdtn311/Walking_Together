@@ -66,6 +66,7 @@ public class NoticeDTO {
         }
     }
 
+    @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -123,6 +124,7 @@ public class NoticeDTO {
         }
     }
 
+    @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

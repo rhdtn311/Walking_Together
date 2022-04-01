@@ -40,6 +40,7 @@ public class MyPageDTO {
         }
     }
 
+    @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -117,6 +118,7 @@ public class MyPageDTO {
         }
     }
 
+    @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -152,6 +154,7 @@ public class MyPageDTO {
         }
     }
 
+    @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
