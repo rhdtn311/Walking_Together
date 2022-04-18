@@ -17,12 +17,12 @@ public class ActivityInfoService {
     private final AdminQueryRepository adminQueryRepository;
     private final ActivityRepository activityRepository;
     // 활동정보조회
-    public List<AdminDTO.ActivityInfoResDTO> getActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
+    public List<AdminDTO.ActivityInfoResDTO> findActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
         return adminQueryRepository.findActivityInfo(activityInfoReqDTO);
     }
 
     //활동 정보 세부 조회
-    public AdminDTO.ActivityDetailInfoResDTO getActivityDetailInfo(Long activityId) {
+    public AdminDTO.ActivityDetailInfoResDTO findActivityDetailInfo(Long activityId) {
 
         Optional<Activity> activityOpt = activityRepository.findById(activityId);
         if (activityOpt.isEmpty()) {

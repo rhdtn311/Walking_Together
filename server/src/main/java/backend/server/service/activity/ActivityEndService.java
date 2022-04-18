@@ -97,7 +97,7 @@ public class ActivityEndService {
         activityCheckImagesRepository.save(activityCheckImage);
     }
 
-    public String tokenToStdId(TokenDTO tokenDTO) {
+    public String getStdIdFromToken(TokenDTO tokenDTO) {
 
         Authentication authentication = tokenProvider.getAuthentication(tokenDTO.getToken());
         return authentication.getName();

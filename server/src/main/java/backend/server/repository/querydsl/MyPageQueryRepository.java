@@ -19,7 +19,7 @@ public class MyPageQueryRepository {
 
     private final JPQLQueryFactory queryFactory;
 
-    public List<MyPageDTO.MyPagePartnerListResDTO> findPartnerList(String stdId) {
+    public List<MyPageDTO.MyPagePartnerListResDTO> findPartnersInfo(String stdId) {
         return queryFactory.select(Projections.constructor(MyPageDTO.MyPagePartnerListResDTO.class,
                 partner.partnerName, partner.partnerId, partner.partnerDetail, partner.partnerBirth))
                 .from(partner)

@@ -35,11 +35,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginDTO> login(@Valid @RequestBody LoginDTO.LoginReqDTO loginReqDTO) {
 
-        LoginDTO loginResult = authService.login(loginReqDTO);
+        LoginDTO loginDTO = authService.login(loginReqDTO);
 
-        if (loginResult instanceof LoginDTO.LoginSuccessResDTO) {
+        if (loginDTO instanceof LoginDTO.LoginSuccessResDTO) {
 
-            String jwt = ((LoginDTO.LoginSuccessResDTO) loginResult).getToken();
+            String jwt = ((LoginDTO.LoginSuccessResDTO) loginDTO).getToken();
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);

@@ -21,19 +21,20 @@ public class MyPagePartnerInfoService {
     private final PartnerRepository partnerRepository;
 
     @Transactional(readOnly = true)
-    public List<MyPageDTO.MyPagePartnerListResDTO> getPartnerList(String stdId) {
-        return myPageQueryRepository.findPartnerList(stdId);
+    public List<MyPageDTO.MyPagePartnerListResDTO> findPartnersInfo(String stdId) {
+        return myPageQueryRepository.findPartnersInfo(stdId);
     }
 
     // 마이페이지 - 파트너 세부 정보
     @Transactional(readOnly = true)
-    public MyPageDTO.MyPagePartnerDetailResDTO getMyPagePartnerDetail(Long partnerId) {
+    public MyPageDTO.MyPagePartnerDetailResDTO findPartnerDetail(Long partnerId) {
         Optional<Partner> partnerOptional = partnerRepository.findPartnerByPartnerId(partnerId);
         if (partnerOptional.isEmpty()) {
             throw new PartnerNotFoundException();
         }
 
         Partner partner = partnerOptional.get();
+
         return MyPageDTO.MyPagePartnerDetailResDTO.partnerToMyPagePartnerDetailResDTO(partner);
     }
 }

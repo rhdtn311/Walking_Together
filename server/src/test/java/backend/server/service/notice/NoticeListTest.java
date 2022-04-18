@@ -50,7 +50,7 @@ public class NoticeListTest {
                 .keyword("")
                 .build();
 
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
         System.out.println(noticeList);
         System.out.println(noticeList.getPageDataList());

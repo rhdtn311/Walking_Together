@@ -59,7 +59,7 @@ public class ActivityCreationService {
 
     // 활동 생성 완료
     @Transactional
-    public Long createActivityDone(ActivityDTO.ActivityCreationReq activityCreationReq) {
+    public Long createActivityDone(ActivityDTO.ActivityCreationReqDTO activityCreationReq) {
         Optional<Partner> partnerOpt = partnerRepository.findById(activityCreationReq.getPartnerId());
         if (partnerOpt.isEmpty()) {
             throw new PartnerNotFoundException();

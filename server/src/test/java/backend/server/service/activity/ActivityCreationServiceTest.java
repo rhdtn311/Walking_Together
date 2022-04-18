@@ -202,7 +202,7 @@ class ActivityCreationServiceTest {
         String filePath = "src/test/java/imageFiles/ActivityStartImage.png";
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
 
-        ActivityDTO.ActivityCreationReq doneActivity = ActivityDTO.ActivityCreationReq.builder()
+        ActivityDTO.ActivityCreationReqDTO doneActivity = ActivityDTO.ActivityCreationReqDTO.builder()
                 .stdId(member.getStdId())
                 .partnerId(partner.getPartnerId())
                 .startPhoto(mockMultipartFile)
@@ -252,7 +252,7 @@ class ActivityCreationServiceTest {
         String filePath = "src/test/java/imageFiles/ActivityStartImage.png";
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
 
-        ActivityDTO.ActivityCreationReq doneActivity = ActivityDTO.ActivityCreationReq.builder()
+        ActivityDTO.ActivityCreationReqDTO doneActivity = ActivityDTO.ActivityCreationReqDTO.builder()
                 .stdId(member.getStdId())
                 .partnerId(partner.getPartnerId())
                 .startPhoto(mockMultipartFile)
@@ -305,7 +305,7 @@ class ActivityCreationServiceTest {
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
 
         // when
-        ActivityDTO.ActivityCreationReq doneActivity = ActivityDTO.ActivityCreationReq.builder()
+        ActivityDTO.ActivityCreationReqDTO doneActivity = ActivityDTO.ActivityCreationReqDTO.builder()
                 .stdId(member.getStdId())
                 .partnerId(Long.MIN_VALUE)
                 .startPhoto(mockMultipartFile)
@@ -350,7 +350,7 @@ class ActivityCreationServiceTest {
         String filePath = "src/test/java/imageFiles/ActivityStartImage.png";
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
 
-        ActivityDTO.ActivityCreationReq doneActivity = ActivityDTO.ActivityCreationReq.builder()
+        ActivityDTO.ActivityCreationReqDTO doneActivity = ActivityDTO.ActivityCreationReqDTO.builder()
                 .stdId("doNotExist")
                 .partnerId(partner.getPartnerId())
                 .startPhoto(mockMultipartFile)

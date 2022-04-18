@@ -71,7 +71,7 @@ class MyPageChangeServiceTest {
                 .build();
 
         // when
-        myPageChangeService.changeMemberInfo(myPageChangeReqDTO);
+        myPageChangeService.updateMemberInfo(myPageChangeReqDTO);
         Member findMember = userRepository.findMemberByStdId(this.member.getStdId()).get();
 
         // then
@@ -89,7 +89,7 @@ class MyPageChangeServiceTest {
                 .build();
 
         // when
-        myPageChangeService.changeMemberInfo(myPageChangeReqDTO);
+        myPageChangeService.updateMemberInfo(myPageChangeReqDTO);
         Member findMember = userRepository.findMemberByStdId(this.member.getStdId()).get();
 
         // then
@@ -112,7 +112,7 @@ class MyPageChangeServiceTest {
                 .build();
 
         // when
-        myPageChangeService.changeMemberInfo(myPageChangeReqDTO);
+        myPageChangeService.updateMemberInfo(myPageChangeReqDTO);
         MemberProfilePictures memberProfilePicture = memberProfilePicturesRepository.findMemberProfilePicturesByStdId(member.getStdId()).get();
 
         // then

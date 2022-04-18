@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Configuration
-public class QuerydlsConfiguration {
+public class QuerydslConfiguration {
 
 
     @PersistenceContext

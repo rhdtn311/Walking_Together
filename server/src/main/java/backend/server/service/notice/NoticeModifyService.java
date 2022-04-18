@@ -31,7 +31,7 @@ public class NoticeModifyService {
 
     private final FileUpdateService fileUpdateService;
 
-    public NoticeDTO.NoticeModifyResDTO getNoticeInfo(Long noticeId) {
+    public NoticeDTO.NoticeModifyResDTO findNoticeInfo(Long noticeId) {
         if (!noticeRepository.existsById(noticeId)) {
             throw new NoticeNotFoundException();
         }
@@ -48,7 +48,7 @@ public class NoticeModifyService {
 
     // 게시물 수정 (title, content)
     @Transactional
-    public Long modifyNoticeInfo(NoticeDTO.NoticeModifyReqDTO noticeModifyReqDTO) {
+    public Long updateNoticeInfo(NoticeDTO.NoticeModifyReqDTO noticeModifyReqDTO) {
         if (!noticeRepository.existsById(noticeModifyReqDTO.getNoticeId())) {
             throw new NoticeNotFoundException();
         }

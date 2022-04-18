@@ -16,9 +16,9 @@ public class FeedCertificationService {
     private final FeedQueryRepository feedQueryRepository;
 
     @Transactional
-    public FeedDTO.CertificationResDTO getCertification(LocalDate from, LocalDate to, String stdId) {
+    public FeedDTO.CertificationResDTO findCertification(LocalDate from, LocalDate to, String stdId) {
 
-        List<CertificationDTO> certificationDTOList = feedQueryRepository.findCertification(from, to, stdId);
-        return new FeedDTO.CertificationResDTO(certificationDTOList);
+        List<CertificationDTO> certificationDTOs = feedQueryRepository.findCertification(from, to, stdId);
+        return new FeedDTO.CertificationResDTO(certificationDTOs);
     }
 }

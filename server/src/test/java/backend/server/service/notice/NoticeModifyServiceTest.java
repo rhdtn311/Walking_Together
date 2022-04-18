@@ -70,7 +70,7 @@ class NoticeModifyServiceTest {
     void getNoticeInfo() {
 
         // when
-        NoticeDTO.NoticeModifyResDTO noticeInfo = noticeModifyService.getNoticeInfo(notice.getNoticeId());
+        NoticeDTO.NoticeModifyResDTO noticeInfo = noticeModifyService.findNoticeInfo(notice.getNoticeId());
 
         // then
         assertThat(noticeInfo.getTitle()).isEqualTo(notice.getTitle());
@@ -92,7 +92,7 @@ class NoticeModifyServiceTest {
                 .build();
 
         // when
-        noticeModifyService.modifyNoticeInfo(noticeModifyReqDTO);
+        noticeModifyService.updateNoticeInfo(noticeModifyReqDTO);
         Notice findNotice = noticeRepository.findById(this.notice.getNoticeId()).get();
 
         // then

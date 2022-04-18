@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
 
@@ -30,6 +31,7 @@ class NoticeListServiceTest {
     @Autowired
     NoticeListService noticeListService;
 
+    @Rollback(true)
     @BeforeEach
     void init() {
 
@@ -58,7 +60,7 @@ class NoticeListServiceTest {
                     .build();
 
             // when
-            PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+            PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
             // then
             int[] nums = IntStream.rangeClosed(num - 9, num).toArray();
@@ -82,7 +84,7 @@ class NoticeListServiceTest {
                 .build();
 
         // when
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
         // then
         assertTrue(noticeList.isNext());
@@ -100,7 +102,7 @@ class NoticeListServiceTest {
                 .build();
 
         // when
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
         // then
         assertTrue(noticeList.isPrev());
@@ -118,7 +120,7 @@ class NoticeListServiceTest {
                 .build();
 
         // when
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
         // then
         assertFalse(noticeList.isNext());
@@ -136,7 +138,7 @@ class NoticeListServiceTest {
                 .build();
 
         // when
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
         // then
         assertFalse(noticeList.isPrev());
@@ -154,7 +156,7 @@ class NoticeListServiceTest {
                 .build();
 
         // when
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
         // then
         assertThat(noticeList.getStart()).isEqualTo(1);
@@ -172,7 +174,7 @@ class NoticeListServiceTest {
                 .build();
 
         // when
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
         // then
         assertThat(noticeList.getEnd()).isEqualTo(10);
@@ -190,7 +192,7 @@ class NoticeListServiceTest {
                 .build();
 
         // when
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNoticeList(pageRequestDTO);
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> noticeList = noticeListService.findNotices(pageRequestDTO);
 
         // then
         assertThat(noticeList.getEnd()).isEqualTo(13);

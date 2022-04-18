@@ -23,8 +23,8 @@ public class NoticeController {
 
     // 공지사항 게시물 출력
     @PostMapping("/noticeList")
-    public ResponseEntity<ResponseDTO> getNoticeList(@RequestBody PageRequestDTO pageRequestDTO) {
-        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> pageResultDTO = noticeListService.findNoticeList(pageRequestDTO);
+    public ResponseEntity<ResponseDTO> findNotices(@RequestBody PageRequestDTO pageRequestDTO) {
+        PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> pageResultDTO = noticeListService.findNotices(pageRequestDTO);
         if(pageResultDTO.getTotalPage() < pageRequestDTO.getPage()) {
             throw new DataNotFoundInPageException();
         }
@@ -59,8 +59,8 @@ public class NoticeController {
 
     // 공지사항 게시물 수정
     @GetMapping("/admin/update")
-    public ResponseEntity<ResponseDTO> modifyNotice(@RequestParam(value = "noticeId") Long noticeId) {
-        NoticeDTO.NoticeModifyResDTO noticeModifyResDTO = noticeModifyService.getNoticeInfo(noticeId);
+    public ResponseEntity<ResponseDTO> updateNotice(@RequestParam(value = "noticeId") Long noticeId) {
+        NoticeDTO.NoticeModifyResDTO noticeModifyResDTO = noticeModifyService.findNoticeInfo(noticeId);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("게시글 조회 완료")
@@ -70,8 +70,8 @@ public class NoticeController {
 
     // 공지사항 게시물 수정
     @PostMapping("/admin/update")
-    public ResponseEntity<ResponseDTO> modifyNoticeInfo(NoticeDTO.NoticeModifyReqDTO noticeModifyReqDTO){
-        Long noticeId = noticeModifyService.modifyNoticeInfo(noticeModifyReqDTO);
+    public ResponseEntity<ResponseDTO> updateNoticeInfo(NoticeDTO.NoticeModifyReqDTO noticeModifyReqDTO){
+        Long noticeId = noticeModifyService.updateNoticeInfo(noticeModifyReqDTO);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("게시글 수정 완료")

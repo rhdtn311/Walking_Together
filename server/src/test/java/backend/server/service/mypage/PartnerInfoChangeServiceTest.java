@@ -87,7 +87,7 @@ class PartnerInfoChangeServiceTest {
                 .build();
 
         // when
-        partnerInfoChangeService.changePartnerInfo(changePartnerDTO);
+        partnerInfoChangeService.updatePartnerInfo(changePartnerDTO);
         Partner findPartner = partnerRepository.findById(this.partner.getPartnerId()).get();
 
         // then
@@ -105,7 +105,7 @@ class PartnerInfoChangeServiceTest {
                 .build();
 
         // when
-        partnerInfoChangeService.changePartnerInfo(changePartnerDTO);
+        partnerInfoChangeService.updatePartnerInfo(changePartnerDTO);
         Partner findPartner = partnerRepository.findById(this.partner.getPartnerId()).get();
 
         // then
@@ -123,7 +123,7 @@ class PartnerInfoChangeServiceTest {
                 .build();
 
         // when
-        partnerInfoChangeService.changePartnerInfo(changePartnerDTO);
+        partnerInfoChangeService.updatePartnerInfo(changePartnerDTO);
         Partner findPartner = partnerRepository.findById(this.partner.getPartnerId()).get();
 
         // then
@@ -141,7 +141,7 @@ class PartnerInfoChangeServiceTest {
                 .build();
 
         // when
-        partnerInfoChangeService.changePartnerInfo(changePartnerDTO);
+        partnerInfoChangeService.updatePartnerInfo(changePartnerDTO);
         Partner findPartner = partnerRepository.findById(this.partner.getPartnerId()).get();
 
         // then
@@ -159,7 +159,7 @@ class PartnerInfoChangeServiceTest {
                 .build();
 
         // when
-        partnerInfoChangeService.changePartnerInfo(changePartnerDTO);
+        partnerInfoChangeService.updatePartnerInfo(changePartnerDTO);
         Partner findPartner = partnerRepository.findById(this.partner.getPartnerId()).get();
 
         // then
@@ -177,7 +177,7 @@ class PartnerInfoChangeServiceTest {
                 .build();
 
         // when
-        partnerInfoChangeService.changePartnerInfo(changePartnerDTO);
+        partnerInfoChangeService.updatePartnerInfo(changePartnerDTO);
         Partner findPartner = partnerRepository.findById(this.partner.getPartnerId()).get();
 
         // then
@@ -200,7 +200,7 @@ class PartnerInfoChangeServiceTest {
                 .build();
 
         // when
-        partnerInfoChangeService.changePartnerInfo(changePartnerDTO);
+        partnerInfoChangeService.updatePartnerInfo(changePartnerDTO);
         PartnerPhotos changePartnerPhoto = partnerPhotosRepository.findPartnerPhotosByPartnerId(partner.getPartnerId());
 
         // then

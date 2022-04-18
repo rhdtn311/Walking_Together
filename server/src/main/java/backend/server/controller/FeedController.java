@@ -32,17 +32,17 @@ public class FeedController {
     @GetMapping("/feed")
     public ResponseEntity<ResponseDTO> getFeedMain(@RequestParam(value = "stdId") String stdId,
                                                    @RequestParam(value = "sort") String sort) {
-        List<FeedDTO.FeedMainResDTO> feedMain = feedMainService.getFeedMain(stdId, sort);
+        List<FeedDTO.FeedMainResDTO> feedMainDTO = feedMainService.getFeedMain(stdId, sort);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("조회 완료")
-                .data(feedMain)
+                .data(feedMainDTO)
                 .build());
     }
 
     // 피드 상세
     @GetMapping("/feed/detail")
-    public ResponseEntity<ResponseDTO> feedDetail(@RequestParam("activityId") Long activityId) {
+    public ResponseEntity<ResponseDTO> getFeedDetail(@RequestParam("activityId") Long activityId) {
         FeedDTO.FeedDetailResDTO feedDetail = feedDetailService.getFeedDetail(activityId);
 
         return ResponseEntity.ok(ResponseDTO.builder()
@@ -53,7 +53,7 @@ public class FeedController {
 
     // 소감문
     @PostMapping("/feed/detail/review")
-    public ResponseEntity<ResponseDTO> writeFeedReview(@RequestParam(value="activityId") Long activityId,
+    public ResponseEntity<ResponseDTO> writeActivityReview(@RequestParam(value="activityId") Long activityId,
                                           @RequestParam(value = "review") @Nullable String review) {
         if (review == null) {
             throw new ReviewNotReceiveException();
@@ -74,7 +74,7 @@ public class FeedController {
         LocalDate fromDate = LocalDate.parse(from, formatter);
         LocalDate toDate = LocalDate.parse(to, formatter);
 
-        FeedDTO.CertificationResDTO certification = feedCertificationService.getCertification(fromDate, toDate, stdId);
+        FeedDTO.CertificationResDTO certification = feedCertificationService.findCertification(fromDate, toDate, stdId);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("발급 완료")

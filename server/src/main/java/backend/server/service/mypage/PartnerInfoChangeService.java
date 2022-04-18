@@ -23,7 +23,7 @@ public class PartnerInfoChangeService {
     private final FileUpdateService fileUpdateService;
 
     @Transactional
-    public Long changePartnerInfo(MyPageDTO.PartnerInfoChangeReqDTO partnerInfoChangeReqDTO) {
+    public Long updatePartnerInfo(MyPageDTO.PartnerInfoChangeReqDTO partnerInfoChangeReqDTO) {
 
         Long partnerId = Long.parseLong(partnerInfoChangeReqDTO.getPartnerId());
         if (!partnerRepository.existsPartnerByPartnerId(partnerId)) {
@@ -40,7 +40,7 @@ public class PartnerInfoChangeService {
         }
 
         if(partnerInfoChangeReqDTO.isPartnerBirthPresent()) {
-            partner.changePartnerBirth(partnerInfoChangeReqDTO.partnerBirthReplace());
+            partner.changePartnerBirth(partnerInfoChangeReqDTO.replacePartnerBirth());
         }
 
         if(partnerInfoChangeReqDTO.isSelectionReasonPresent()) {

@@ -24,9 +24,9 @@ public class AdminController {
 
     // 학생정보조회
     @GetMapping("/admin/userinfo")
-    public ResponseEntity<ResponseDTO> getMemberInfo(@RequestParam(value = "keyword") @Nullable String keyword) {
+    public ResponseEntity<ResponseDTO> findMemberInfo(@RequestParam(value = "keyword") @Nullable String keyword) {
 
-        List<AdminDTO.MemberInfoResDTO> memberInfo = memberInfoService.getMemberInfo(keyword);
+        List<AdminDTO.MemberInfoResDTO> memberInfo = memberInfoService.findMemberInfo(keyword);
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("조회 완료")
                 .data(memberInfo)
@@ -35,9 +35,9 @@ public class AdminController {
 
     // 활동정보조회
     @GetMapping("/admin/activityInfo")
-    public ResponseEntity<ResponseDTO> getActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
+    public ResponseEntity<ResponseDTO> findActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
 
-        List<AdminDTO.ActivityInfoResDTO> activityInfo = activityInfoService.getActivityInfo(activityInfoReqDTO);
+        List<AdminDTO.ActivityInfoResDTO> activityInfo = activityInfoService.findActivityInfo(activityInfoReqDTO);
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("조회 완료")
                 .data(activityInfo)
@@ -46,9 +46,9 @@ public class AdminController {
 
     // 특정 활동 상세 조회
     @GetMapping("/admin/activityInfo/detail")
-    public ResponseEntity<ResponseDTO> getActivityInfoDetail(Long activityId) {
+    public ResponseEntity<ResponseDTO> findActivityInfoDetail(Long activityId) {
 
-        AdminDTO.ActivityDetailInfoResDTO activityDetailInfo = activityInfoService.getActivityDetailInfo(activityId);
+        AdminDTO.ActivityDetailInfoResDTO activityDetailInfo = activityInfoService.findActivityDetailInfo(activityId);
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("조회 완료")
                 .data(activityDetailInfo)

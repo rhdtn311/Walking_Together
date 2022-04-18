@@ -24,10 +24,10 @@ public class RankingService {
 
         Page<Member> memberPage = userRepository.findAll(pageable);
 
-        return memberToRankingDTOList(memberPage);
+        return memberToRankingDTOs(memberPage);
     }
 
-    public List<RankingDTO> memberToRankingDTOList(Page<Member> memberPage) {
+    public List<RankingDTO> memberToRankingDTOs(Page<Member> memberPage) {
         return memberPage.stream().map(RankingDTO::entityToDto).collect(Collectors.toList());
     }
 }

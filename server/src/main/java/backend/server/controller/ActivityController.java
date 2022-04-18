@@ -28,19 +28,19 @@ public class ActivityController {
     @GetMapping("/activity/create")
     public ResponseEntity<ResponseDTO> createActivity(@RequestParam(value = "stdId") String stdId) {
 
-        List<PartnerDTO.PartnerListResDTO> partnerListRes = activityCreationService.createActivity(stdId);
+        List<PartnerDTO.PartnerListResDTO> partnerListResDTO = activityCreationService.createActivity(stdId);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("파트너 리스트 불러오기 완료")
-                .data(partnerListRes)
+                .data(partnerListResDTO)
                 .build());
     }
 
     // 활동 생성 완료
     @PostMapping("/activity/createActivity")
-    public ResponseEntity<ResponseDTO> createActivityDone(@ModelAttribute ActivityDTO.ActivityCreationReq activityCreationReq) {
+    public ResponseEntity<ResponseDTO> createActivityDone(@ModelAttribute ActivityDTO.ActivityCreationReqDTO activityCreationReqDTO) {
 
-        Long activityId = activityCreationService.createActivityDone(activityCreationReq);
+        Long activityId = activityCreationService.createActivityDone(activityCreationReqDTO);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("활동 생성 완료")
@@ -85,7 +85,7 @@ public class ActivityController {
 
     // 활동 비정상 종료시 학번 리턴
     @PostMapping("/returnId")
-    public String tokenToStdId(@RequestBody TokenDTO tokenDTO) {
-        return activityEndService.tokenToStdId(tokenDTO);
+    public String getStdIdFromToken(@RequestBody TokenDTO tokenDTO) {
+        return activityEndService.getStdIdFromToken(tokenDTO);
     }
 }

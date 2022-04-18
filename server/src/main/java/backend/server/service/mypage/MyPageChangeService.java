@@ -28,7 +28,7 @@ public class MyPageChangeService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String changeMemberInfo(MyPageDTO.MyPageChangeReqDTO myPageChangeReqDTO) {
+    public String updateMemberInfo(MyPageDTO.MyPageChangeReqDTO myPageChangeReqDTO) {
         Optional<Member> memberOptional = userRepository.findMemberByStdId(myPageChangeReqDTO.getStdId());
         if (memberOptional.isEmpty()) {
             throw new MemberNotFoundException();

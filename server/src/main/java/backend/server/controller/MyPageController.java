@@ -32,8 +32,8 @@ public class MyPageController {
 
     // 마이페이지-변경
     @PostMapping("/mypage/change")
-    public ResponseEntity<ResponseDTO> changeMemberInfo (MyPageDTO.MyPageChangeReqDTO myPageChangeReqDTO) {
-        String changeMemberStdId = myPageChangeService.changeMemberInfo(myPageChangeReqDTO);
+    public ResponseEntity<ResponseDTO> updateMemberInfo (MyPageDTO.MyPageChangeReqDTO myPageChangeReqDTO) {
+        String changeMemberStdId = myPageChangeService.updateMemberInfo(myPageChangeReqDTO);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("회원 정보 수정 완료")
@@ -43,8 +43,8 @@ public class MyPageController {
 
     // 마이페이지 - 파트너
     @GetMapping("/mypage/partnerInfo")
-    public ResponseEntity<ResponseDTO> myPagePartnerInfo(@RequestParam(value = "stdId") String stdId) {
-        List<MyPageDTO.MyPagePartnerListResDTO> partnerList = myPagePartnerInfoService.getPartnerList(stdId);
+    public ResponseEntity<ResponseDTO> findPartnersInfo(@RequestParam(value = "stdId") String stdId) {
+        List<MyPageDTO.MyPagePartnerListResDTO> partnerList = myPagePartnerInfoService.findPartnersInfo(stdId);
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("파트너 리스트 출력 완료")
                 .data(partnerList)
@@ -53,8 +53,8 @@ public class MyPageController {
 
     // 마이페이지 -파트너 detail
     @GetMapping("/mypage/partnerInfo/detail")
-    public ResponseEntity<ResponseDTO> getMyPagePartnerDetail(@RequestParam(value = "partnerId") Long partnerId) {
-        MyPageDTO.MyPagePartnerDetailResDTO myPagePartnerDetail = myPagePartnerInfoService.getMyPagePartnerDetail(partnerId);
+    public ResponseEntity<ResponseDTO> findPartnerDetail(@RequestParam(value = "partnerId") Long partnerId) {
+        MyPageDTO.MyPagePartnerDetailResDTO myPagePartnerDetail = myPagePartnerInfoService.findPartnerDetail(partnerId);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("파트너 세부 조회 완료")
@@ -75,8 +75,8 @@ public class MyPageController {
 
     // 마이페이지 - 파트너 정보 수정
     @PostMapping("/partner/change")
-    public ResponseEntity<ResponseDTO> changePartnerInfo(MyPageDTO.PartnerInfoChangeReqDTO partnerInfoChangeReqDTO) {
-        Long partnerId = partnerInfoChangeService.changePartnerInfo(partnerInfoChangeReqDTO);
+    public ResponseEntity<ResponseDTO> updatePartnerInfo(MyPageDTO.PartnerInfoChangeReqDTO partnerInfoChangeReqDTO) {
+        Long partnerId = partnerInfoChangeService.updatePartnerInfo(partnerInfoChangeReqDTO);
 
         return ResponseEntity.ok(ResponseDTO.builder()
                 .message("파트너 정보가 성공적으로 변경되었습니다.")

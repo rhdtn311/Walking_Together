@@ -21,7 +21,7 @@ public class NoticeListService {
 
     private final NoticeRepository noticeRepository;
 
-    public PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> findNoticeList(PageRequestDTO requestDTO) {
+    public PageResultDTO<NoticeDTO.NoticeListResDTO, Notice> findNotices(PageRequestDTO requestDTO) {
 
         Pageable pageable = requestDTO.getPageable(Sort.by("noticeId").descending());
 

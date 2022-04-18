@@ -443,7 +443,7 @@ class ActivityInfoServiceTest {
     void activityNotFoundException() {
 
         assertThrows(ActivityNotFoundException.class, () ->
-                activityInfoService.getActivityDetailInfo(0L)
+                activityInfoService.findActivityDetailInfo(0L)
         );
     }
 }

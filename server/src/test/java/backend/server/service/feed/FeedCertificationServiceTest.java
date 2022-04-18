@@ -208,7 +208,7 @@ class FeedCertificationServiceTest {
         LocalDate from = LocalDate.of(2022, 3, 1);
         LocalDate to = LocalDate.of(2022, 5, 20);
         // when
-        FeedDTO.CertificationResDTO certification = feedCertificationService.getCertification(from, to, "2015100885");
+        FeedDTO.CertificationResDTO certification = feedCertificationService.findCertification(from, to, "2015100885");
 
         // then
         assertThat(certification.getEachCertificationInfos().size()).isEqualTo(2);
@@ -242,7 +242,7 @@ class FeedCertificationServiceTest {
         String totalTime = "10:30";
 
         // when
-        FeedDTO.CertificationResDTO certification = feedCertificationService.getCertification(from, to, "2015100885");
+        FeedDTO.CertificationResDTO certification = feedCertificationService.findCertification(from, to, "2015100885");
 
         assertThat(certification.getCareTimes()).isEqualTo(sumOfCareTime);
         assertThat(certification.getOrdinaryTimes()).isEqualTo(sumOfOrdinaryTime);

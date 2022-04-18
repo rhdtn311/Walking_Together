@@ -75,7 +75,7 @@ class SignUpServiceTest {
     void passwordEncoding() {
         // given
         UserDTO.SignUpReqDTO signUpReqDTO = UserDTO.SignUpReqDTO.builder()
-                .stdId("12345")
+                .stdId("11111")
                 .name("member")
                 .email("email@email.com")
                 .phoneNumber("01012345678")
@@ -87,7 +87,7 @@ class SignUpServiceTest {
         signUpService.signup(signUpReqDTO);
 
         // when
-        Member findMember = userRepository.findMemberByStdId("12345").get();
+        Member findMember = userRepository.findMemberByStdId("11111").get();
 
         // then
         assertTrue(passwordEncoder.matches(signUpReqDTO.getPassword(), findMember.getPassword()));
@@ -98,7 +98,7 @@ class SignUpServiceTest {
     void stdIdDuplicate() {
         // given
         UserDTO.SignUpReqDTO signUpReqDTO1 = UserDTO.SignUpReqDTO.builder()
-                .stdId("12345")
+                .stdId("11111")
                 .name("member1")
                 .email("email1@email.com")
                 .phoneNumber("01012345678")
@@ -111,7 +111,7 @@ class SignUpServiceTest {
 
         // when
         UserDTO.SignUpReqDTO signUpReqDTO2 = UserDTO.SignUpReqDTO.builder()
-                .stdId("12345")
+                .stdId("11111")
                 .name("member2")
                 .email("email2@email.com")
                 .phoneNumber("01011112222")

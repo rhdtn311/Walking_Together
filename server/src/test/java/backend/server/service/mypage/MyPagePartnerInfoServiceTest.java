@@ -76,7 +76,7 @@ class MyPagePartnerInfoServiceTest {
     void findPartnerListByStdId() {
 
         // when
-        List<MyPageDTO.MyPagePartnerListResDTO> partnerList = myPagePartnerInfoService.getPartnerList(member.getStdId());
+        List<MyPageDTO.MyPagePartnerListResDTO> partnerList = myPagePartnerInfoService.findPartnersInfo(member.getStdId());
 
         // then
         assertThat(partnerList.size()).isEqualTo(2);
@@ -95,7 +95,7 @@ class MyPagePartnerInfoServiceTest {
     void findPartnerByPartnerId() {
 
         // when
-        MyPageDTO.MyPagePartnerDetailResDTO partnerDetail = myPagePartnerInfoService.getMyPagePartnerDetail(partner1.getPartnerId());
+        MyPageDTO.MyPagePartnerDetailResDTO partnerDetail = myPagePartnerInfoService.findPartnerDetail(partner1.getPartnerId());
 
         // then
         assertThat(partnerDetail.getPartnerName()).isEqualTo(partner1.getPartnerName());
