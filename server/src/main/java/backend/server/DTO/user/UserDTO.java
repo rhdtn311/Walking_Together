@@ -20,7 +20,7 @@ public class UserDTO {
         private String birth;
         private String department;
 
-        public Member signUpReqDTOToMember(PasswordEncoder passwordEncoder) {
+        public Member toMember(PasswordEncoder passwordEncoder) {
             Member member = Member.builder()
                     .stdId(this.getStdId())
                     .name(this.getName())

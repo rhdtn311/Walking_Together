@@ -51,9 +51,9 @@ public class ActivityController {
     // MediaType.MULTIPART_FORM_DATA_VALUE
     // 활동 종료
     @PostMapping(value = "/activity/end")
-    public ResponseEntity<ResponseDTO> endActivity(@ModelAttribute ActivityDTO.ActivityEndReq activityEndReq) {
+    public ResponseEntity<ResponseDTO> endActivity(@ModelAttribute ActivityDTO.ActivityEndReqDTO activityEndReqDTO) {
 
-        Long result = activityEndService.endActivity(activityEndReq);
+        Long result = activityEndService.endActivity(activityEndReqDTO);
 
         if (result.equals(ErrorCode.ACTIVITY_ABNORMAL_DONE_WITHOUT_MINIMUM_TIME.getCode()))
             throw new ActivityAbnormalDoneWithoutMinimumTimeException();

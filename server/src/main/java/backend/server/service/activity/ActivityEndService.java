@@ -35,9 +35,9 @@ public class ActivityEndService {
 
     // 활동 종료
     @Transactional
-    public Long endActivity(ActivityDTO.ActivityEndReq activityEndReq) {
+    public Long endActivity(ActivityDTO.ActivityEndReqDTO activityEndReqDTO) {
 
-        Optional<Activity> activityOptional = activityRepository.findById(activityEndReq.getActivityId());
+        Optional<Activity> activityOptional = activityRepository.findById(activityEndReqDTO.getActivityId());
 
         if (activityOptional.isEmpty()) {
             throw new ActivityNotFoundException();
@@ -48,14 +48,14 @@ public class ActivityEndService {
             throw new ActivityAlreadyDoneException();
         }
 
-        long checkActivityResult = activity.checkAndSaveActivity(activityEndReq.getDistance(),activityEndReq.getCheckNormalQuit(),activityEndReq.getActivityEndTime());
+        long checkActivityResult = activity.checkAndSaveActivity(activityEndReqDTO.getDistance(),activityEndReqDTO.getCheckNormalQuit(),activityEndReqDTO.getActivityEndTime());
         if (checkActivityResult != 0) {
             return checkActivityResult;
         }
 
-        if (activityEndReq.getCheckNormalQuit() == 0) {
-            if (activityEndReq.getEndPhoto() != null) {
-                ActivityEndImageFileUploadDTO activityEndImageFileUploadDTO = new ActivityEndImageFileUploadDTO(activityEndReq.getEndPhoto());
+        if (activityEndReqDTO.getCheckNormalQuit() == 0) {
+            if (activityEndReqDTO.getEndPhoto() != null) {
+                ActivityEndImageFileUploadDTO activityEndImageFileUploadDTO = new ActivityEndImageFileUploadDTO(activityEndReqDTO.getEndPhoto());
                 String fileUrl = fileUploadService.uploadFileToS3(activityEndImageFileUploadDTO);
                 saveActivityEndImage(activity.getActivityId(), fileUrl, activityEndImageFileUploadDTO.getFileName());
             } else {
@@ -63,28 +63,28 @@ public class ActivityEndService {
             }
         }
 
-        if (activityEndReq.getMapToArray() == null) {
+        if (activityEndReqDTO.getMapToArray() == null) {
             throw new ActivityMapPhotoNotSendException();
         }
 
         // 맵 경로 저장
-        mapCaptureSaveService.saveMapCapture(activityEndReq.mapArrayToHashMap(), activity.getActivityId());
+        mapCaptureSaveService.saveMapCapture(activityEndReqDTO.mapArrayToHashMap(), activity.getActivityId());
 
         // 활동 저장
-        activity.changeDistance(activityEndReq.getDistance());
-        activity.changeEndTime(activityEndReq.getActivityEndTime());
+        activity.changeDistance(activityEndReqDTO.getDistance());
+        activity.changeEndTime(activityEndReqDTO.getActivityEndTime());
         activity.changeActivityStatus(0);
         // 활동 시간 변경
         activity.changeTotalTime();
 
         // 활동한 회원의 총 거리 변경
         Member member = activity.getMember();
-        member.addDistance(activityEndReq.getDistance());
+        member.addDistance(activityEndReqDTO.getDistance());
         member.changeTotalTime(activity, "plus"); // 회원의 총 환산 시간 변경
 
         certificationSaveService.saveCertification(member, activity);
 
-        return activityEndReq.getActivityId();
+        return activityEndReqDTO.getActivityId();
     }
 
     private void saveActivityEndImage(Long activityId, String fileUrl, String fileName) {

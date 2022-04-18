@@ -98,8 +98,8 @@ class ActivityEndServiceTest {
         String filePath = "src/test/java/imageFiles/ActivityEndImage.png";
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
 
-        ActivityDTO.ActivityEndReq activityEndReq =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO activityEndReq =
+                new ActivityDTO.ActivityEndReqDTO(
                           savedActivity.getActivityId()
                         , 4300L
                         , "{lat: 37.6440559, lon: 127.11006579999999, timestamp: 1621825328595}"
@@ -179,8 +179,8 @@ class ActivityEndServiceTest {
         String filePath = "src/test/java/imageFiles/ActivityEndImage.png";
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
 
-        ActivityDTO.ActivityEndReq activityEndReq =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO activityEndReqDTO =
+                new ActivityDTO.ActivityEndReqDTO(
                         savedActivity.getActivityId()
                         , 2500L
                         , "{lat: 37.6440559, lon: 127.11006579999999, timestamp: 1621825328595}"
@@ -189,7 +189,7 @@ class ActivityEndServiceTest {
                         , 0);
 
         // when
-        activityEndService.endActivity(activityEndReq);
+        activityEndService.endActivity(activityEndReqDTO);
 
         Activity endActivity = activityRepository.findById(startActivity.getActivityId()).get();
 
@@ -257,8 +257,8 @@ class ActivityEndServiceTest {
 
         // when
         // 존재하지 않는 activityId로 activityEndReqDTO 생성
-        ActivityDTO.ActivityEndReq notExistActivityEndReq =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO notExistActivityEndReq =
+                new ActivityDTO.ActivityEndReqDTO(
                         0L
                         , 2500L
                         , "{lat: 37.6440559, lon: 127.11006579999999, timestamp: 1621825328595}"
@@ -267,8 +267,8 @@ class ActivityEndServiceTest {
                         , 0);
 
         // 존재하는 activityId로 activityEndReqDTO 생성
-        ActivityDTO.ActivityEndReq existActivityEndReq =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO existActivityEndReq =
+                new ActivityDTO.ActivityEndReqDTO(
                         savedActivity.getActivityId()
                         , 2500L
                         , "{lat: 37.6440559, lon: 127.11006579999999, timestamp: 1621825328595}"
@@ -328,8 +328,8 @@ class ActivityEndServiceTest {
         String filePath = "src/test/java/imageFiles/ActivityEndImage.png";
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
 
-        ActivityDTO.ActivityEndReq activityEndReq =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO activityEndReq =
+                new ActivityDTO.ActivityEndReqDTO(
                         savedActivity.getActivityId()
                         , 2500L
                         , "{lat: 37.6440559, lon: 127.11006579999999, timestamp: 1621825328595}"
@@ -394,8 +394,8 @@ class ActivityEndServiceTest {
 
         // when
         // 거리는 만족했으나, 활동 시간은 29분으로 만족하지 않았고, 정상 종료인 경우
-        ActivityDTO.ActivityEndReq notSatisfyMinimumActivityTimeDTO =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO notSatisfyMinimumActivityTimeDTO =
+                new ActivityDTO.ActivityEndReqDTO(
                         savedActivity.getActivityId()
                         , 2500L
                         , "{lat: 37.6440559, lon: 127.11006579999999, timestamp: 1621825328595}"
@@ -470,8 +470,8 @@ class ActivityEndServiceTest {
 
         // when
         // 거리는 만족했으나, 활동 시간은 29분으로 만족하지 않았고, 비정상 종료인 경우
-        ActivityDTO.ActivityEndReq notSatisfyMinimumActivityTimeDTO =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO notSatisfyMinimumActivityTimeDTO =
+                new ActivityDTO.ActivityEndReqDTO(
                         savedActivity.getActivityId()
                         , 2500L
                         , "{lat: 37.6440559, lon: 127.11006579999999, timestamp: 1621825328595}"
@@ -546,8 +546,8 @@ class ActivityEndServiceTest {
 
         // when
         // 활동이 정상 종료 되었는데 활동 경로만 보내지지 않았을 경우
-        ActivityDTO.ActivityEndReq notSendMapCaptureDTO =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO notSendMapCaptureDTO =
+                new ActivityDTO.ActivityEndReqDTO(
                         startActivity.getActivityId()
                         , 2500L
                         , null
@@ -604,8 +604,8 @@ class ActivityEndServiceTest {
 
         // when
         // 활동이 정상 종료 되었는데 활동 경로만 보내지지 않았을 경우
-        ActivityDTO.ActivityEndReq notSendActivityEndPhoto =
-                new ActivityDTO.ActivityEndReq(
+        ActivityDTO.ActivityEndReqDTO notSendActivityEndPhoto =
+                new ActivityDTO.ActivityEndReqDTO(
                         startActivity.getActivityId()
                         , 2500L
                         , "{lat: 37.6440559, lon: 127.11006579999999, timestamp: 1621825328595}"

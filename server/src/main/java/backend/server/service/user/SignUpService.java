@@ -32,7 +32,7 @@ public class SignUpService {
         if (userRepository.existsMemberByPhoneNumber(signUpReqDTO.getPhoneNumber())) {
             throw new PhoneNumberDuplicationException();
         }
-        Member member = signUpReqDTO.signUpReqDTOToMember(passwordEncoder);
+        Member member = signUpReqDTO.toMember(passwordEncoder);
 
         return userRepository.save(member).getStdId();
     }

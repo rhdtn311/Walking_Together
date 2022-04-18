@@ -105,7 +105,7 @@ public class MyPageDTO {
             this.relationship = relationship;
         }
 
-        public static MyPagePartnerDetailResDTO partnerToMyPagePartnerDetailResDTO(Partner partner) {
+        public static MyPagePartnerDetailResDTO entityToDTO(Partner partner) {
             return MyPagePartnerDetailResDTO
                     .builder()
                     .partnerName(partner.getPartnerName())
@@ -132,11 +132,11 @@ public class MyPageDTO {
         private String gender;
         private String partnerBirth;
 
-        public Partner partnerCreationReqDTOToPartner() {
+        public Partner toPartner() {
             return Partner.builder()
                     .member(Member.builder().stdId(this.stdId).build())
                     .partnerName(this.partnerName)
-                    .partnerBirth(partnerBirthReplace())
+                    .partnerBirth(replacePartnerBirth())
                     .gender(this.gender)
                     .selectionReason(this.selectionReason)
                     .partnerDetail(this.partnerDetail)
@@ -145,7 +145,7 @@ public class MyPageDTO {
                     .build();
         }
 
-        public String partnerBirthReplace() {
+        public String replacePartnerBirth() {
             return this.partnerBirth.replace('-','/');
         }
 
@@ -196,7 +196,7 @@ public class MyPageDTO {
             return this.partnerPhoto != null;
         }
 
-        public String partnerBirthReplace() {
+        public String replacePartnerBirth() {
             return this.partnerBirth.replace('-', '/');
         }
     }

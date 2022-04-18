@@ -35,6 +35,6 @@ public class MyPagePartnerInfoService {
 
         Partner partner = partnerOptional.get();
 
-        return MyPageDTO.MyPagePartnerDetailResDTO.partnerToMyPagePartnerDetailResDTO(partner);
+        return MyPageDTO.MyPagePartnerDetailResDTO.entityToDTO(partner);
     }
 }

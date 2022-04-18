@@ -72,7 +72,7 @@ class MapCaptureSaveServiceTest {
         }
 
         // DTO 생성
-        ActivityDTO.ActivityEndReq activityEndReqDTO = ActivityDTO.ActivityEndReq.builder()
+        ActivityDTO.ActivityEndReqDTO activityEndReqDTO = ActivityDTO.ActivityEndReqDTO.builder()
                 .activityId(1L)
                 .endTime("20211111150000")
                 .distance(5000L)

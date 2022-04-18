@@ -20,19 +20,19 @@ public class ActivityDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ActivityCreationReq {
+    public static class ActivityCreationReqDTO {
         private String stdId;
         private Long partnerId;
         private MultipartFile startPhoto;
 
         @Builder
-        public ActivityCreationReq(String stdId, Long partnerId, MultipartFile startPhoto) {
+        public ActivityCreationReqDTO(String stdId, Long partnerId, MultipartFile startPhoto) {
             this.stdId = stdId;
             this.partnerId = partnerId;
             this.startPhoto = startPhoto;
         }
 
-        public Activity toEntity(Member member, Partner partner) {
+        public Activity toActivity(Member member, Partner partner) {
             return Activity.builder()
                     .member(member)
                     .partner(partner)
@@ -46,7 +46,7 @@ public class ActivityDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ActivityEndReq {
+    public static class ActivityEndReqDTO {
 
         private Long activityId;
         private Long distance;
@@ -60,7 +60,7 @@ public class ActivityDTO {
         private int checkNormalQuit;
 
         @Builder
-        public ActivityEndReq(Long activityId, Long distance, String map, MultipartFile endPhoto,
+        public ActivityEndReqDTO(Long activityId, Long distance, String map, MultipartFile endPhoto,
                               String endTime, int checkNormalQuit) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 

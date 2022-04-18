@@ -73,7 +73,7 @@ public class ActivityCreationService {
         Partner partner = partnerOpt.get();
         Member member = memberOpt.get();
 
-        Activity activity = activityRepository.save(activityCreationReq.toEntity(member, partner));
+        Activity activity = activityRepository.save(activityCreationReq.toActivity(member, partner));
 
         ActivityStartImageFileUploadDTO activityStartImageFileUploadDTO = new ActivityStartImageFileUploadDTO(activityCreationReq.getStartPhoto());
         String fileUrl = fileUploadService.uploadFileToS3(activityStartImageFileUploadDTO);

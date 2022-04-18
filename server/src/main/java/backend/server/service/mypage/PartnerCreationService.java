@@ -28,7 +28,7 @@ public class PartnerCreationService {
         if (!userRepository.existsMemberByStdId(partnerCreationReqDTO.getStdId())) {
             throw new MemberNotFoundException();
         }
-        Partner partner = partnerCreationReqDTO.partnerCreationReqDTOToPartner();
+        Partner partner = partnerCreationReqDTO.toPartner();
         Partner savedPartner = partnerRepository.save(partner);
 
         if (partnerCreationReqDTO.isPartnerPhotoPresent()) {
