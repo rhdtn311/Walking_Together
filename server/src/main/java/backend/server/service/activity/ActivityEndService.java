@@ -13,7 +13,7 @@ import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.ActivityCheckImagesRepository;
 import backend.server.repository.ActivityRepository;
 import backend.server.s3.FileUploadService;
-import backend.server.security.jwt.TokenProvider;
+import backend.server.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class ActivityEndService {
     private final FileUploadService fileUploadService;
     private final ActivityCheckImagesRepository activityCheckImagesRepository;
 
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 활동 종료
     @Transactional
@@ -99,7 +99,7 @@ public class ActivityEndService {
 
     public String getStdIdFromToken(TokenDTO tokenDTO) {
 
-        Authentication authentication = tokenProvider.getAuthentication(tokenDTO.getToken());
-        return authentication.getName();
+        return jwtTokenProvider.getStdIdFromToken(tokenDTO.getToken());
+
     }
 }
