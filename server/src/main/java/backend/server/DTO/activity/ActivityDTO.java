@@ -45,7 +45,7 @@ public class ActivityDTO {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class ActivityEndReqDTO {
 
         private Long activityId;

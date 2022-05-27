@@ -12,7 +12,7 @@ import java.util.List;
 public class AdminDTO {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class MemberInfoResDTO {
         private String name;
         private String stdId;
@@ -33,7 +33,7 @@ public class AdminDTO {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class ActivityInfoReqDTO {
         private String keyword;
         private String from;
@@ -56,7 +56,7 @@ public class AdminDTO {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class ActivityInfoResDTO {
 
         private Long activityId;
@@ -85,6 +85,7 @@ public class AdminDTO {
         }
     }
 
+    @ToString
     @Getter
     @NoArgsConstructor
     public static class ActivityDetailInfoResDTO {
