@@ -2,6 +2,10 @@ package backend.server.exception;
 
 public enum ErrorCode {
 
+    // auth
+    LOGIN_USER_NOT_FOUND_EXCEPTION(401L, "존재하지 않는 회원입니다.", 401),
+    AUTHORIZATION_FAIL_EXCEPTION(403L, "요청 권한이 존재하지 않습니다.", 403),
+
     // Activity
     ACTIVITY_ALREADY_IN_PROGRESS(400L, "이미 진행 중인 활동이 있습니다.", 400),
     PARTNER_NOT_FOUND(404L, "파트너가 존재하지 않습니다.", 404),
