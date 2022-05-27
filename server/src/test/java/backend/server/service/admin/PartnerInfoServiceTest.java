@@ -4,8 +4,7 @@ import backend.server.DTO.admin.AdminDTO;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
-import org.assertj.core.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,17 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
 class PartnerInfoServiceTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private PartnerRepository partnerRepository;
@@ -49,7 +45,7 @@ class PartnerInfoServiceTest {
                 .phoneNumber("01039281329")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         ordinaryPartner = Partner.builder()
                 .member(member)
@@ -129,7 +125,7 @@ class PartnerInfoServiceTest {
                 .phoneNumber("01099991111")
                 .build();
 
-        userRepository.save(anotherMember);
+        memberRepository.save(anotherMember);
 
         Partner anotherOrdinaryPartner = Partner.builder()
                 .member(anotherMember)
@@ -164,7 +160,7 @@ class PartnerInfoServiceTest {
                 .phoneNumber("01099991111")
                 .build();
 
-        userRepository.save(anotherMember);
+        memberRepository.save(anotherMember);
 
         Partner anotherOrdinaryPartner = Partner.builder()
                 .member(anotherMember)

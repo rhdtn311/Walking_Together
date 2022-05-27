@@ -5,7 +5,7 @@ import backend.server.entity.Member;
 import backend.server.entity.Partner;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ class ActivityQueryRepositoryTest {
     ActivityQueryRepository activityQueryRepository;
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     ActivityRepository activityRepository;
@@ -45,7 +45,7 @@ class ActivityQueryRepositoryTest {
                 .phoneNumber("01000000000")
                 .build();
 
-        userRepository.save(notActiveMember);
+        memberRepository.save(notActiveMember);
 
         Member activeMember = Member.builder()
                 .name("activeMember")
@@ -57,7 +57,7 @@ class ActivityQueryRepositoryTest {
                 .phoneNumber("01011111111")
                 .build();
 
-        userRepository.save(activeMember);
+        memberRepository.save(activeMember);
 
         Partner notActiveMemberPartner = Partner.builder()
                 .partnerName("notActiveMemberPartner")

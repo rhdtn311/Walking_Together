@@ -4,8 +4,7 @@ import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
-import org.assertj.core.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,14 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
 class MyPagePartnerInfoServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     PartnerRepository partnerRepository;
@@ -46,7 +44,7 @@ class MyPagePartnerInfoServiceTest {
                 .birth("19960311")
                 .phoneNumber("01039281329")
                 .build();
-        userRepository.save(member);
+        memberRepository.save(member);
 
         partner1 = Partner.builder()
                 .member(member)

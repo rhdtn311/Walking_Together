@@ -6,7 +6,7 @@ import backend.server.entity.Partner;
 import backend.server.entity.PartnerPhotos;
 import backend.server.repository.PartnerPhotosRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,14 +21,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
 class PartnerInfoChangeServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     PartnerRepository partnerRepository;
@@ -54,7 +52,7 @@ class PartnerInfoChangeServiceTest {
                 .birth("19960311")
                 .phoneNumber("01039281329")
                 .build();
-        userRepository.save(member);
+        memberRepository.save(member);
 
         partner = Partner.builder()
                 .member(member)

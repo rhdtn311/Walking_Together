@@ -4,8 +4,7 @@ import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.entity.Member;
 import backend.server.entity.MemberProfilePictures;
 import backend.server.repository.MemberProfilePicturesRepository;
-import backend.server.repository.UserRepository;
-import org.assertj.core.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
 
 import java.io.File;
@@ -29,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MyPageChangeServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -53,7 +51,7 @@ class MyPageChangeServiceTest {
                 .birth("19960311")
                 .phoneNumber("01039281329")
                 .build();
-        userRepository.save(member);
+        memberRepository.save(member);
     }
 
     // MyPageChangeReqDTO에 비밀번호가 존재한다면 비밀번호 변경
@@ -72,7 +70,7 @@ class MyPageChangeServiceTest {
 
         // when
         myPageChangeService.updateMemberInfo(myPageChangeReqDTO);
-        Member findMember = userRepository.findMemberByStdId(this.member.getStdId()).get();
+        Member findMember = memberRepository.findMemberByStdId(this.member.getStdId()).get();
 
         // then
         assertTrue(passwordEncoder.matches("newPassword", findMember.getPassword()));
@@ -90,7 +88,7 @@ class MyPageChangeServiceTest {
 
         // when
         myPageChangeService.updateMemberInfo(myPageChangeReqDTO);
-        Member findMember = userRepository.findMemberByStdId(this.member.getStdId()).get();
+        Member findMember = memberRepository.findMemberByStdId(this.member.getStdId()).get();
 
         // then
         assertThat(findMember.getDepartment()).isEqualTo("음악");

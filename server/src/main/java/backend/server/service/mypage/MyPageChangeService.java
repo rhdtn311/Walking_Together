@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 public class MyPageChangeService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final MemberProfilePicturesRepository memberProfilePicturesRepository;
 
     private final FileUploadService fileUploadService;
@@ -29,7 +29,7 @@ public class MyPageChangeService {
 
     @Transactional
     public String updateMemberInfo(MyPageDTO.MyPageChangeReqDTO myPageChangeReqDTO) {
-        Optional<Member> memberOptional = userRepository.findMemberByStdId(myPageChangeReqDTO.getStdId());
+        Optional<Member> memberOptional = memberRepository.findMemberByStdId(myPageChangeReqDTO.getStdId());
         if (memberOptional.isEmpty()) {
             throw new MemberNotFoundException();
         }

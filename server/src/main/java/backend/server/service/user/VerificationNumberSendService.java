@@ -3,7 +3,7 @@ package backend.server.service.user;
 import backend.server.DTO.user.MailDTO;
 import backend.server.DTO.user.UserDTO;
 import backend.server.exception.userService.EmailDuplicationException;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class VerificationNumberSendService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final MailService mailService;
 
     public UserDTO.VerificationNumberSendResDTO sendVerificationNumber(String email) {
-        if (userRepository.existsMemberByEmail(email)) {
+        if (memberRepository.existsMemberByEmail(email)) {
             throw new EmailDuplicationException();
         }
 

@@ -1,13 +1,9 @@
 package backend.server.service.activity;
 
-import backend.server.entity.Activity;
 import backend.server.entity.Certification;
-import backend.server.entity.Member;
-import backend.server.entity.Partner;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.CertificationRepository;
-import backend.server.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -29,7 +24,7 @@ class CertificationDeleteServiceTest {
     CertificationDeleteService certificationDeleteService;
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     ActivityRepository activityRepository;

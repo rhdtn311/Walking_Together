@@ -2,21 +2,14 @@ package backend.server.service.user;
 
 import backend.server.DTO.user.UserDTO;
 import backend.server.entity.Member;
-import backend.server.entity.MemberRole;
 import backend.server.exception.activityService.MemberNotFoundException;
-import backend.server.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
@@ -24,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PasswordFindServiceTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private PasswordFindService passwordFindService;
@@ -116,7 +109,7 @@ class PasswordFindServiceTest {
                 .totalTime(0)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
         // when
         UserDTO.PasswordFindReqDTO nameNotSame = UserDTO.PasswordFindReqDTO.builder()
                 .name("anotherMember")

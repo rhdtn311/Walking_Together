@@ -3,16 +3,13 @@ package backend.server.service.activity;
 import backend.server.entity.*;
 import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.*;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ActivityDeleteServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     ActivityRepository activityRepository;
@@ -53,7 +50,7 @@ class ActivityDeleteServiceTest {
                 .build();
 
         Long originalMemberDistance = member.getDistance();
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Activity activity = Activity.builder()
                 .member(member)
@@ -87,7 +84,7 @@ class ActivityDeleteServiceTest {
                 .build();
 
         int originalMemberTotalTime = member.getTotalTime();
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Activity activity = Activity.builder()
                 .member(member)
@@ -118,7 +115,7 @@ class ActivityDeleteServiceTest {
                 .email("email@naver.com")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Activity activity = Activity.builder()
                 .member(member)
@@ -164,7 +161,7 @@ class ActivityDeleteServiceTest {
                 .email("email@naver.com")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Activity activity = Activity.builder()
                 .member(member)
@@ -204,7 +201,7 @@ class ActivityDeleteServiceTest {
                 .email("email@naver.com")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Activity activity = Activity.builder()
                 .member(member)

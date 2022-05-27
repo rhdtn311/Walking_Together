@@ -1,7 +1,6 @@
 package backend.server.service.activity;
 
 import backend.server.DTO.activity.ActivityDTO;
-import backend.server.DTO.user.UserDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
@@ -11,7 +10,7 @@ import backend.server.exception.activityService.ActivityMapPhotoNotSendException
 import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
@@ -35,7 +33,7 @@ import static org.assertj.core.api.Assertions.*;
 class ActivityEndServiceTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private PartnerRepository partnerRepository;
@@ -61,7 +59,7 @@ class ActivityEndServiceTest {
                 .distance(0L)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         // 활동 전 회원의 총 활동 거리
         long beforeActivityDistance = member.getDistance();
@@ -142,7 +140,7 @@ class ActivityEndServiceTest {
                 .distance(0L)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         // 활동 전 회원의 총 활동 거리
         long beforeActivityDistance = member.getDistance();
@@ -223,7 +221,7 @@ class ActivityEndServiceTest {
                 .distance(0L)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("carePartner")
@@ -296,7 +294,7 @@ class ActivityEndServiceTest {
                 .distance(0L)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("carePartner")
@@ -360,7 +358,7 @@ class ActivityEndServiceTest {
                 .distance(0L)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("carePartner")
@@ -436,7 +434,7 @@ class ActivityEndServiceTest {
                 .distance(0L)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("carePartner")
@@ -512,7 +510,7 @@ class ActivityEndServiceTest {
                 .distance(0L)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("carePartner")
@@ -575,7 +573,7 @@ class ActivityEndServiceTest {
                 .distance(0L)
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("carePartner")

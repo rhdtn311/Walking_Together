@@ -10,7 +10,7 @@ import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.MapCaptureRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import backend.server.repository.querydsl.AdminQueryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ class ActivityInfoServiceTest {
     ActivityRepository activityRepository;
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     PartnerRepository partnerRepository;
@@ -78,8 +78,8 @@ class ActivityInfoServiceTest {
                 .distance(6000L)
                 .build();
 
-        userRepository.save(member1);
-        userRepository.save(member2);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
 
         partner1 = Partner.builder()
                 .member(member1)

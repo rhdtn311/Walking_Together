@@ -5,7 +5,7 @@ import backend.server.entity.Member;
 import backend.server.entity.MemberProfilePictures;
 import backend.server.exception.activityService.MemberNotFoundException;
 import backend.server.repository.MemberProfilePicturesRepository;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +16,13 @@ import java.util.Optional;
 @Service
 public class MyPageMainService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final MemberProfilePicturesRepository memberProfilePicturesRepository;
 
     // 마이페이지 메인
     @Transactional(readOnly = true)
     public MyPageDTO.MyPageMainResDTO getMyPageMain(String stdId) {
-        Optional<Member> memberOptional = userRepository.findMemberByStdId(stdId);
+        Optional<Member> memberOptional = memberRepository.findMemberByStdId(stdId);
         if(memberOptional.isEmpty()) {
             throw new MemberNotFoundException();
         }

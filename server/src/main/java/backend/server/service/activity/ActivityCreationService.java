@@ -13,7 +13,7 @@ import backend.server.exception.activityService.PartnerNotFoundException;
 import backend.server.repository.ActivityCheckImagesRepository;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import backend.server.repository.querydsl.ActivityQueryRepository;
 import backend.server.s3.FileUploadService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class ActivityCreationService {
 
     private final ActivityRepository activityRepository;
     private final PartnerRepository partnerRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final ActivityCheckImagesRepository activityCheckImagesRepository;
     private final ActivityQueryRepository activityQueryRepository;
 
@@ -65,7 +65,7 @@ public class ActivityCreationService {
             throw new PartnerNotFoundException();
         }
 
-        Optional<Member> memberOpt = userRepository.findMemberByStdId(activityCreationReq.getStdId());
+        Optional<Member> memberOpt = memberRepository.findMemberByStdId(activityCreationReq.getStdId());
         if (memberOpt.isEmpty()) {
             throw new MemberNotFoundException();
         }

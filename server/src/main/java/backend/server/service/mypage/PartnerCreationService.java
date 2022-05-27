@@ -7,7 +7,7 @@ import backend.server.entity.PartnerPhotos;
 import backend.server.exception.activityService.MemberNotFoundException;
 import backend.server.repository.PartnerPhotosRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import backend.server.s3.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PartnerCreationService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final PartnerRepository partnerRepository;
     private final PartnerPhotosRepository partnerPhotosRepository;
 
@@ -25,7 +25,7 @@ public class PartnerCreationService {
 
     @Transactional
     public Long createPartner (MyPageDTO.PartnerCreationReqDTO partnerCreationReqDTO) {
-        if (!userRepository.existsMemberByStdId(partnerCreationReqDTO.getStdId())) {
+        if (!memberRepository.existsMemberByStdId(partnerCreationReqDTO.getStdId())) {
             throw new MemberNotFoundException();
         }
         Partner partner = partnerCreationReqDTO.toPartner();

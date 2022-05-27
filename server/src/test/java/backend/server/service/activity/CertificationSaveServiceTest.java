@@ -6,8 +6,7 @@ import backend.server.entity.Member;
 import backend.server.entity.Partner;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.CertificationRepository;
-import backend.server.repository.UserRepository;
-import org.assertj.core.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -32,7 +30,7 @@ class CertificationSaveServiceTest {
     ActivityRepository activityRepository;
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     CertificationRepository certificationRepository;
@@ -50,7 +48,7 @@ class CertificationSaveServiceTest {
                 .password("password")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Activity activity = Activity.builder()
                 .partner(Partner.builder().partnerName("partner").build())
@@ -99,7 +97,7 @@ class CertificationSaveServiceTest {
                 .password("password")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Activity activity = Activity.builder()
                 .partner(Partner.builder().partnerName("partner").build())

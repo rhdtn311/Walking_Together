@@ -2,9 +2,7 @@ package backend.server.service.ranking;
 
 import backend.server.DTO.ranking.RankingDTO;
 import backend.server.entity.Member;
-import backend.server.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +13,13 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
 class RankingServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     RankingService rankingService;
@@ -40,7 +37,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(100L)
                 .build();
-        userRepository.save(memberA);
+        memberRepository.save(memberA);
 
         Member memberB = Member.builder()
                 .stdId("stdIdB")
@@ -50,7 +47,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(4000L)
                 .build();
-        userRepository.save(memberB);
+        memberRepository.save(memberB);
 
         Member memberC = Member.builder()
                 .stdId("stdIdC")
@@ -60,7 +57,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(4512L)
                 .build();
-        userRepository.save(memberC);
+        memberRepository.save(memberC);
 
         Member memberD = Member.builder()
                 .stdId("stdIdD")
@@ -70,7 +67,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(0L)
                 .build();
-        userRepository.save(memberD);
+        memberRepository.save(memberD);
 
         Member memberE = Member.builder()
                 .stdId("stdIdE")
@@ -80,7 +77,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(3510L)
                 .build();
-        userRepository.save(memberE);
+        memberRepository.save(memberE);
 
         Member memberF = Member.builder()
                 .stdId("stdIdF")
@@ -90,7 +87,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(5021L)
                 .build();
-        userRepository.save(memberF);
+        memberRepository.save(memberF);
 
         Member memberG = Member.builder()
                 .stdId("stdIdG")
@@ -100,7 +97,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(1000L)
                 .build();
-        userRepository.save(memberG);
+        memberRepository.save(memberG);
 
         Member memberH = Member.builder()
                 .stdId("stdIdH")
@@ -110,7 +107,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(9021L)
                 .build();
-        userRepository.save(memberH);
+        memberRepository.save(memberH);
 
         Member memberI = Member.builder()
                 .stdId("stdIdI")
@@ -120,7 +117,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(1051L)
                 .build();
-        userRepository.save(memberI);
+        memberRepository.save(memberI);
 
         Member memberJ = Member.builder()
                 .stdId("stdIdJ")
@@ -130,7 +127,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(5121L)
                 .build();
-        userRepository.save(memberJ);
+        memberRepository.save(memberJ);
 
         Member memberK = Member.builder()
                 .stdId("stdIdK")
@@ -140,7 +137,7 @@ class RankingServiceTest {
                 .password("password")
                 .distance(105L)
                 .build();
-        userRepository.save(memberK);
+        memberRepository.save(memberK);
 
         Member[] rankingArr = new Member[]{memberH, memberJ, memberF, memberC, memberB, memberE, memberI, memberG, memberK, memberA};
 

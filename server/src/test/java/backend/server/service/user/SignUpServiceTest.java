@@ -6,7 +6,7 @@ import backend.server.entity.MemberRole;
 import backend.server.exception.userService.EmailDuplicationException;
 import backend.server.exception.userService.PhoneNumberDuplicationException;
 import backend.server.exception.userService.StdIdDuplicationException;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SignUpServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     SignUpService signUpService;
@@ -47,7 +47,7 @@ class SignUpServiceTest {
         // when
         signUpService.signup(signUpReqDTO);
 
-        Member findMember = userRepository.findMemberByStdId("2015100885").get();
+        Member findMember = memberRepository.findMemberByStdId("2015100885").get();
 
         // then
         assertThat(signUpReqDTO.getStdId()).isEqualTo(findMember.getStdId());
@@ -87,7 +87,7 @@ class SignUpServiceTest {
         signUpService.signup(signUpReqDTO);
 
         // when
-        Member findMember = userRepository.findMemberByStdId("11111").get();
+        Member findMember = memberRepository.findMemberByStdId("11111").get();
 
         // then
         assertTrue(passwordEncoder.matches(signUpReqDTO.getPassword(), findMember.getPassword()));

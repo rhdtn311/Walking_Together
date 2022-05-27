@@ -4,7 +4,7 @@ import backend.server.DTO.user.MailDTO;
 import backend.server.DTO.user.UserDTO;
 import backend.server.entity.Member;
 import backend.server.exception.activityService.MemberNotFoundException;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 public class PasswordFindService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -25,7 +25,7 @@ public class PasswordFindService {
     @Transactional
     public UserDTO.PasswordFindResDTO findPassword(UserDTO.PasswordFindReqDTO passwordFindReqDTO) {
         Optional<Member> memberOptional
-                = userRepository.findMemberByStdIdAndNameAndBirth(passwordFindReqDTO.getStdId(), passwordFindReqDTO.getName(), passwordFindReqDTO.getBirth());
+                = memberRepository.findMemberByStdIdAndNameAndBirth(passwordFindReqDTO.getStdId(), passwordFindReqDTO.getName(), passwordFindReqDTO.getBirth());
 
         if(memberOptional.isEmpty()) {
             throw new MemberNotFoundException();

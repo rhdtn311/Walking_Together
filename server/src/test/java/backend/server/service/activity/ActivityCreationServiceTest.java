@@ -12,7 +12,7 @@ import backend.server.exception.activityService.PartnerNotFoundException;
 import backend.server.repository.ActivityCheckImagesRepository;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
@@ -40,7 +39,7 @@ class ActivityCreationServiceTest {
     private ActivityCreationService activityCreationService;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private PartnerRepository partnerRepository;
@@ -65,7 +64,7 @@ class ActivityCreationServiceTest {
                 .phoneNumber("01011111111")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner1 = Partner.builder()
                 .partnerId(1L)
@@ -118,7 +117,7 @@ class ActivityCreationServiceTest {
                 .phoneNumber("01011111111")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("partner")
@@ -161,7 +160,7 @@ class ActivityCreationServiceTest {
                 .phoneNumber("01011111111")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         // then
         assertThrows(PartnerNotFoundException.class, () -> activityCreationService.createActivity(member.getStdId()));
@@ -181,7 +180,7 @@ class ActivityCreationServiceTest {
                 .phoneNumber("01011111111")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("partner")
@@ -232,7 +231,7 @@ class ActivityCreationServiceTest {
                 .phoneNumber("01011111111")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("partner")
@@ -284,7 +283,7 @@ class ActivityCreationServiceTest {
                 .phoneNumber("01011111111")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("partner")
@@ -330,7 +329,7 @@ class ActivityCreationServiceTest {
                 .phoneNumber("01011111111")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         Partner partner = Partner.builder()
                 .partnerName("partner")

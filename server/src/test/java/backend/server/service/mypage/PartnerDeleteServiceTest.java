@@ -8,8 +8,7 @@ import backend.server.exception.mypageService.PartnerHaveActivityException;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerPhotosRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
-import org.assertj.core.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PartnerDeleteServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     PartnerRepository partnerRepository;
@@ -61,7 +60,7 @@ class PartnerDeleteServiceTest {
                 .birth("19960311")
                 .phoneNumber("01039281329")
                 .build();
-        userRepository.save(member);
+        memberRepository.save(member);
 
         partner = Partner.builder()
                 .member(member)

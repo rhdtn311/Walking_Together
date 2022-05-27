@@ -2,9 +2,8 @@ package backend.server.service.admin;
 
 import backend.server.DTO.admin.AdminDTO;
 import backend.server.entity.Member;
-import backend.server.repository.UserRepository;
+import backend.server.repository.MemberRepository;
 import backend.server.repository.querydsl.AdminQueryRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,14 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 class MemberInfoServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     AdminQueryRepository adminQueryRepository;
@@ -43,7 +41,7 @@ class MemberInfoServiceTest {
                 .phoneNumber("01039281329")
                 .build();
 
-        userRepository.save(member1);
+        memberRepository.save(member1);
 
         member2 = Member.builder()
                 .name("김뽀롱")
@@ -55,7 +53,7 @@ class MemberInfoServiceTest {
                 .phoneNumber("01039284132")
                 .build();
 
-        userRepository.save(member2);
+        memberRepository.save(member2);
     }
 
     @Test

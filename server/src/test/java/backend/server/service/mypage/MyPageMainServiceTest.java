@@ -4,8 +4,7 @@ import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.entity.Member;
 import backend.server.entity.MemberProfilePictures;
 import backend.server.repository.MemberProfilePicturesRepository;
-import backend.server.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,14 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
 class MyPageMainServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @Autowired
     MemberProfilePicturesRepository memberProfilePicturesRepository;
@@ -43,7 +41,7 @@ class MyPageMainServiceTest {
                 .birth("19960311")
                 .phoneNumber("01039281329")
                 .build();
-        userRepository.save(member);
+        memberRepository.save(member);
 
         memberProfilePictures = MemberProfilePictures.builder()
                 .stdId(member.getStdId())

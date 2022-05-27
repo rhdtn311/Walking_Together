@@ -9,8 +9,7 @@ import backend.server.entity.Partner;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.MapCaptureRepository;
 import backend.server.repository.PartnerRepository;
-import backend.server.repository.UserRepository;
-import org.assertj.core.api.Assertions;
+import backend.server.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ import static org.assertj.core.api.Assertions.*;
 class FeedDetailServiceTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private PartnerRepository partnerRepository;
@@ -60,7 +59,7 @@ class FeedDetailServiceTest {
                 .phoneNumber("01039281329")
                 .build();
 
-        userRepository.save(member);
+        memberRepository.save(member);
 
         partner = Partner.builder()
                 .member(member)
