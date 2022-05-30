@@ -1,5 +1,7 @@
 package backend.server.DTO.page;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +11,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Builder
+@AllArgsConstructor
 @Data
 public class PageResultDTO<DTO,ENTITY> {
 
@@ -36,7 +40,7 @@ public class PageResultDTO<DTO,ENTITY> {
     // 페이지 번호 목록
     private List<Integer> pageList;
 
-    public  PageResultDTO(Page<ENTITY> result, Function<ENTITY, DTO> fn) {   // Function<EN, DTO>는 엔티티 객체들을 DTO로 변환
+    public PageResultDTO(Page<ENTITY> result, Function<ENTITY, DTO> fn) {   // Function<EN, DTO>는 엔티티 객체들을 DTO로 변환
 
         // 생성된 Page객체를 DTO로 바꾸고 List 형태로 변환
         pageDataList = result.stream().map(fn).collect(Collectors.toList());
