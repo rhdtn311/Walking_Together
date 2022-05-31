@@ -120,6 +120,7 @@ public class AdminQueryRepository {
                 .fetchOne();
     }
 
+    // 파트너 정보 조회
     public List<AdminDTO.PartnerInfoResDTO> findPartnerInfo(String keyword, String partnerDetail) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.or(eqName(keyword)).or(eqStdId(keyword)).and(eqPartnerDetail(partnerDetail));

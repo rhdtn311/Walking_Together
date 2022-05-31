@@ -48,6 +48,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // h2 -test
+    implementation 'com.h2database:h2'
+
 //    compile group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 //    runtime group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 //    runtime group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
