@@ -1,6 +1,7 @@
 package backend.server.service.activity;
 
 import backend.server.DTO.activity.ActivityDTO;
+import backend.server.DTO.s3.fileUpload.FileUploadDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
@@ -8,13 +9,16 @@ import backend.server.exception.activityService.ActivityAlreadyDoneException;
 import backend.server.exception.activityService.ActivityDonePhotoNotSendException;
 import backend.server.exception.activityService.ActivityMapPhotoNotSendException;
 import backend.server.exception.activityService.ActivityNotFoundException;
+import backend.server.repository.ActivityCheckImagesRepository;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.MemberRepository;
+import backend.server.s3.FileUploadService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +31,8 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
+
+import static org.mockito.Mockito.*;
 
 @Transactional
 @SpringBootTest
@@ -43,6 +49,9 @@ class ActivityEndServiceTest {
 
     @Autowired
     private ActivityEndService activityEndService;
+
+    @MockBean
+    private FileUploadService fileUploadService;
 
     @Test
     @DisplayName("활동이 정상 종료일 때 확인 : 일반 활동")
@@ -185,6 +194,8 @@ class ActivityEndServiceTest {
                         , mockMultipartFile
                         , "20210101014000"
                         , 0);
+
+        doReturn("fileUrl").when(fileUploadService).uploadFileToS3(any(FileUploadDTO.class));
 
         // when
         activityEndService.endActivity(activityEndReqDTO);
@@ -541,6 +552,8 @@ class ActivityEndServiceTest {
         String contentType = "png";
         String filePath = "src/test/java/imageFiles/ActivityEndImage.png";
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
+
+
 
         // when
         // 활동이 정상 종료 되었는데 활동 경로만 보내지지 않았을 경우

@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
 class ActivityCheckImagesDeleteServiceTest {
@@ -27,14 +25,12 @@ class ActivityCheckImagesDeleteServiceTest {
 
         // given
         ActivityCheckImages activityCheckImage1 = ActivityCheckImages.builder()
-                .activityId(1L)
                 .imageUrl("imageUrl1")
                 .imageName("imageName1")
                 .imageId(1L)
                 .build();
 
         ActivityCheckImages activityCheckImage2 = ActivityCheckImages.builder()
-                .activityId(1L)
                 .imageUrl("imageUrl2")
                 .imageName("imageName2")
                 .imageId(1L)
@@ -47,7 +43,7 @@ class ActivityCheckImagesDeleteServiceTest {
         activityCheckImagesDeleteService.deleteActivityCheckImages(1L);
 
         // then
-        Assertions.assertThat(activityCheckImagesRepository.findActivityCheckImagesByActivityId(1L).get()).isEmpty();
+        Assertions.assertThat(activityCheckImagesRepository.findImagesByActivityId(1L).get()).isEmpty();
     }
 
 }

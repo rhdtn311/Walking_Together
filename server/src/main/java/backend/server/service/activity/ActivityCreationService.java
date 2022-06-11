@@ -77,14 +77,14 @@ public class ActivityCreationService {
 
         ActivityStartImageFileUploadDTO activityStartImageFileUploadDTO = new ActivityStartImageFileUploadDTO(activityCreationReq.getStartPhoto());
         String fileUrl = fileUploadService.uploadFileToS3(activityStartImageFileUploadDTO);
-        saveActivityStartImage(activity.getActivityId(), fileUrl, activityStartImageFileUploadDTO.getFileName());
+        saveActivityStartImage(activity, fileUrl, activityStartImageFileUploadDTO.getFileName());
 
         return activity.getActivityId();
     }
 
-    public void saveActivityStartImage(Long activityId, String fileUrl, String fileName) {
+    public void saveActivityStartImage(Activity activity, String fileUrl, String fileName) {
         ActivityCheckImages activityStartImage = ActivityCheckImages.builder()
-                .activityId(activityId)
+                .activity(activity)
                 .imageUrl(fileUrl)
                 .imageName(fileName)
                 .build();

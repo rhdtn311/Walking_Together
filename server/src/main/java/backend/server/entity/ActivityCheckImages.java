@@ -20,7 +20,8 @@ public class ActivityCheckImages extends BaseEntity {
 
     private String imageName;
 
-    // 연관된 활동 Id
-    @Column(name = "activity_id")
-    private Long activityId;
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
+
 }

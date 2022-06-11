@@ -1,18 +1,25 @@
 package backend.server.service.activity;
 
+import backend.server.DTO.s3.fileDelete.FileDeleteDTO;
 import backend.server.entity.*;
 import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.*;
+import backend.server.repository.s3.FileDeleteRepository;
+import backend.server.s3.FileDeleteService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import static org.mockito.Mockito.*;
 
 @Transactional
 @SpringBootTest
@@ -35,6 +42,9 @@ class ActivityDeleteServiceTest {
 
     @Autowired
     MapCaptureRepository mapCaptureRepository;
+
+    @MockBean
+    FileDeleteService fileDeleteService;
 
     @Test
     @DisplayName("활동이 종료된 활동인 경우 : 회원의 총 거리에서 해당 활동 거리가 제외되는지 확인")
@@ -105,6 +115,7 @@ class ActivityDeleteServiceTest {
     @Test
     @DisplayName("활동 사진이 삭제되는지 확인")
     void activityCheckImageDelete() {
+
         // given
         Member member = Member.builder()
                 .stdId("stdId")
@@ -114,7 +125,6 @@ class ActivityDeleteServiceTest {
                 .password("password")
                 .email("email@naver.com")
                 .build();
-
         memberRepository.save(member);
 
         Activity activity = Activity.builder()
@@ -122,18 +132,20 @@ class ActivityDeleteServiceTest {
                 .distance(60L)
                 .activityDivision(0)
                 .ordinaryTime(LocalTime.of(1, 30))
+                .activityCheckImages(new ArrayList<>())
                 .build();
-
         activityRepository.save(activity);
 
         ActivityCheckImages activityStartCheckImage = ActivityCheckImages.builder()
-                .activityId(activity.getActivityId())
+//                .activityId(activity.getActivityId())
+                .activity(activity)
                 .imageName("startActivityName")
                 .imageUrl("startActivityURL")
                 .build();
 
         ActivityCheckImages activityEndCheckImage = ActivityCheckImages.builder()
-                .activityId(activity.getActivityId())
+//                .activityId(activity.getActivityId())
+                .activity(activity)
                 .imageName("endActivityName")
                 .imageUrl("endActivityURL")
                 .build();
@@ -141,11 +153,16 @@ class ActivityDeleteServiceTest {
         activityCheckImagesRepository.save(activityStartCheckImage);
         activityCheckImagesRepository.save(activityEndCheckImage);
 
+        activity.getActivityCheckImages().add(activityStartCheckImage);
+        activity.getActivityCheckImages().add(activityEndCheckImage);
+
+        doNothing().when(fileDeleteService).deleteFile(any(FileDeleteRepository.class), any(FileDeleteDTO.class));
+
         // when
         activityDeleteService.deleteActivity(activity.getActivityId());
 
         // then
-        assertThat(activityCheckImagesRepository.findActivityCheckImagesByActivityId(activity.getActivityId()).get()).isEmpty();
+        assertThat(activityCheckImagesRepository.findImagesByActivityId(activity.getActivityId()).get()).isEmpty();
     }
 
     @Test

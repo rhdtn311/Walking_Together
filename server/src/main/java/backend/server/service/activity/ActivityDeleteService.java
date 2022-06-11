@@ -41,11 +41,12 @@ public class ActivityDeleteService {
             member.changeTotalTime(activity, "minus");
         }
 
-        List<ActivityCheckImages> activityCheckImages = activityCheckImagesRepository.findActivityCheckImagesByActivityId(activityId).get();
-        activityCheckImages.forEach(image -> fileDeleteService.deleteFile(activityCheckImagesRepository, new FileDeleteDTO(activityId)));
+        List<ActivityCheckImages> activityCheckImages = activity.getActivityCheckImages();
+        if (activityCheckImages != null) {
+            activityCheckImages.forEach(image -> fileDeleteService.deleteFile(activityCheckImagesRepository, new FileDeleteDTO(activityId)));
+        }
         certificationDeleteService.deleteCertification(activityId);
         mapCaptureDeleteService.deleteMapCaptures(activityId);
-        activityCheckImagesDeleteService.deleteActivityCheckImages(activityId);
         activityRepository.delete(activity);
 
         return activityId;

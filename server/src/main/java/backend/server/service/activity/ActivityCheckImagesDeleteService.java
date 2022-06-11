@@ -17,7 +17,7 @@ public class ActivityCheckImagesDeleteService {
     @Transactional
     public long deleteActivityCheckImages(Long activityId) {
         Optional<List<ActivityCheckImages>> activityCheckImagesByActivityId
-                = activityCheckImagesRepository.findActivityCheckImagesByActivityId(activityId);
+                = activityCheckImagesRepository.findImagesByActivityId(activityId);
         if (activityCheckImagesByActivityId.isPresent()) {
             List<ActivityCheckImages> activityCheckImages = activityCheckImagesByActivityId.get();
             for (Object image : activityCheckImages) {

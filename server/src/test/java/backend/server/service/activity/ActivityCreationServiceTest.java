@@ -2,6 +2,7 @@ package backend.server.service.activity;
 
 import backend.server.DTO.activity.ActivityDTO;
 import backend.server.DTO.activity.PartnerDTO;
+import backend.server.DTO.s3.fileUpload.FileUploadDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.ActivityCheckImages;
 import backend.server.entity.Member;
@@ -13,13 +14,16 @@ import backend.server.repository.ActivityCheckImagesRepository;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.MemberRepository;
+import backend.server.s3.FileUploadService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
@@ -29,6 +33,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -49,6 +55,9 @@ class ActivityCreationServiceTest {
 
     @Autowired
     private ActivityCheckImagesRepository activityCheckImagesRepository;
+
+    @MockBean
+    private FileUploadService fileUploadService;
 
     @Test
     @DisplayName("파트너 리스트가 제대로 출력되는지 확인")
@@ -217,6 +226,7 @@ class ActivityCreationServiceTest {
         assertThat(findActivity.getPartner().getPartnerId()).isEqualTo(findActivity.getPartner().getPartnerId());
     }
 
+    @Rollback(false)
     @Test
     @DisplayName("활동 생성 완료 시 활동 사진 저장")
     void activityCreateWithActivityStartImage() throws IOException {
@@ -259,13 +269,13 @@ class ActivityCreationServiceTest {
 
         Long savedActivityId = activityCreationService.createActivityDone(doneActivity);
 
+        doReturn("fileURL").when(fileUploadService).uploadFileToS3(any(FileUploadDTO.class));
+
         // when
         ActivityCheckImages activityStartImage
-                = activityCheckImagesRepository.findActivityCheckImagesByActivityId(savedActivityId).get().get(0);
+                = activityCheckImagesRepository.findImagesByActivityId(savedActivityId).get().get(0);
 
         // then
-        assertThat(activityStartImage.getActivityId()).isEqualTo(savedActivityId);
-        System.out.println(activityStartImage.getImageName());
         assertTrue(activityStartImage.getImageName().contains("Activity_Start"));
     }
 

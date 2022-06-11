@@ -57,7 +57,7 @@ public class ActivityEndService {
             if (activityEndReqDTO.getEndPhoto() != null) {
                 ActivityEndImageFileUploadDTO activityEndImageFileUploadDTO = new ActivityEndImageFileUploadDTO(activityEndReqDTO.getEndPhoto());
                 String fileUrl = fileUploadService.uploadFileToS3(activityEndImageFileUploadDTO);
-                saveActivityEndImage(activity.getActivityId(), fileUrl, activityEndImageFileUploadDTO.getFileName());
+                saveActivityEndImage(activity, fileUrl, activityEndImageFileUploadDTO.getFileName());
             } else {
                 throw new ActivityDonePhotoNotSendException();
             }
@@ -87,9 +87,9 @@ public class ActivityEndService {
         return activityEndReqDTO.getActivityId();
     }
 
-    private void saveActivityEndImage(Long activityId, String fileUrl, String fileName) {
+    private void saveActivityEndImage(Activity activity, String fileUrl, String fileName) {
         ActivityCheckImages activityCheckImage = ActivityCheckImages.builder()
-                .activityId(activityId)
+                .activity(activity)
                 .imageUrl(fileUrl)
                 .imageName(fileName)
                 .build();
