@@ -226,7 +226,6 @@ class ActivityCreationServiceTest {
         assertThat(findActivity.getPartner().getPartnerId()).isEqualTo(findActivity.getPartner().getPartnerId());
     }
 
-    @Rollback(false)
     @Test
     @DisplayName("활동 생성 완료 시 활동 사진 저장")
     void activityCreateWithActivityStartImage() throws IOException {

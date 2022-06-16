@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -39,15 +40,18 @@ class NoticeQueryRepositoryTest {
     @Autowired
     private NoticeAttachedFilesRepository noticeAttachedFilesRepository;
 
+    List<Notice> noticeList = new ArrayList<>();
+
     @BeforeEach
     void init() {
         for (int i = 0; i < 20; i++) {
-            noticeRepository.save(
+            Notice notice = noticeRepository.save(
                     Notice.builder()
-                    .title("title"+i)
-                    .content("content"+i)
-                    .build()
+                            .title("title" + i)
+                            .content("content" + i)
+                            .build()
             );
+            noticeList.add(notice);
         }
 
         NoticeImages noticeImage = NoticeImages.builder()
@@ -70,14 +74,14 @@ class NoticeQueryRepositoryTest {
     void findNoticeDetail() {
 
         // given
-        Long noticeId = 1L;
+        Long noticeId = noticeList.get(0).getNoticeId();
         Notice notice = noticeRepository.findById(noticeId).get();
 
         // when
         NoticeDTO.NoticeDetailResDTO noticeDetailResDTO = noticeQueryRepository.findNoticeDetail(noticeId);
 
         // then
-        assertThat(noticeDetailResDTO.getNoticeId()).isEqualTo(1L);
+        assertThat(noticeDetailResDTO.getNoticeId()).isEqualTo(noticeId);
         assertThat(noticeDetailResDTO.getTitle()).isEqualTo(notice.getTitle());
         assertThat(noticeDetailResDTO.getContent()).isEqualTo(notice.getContent());
     }
@@ -86,7 +90,7 @@ class NoticeQueryRepositoryTest {
     @DisplayName("게시글 수정 조회")
     void findNoticeModify() {
         // given
-        Long noticeId = 2L;
+        Long noticeId = noticeList.get(0).getNoticeId();
         Notice notice = noticeRepository.findById(noticeId).get();
 
         // when
@@ -117,10 +121,11 @@ class NoticeQueryRepositoryTest {
     void findNoticeImageFileUrls() {
         // given
         Long noticeId = 1L;
-        NoticeImages noticeImageFile = noticeImagesRepository.findFirstByNoticeId(noticeId);
+        Notice findNotice = noticeList.get(0);
+        NoticeImages noticeImageFile = noticeImagesRepository.findFirstByNoticeId(findNotice.getNoticeId());
 
         // when
-        List<String> noticeImageFileURLs = noticeQueryRepository.findNoticeImageFileURLs(noticeId);
+        List<String> noticeImageFileURLs = noticeQueryRepository.findNoticeImageFileURLs(findNotice.getNoticeId());
 
         // then
         assertThat(noticeImageFileURLs.size()).isEqualTo(1);

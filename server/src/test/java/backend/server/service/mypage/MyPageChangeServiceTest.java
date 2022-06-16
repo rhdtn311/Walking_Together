@@ -5,11 +5,13 @@ import backend.server.entity.Member;
 import backend.server.entity.MemberProfilePictures;
 import backend.server.repository.MemberProfilePicturesRepository;
 import backend.server.repository.MemberRepository;
+import backend.server.s3.FileUploadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -37,6 +39,9 @@ class MyPageChangeServiceTest {
 
     @Autowired
     MyPageChangeService myPageChangeService;
+
+    @MockBean
+    private FileUploadService fileUploadService;
 
     Member member;
 

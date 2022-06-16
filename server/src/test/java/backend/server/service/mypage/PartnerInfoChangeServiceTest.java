@@ -7,12 +7,14 @@ import backend.server.entity.PartnerPhotos;
 import backend.server.repository.PartnerPhotosRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.MemberRepository;
+import backend.server.s3.FileUploadService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 
 import javax.transaction.Transactional;
@@ -36,6 +38,9 @@ class PartnerInfoChangeServiceTest {
 
     @Autowired
     PartnerInfoChangeService partnerInfoChangeService;
+
+    @MockBean
+    private FileUploadService fileUploadService;
 
     Member member;
     Partner partner;

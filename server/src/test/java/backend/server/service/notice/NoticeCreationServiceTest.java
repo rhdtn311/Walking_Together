@@ -7,12 +7,14 @@ import backend.server.entity.NoticeImages;
 import backend.server.repository.NoticeAttachedFilesRepository;
 import backend.server.repository.NoticeImagesRepository;
 import backend.server.repository.NoticeRepository;
+import backend.server.s3.FileUploadService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +44,9 @@ class NoticeCreationServiceTest {
 
     @Autowired
     NoticeAttachedFilesRepository noticeAttachedFilesRepository;
+
+    @MockBean
+    private FileUploadService fileUploadService;
 
     @Test
     @DisplayName("공지사항 생성 확인")

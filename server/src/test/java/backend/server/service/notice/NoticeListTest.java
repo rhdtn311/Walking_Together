@@ -28,7 +28,6 @@ public class NoticeListTest {
     @Autowired
     NoticeQueryRepository noticeQueryRepository;
 
-    @Rollback(value = false)
     @Test
     public void init() {
 
