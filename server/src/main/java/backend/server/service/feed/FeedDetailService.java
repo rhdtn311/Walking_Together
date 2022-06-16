@@ -1,5 +1,6 @@
 package backend.server.service.feed;
 
+import backend.server.DTO.common.MapCaptureDTO;
 import backend.server.DTO.feed.FeedDTO;
 import backend.server.entity.Activity;
 import backend.server.exception.activityService.ActivityNotFoundException;
@@ -22,6 +23,11 @@ public class FeedDetailService {
             throw new ActivityNotFoundException();
         }
 
-        return feedQueryRepository.findFeedDetail(activityId);
+        FeedDTO.FeedDetailResDTO feedDetail = feedQueryRepository.findFeedDetail(activityId);
+
+        Activity activity = activityOptional.get();
+        feedDetail.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(activity.getMapCaptures()));
+
+        return feedDetail;
     }
 }

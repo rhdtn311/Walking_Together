@@ -30,7 +30,7 @@ public class MapCaptureDTO {
 
         public static MapCaptureResDTO entityToDto(MapCapture mapCapture) {
             return MapCaptureResDTO.builder()
-                    .activityId(mapCapture.getActivityId())
+                    .activityId(mapCapture.getActivity().getActivityId())
                     .mapCaptureId(mapCapture.getMapCaptureId())
                     .lat(mapCapture.getLat())
                     .lon(mapCapture.getLon())

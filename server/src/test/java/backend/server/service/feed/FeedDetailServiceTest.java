@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +43,9 @@ class FeedDetailServiceTest {
 
     @Autowired
     private FeedDetailService feedDetailService;
+
+    @PersistenceContext
+    private EntityManager em;
 
     Member member;
     Partner partner;
@@ -85,7 +90,7 @@ class FeedDetailServiceTest {
         activityRepository.save(activity);
 
         MapCapture activity1MapCapture1 = MapCapture.builder()
-                .activityId(activity.getActivityId())
+                .activity(activity)
                 .lat("1.001")
                 .lon("2.222")
                 .timestamp("111111")
@@ -93,7 +98,7 @@ class FeedDetailServiceTest {
         mapCaptureRepository.save(activity1MapCapture1);
 
         MapCapture activity1MapCapture2 = MapCapture.builder()
-                .activityId(activity.getActivityId())
+                .activity(activity)
                 .lat("1.002")
                 .lon("2.001")
                 .timestamp("222222")
@@ -101,7 +106,7 @@ class FeedDetailServiceTest {
         mapCaptureRepository.save(activity1MapCapture2);
 
         MapCapture activity1MapCapture3 = MapCapture.builder()
-                .activityId(activity.getActivityId())
+                .activity(activity)
                 .lat("1.003")
                 .lon("2.002")
                 .timestamp("333333")
@@ -115,10 +120,12 @@ class FeedDetailServiceTest {
     @DisplayName("활동 id로 조회 확인 (MapCaptureList까지)")
     void findByActivityId() {
         // when
-        FeedDTO.FeedDetailResDTO feedDetail = feedDetailService.getFeedDetail(activity.getActivityId());
+        em.clear();;
+        Activity findActivity = activityRepository.findById(this.activity.getActivityId()).get();
+        FeedDTO.FeedDetailResDTO feedDetail = feedDetailService.getFeedDetail(findActivity.getActivityId());
 
         // then
-        assertThat(feedDetail.getStartTime()).isEqualTo(activity.getStartTime());
+        assertThat(feedDetail.getStartTime()).isEqualTo(findActivity.getStartTime());
 
         List<MapCaptureDTO.MapCaptureResDTO> mapCaptureList = feedDetail.getMapPicture();
         for (int i = 0; i < mapCaptureList.size(); i++) {

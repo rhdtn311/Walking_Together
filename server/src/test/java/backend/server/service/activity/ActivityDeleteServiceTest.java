@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -42,6 +44,9 @@ class ActivityDeleteServiceTest {
 
     @Autowired
     MapCaptureRepository mapCaptureRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @MockBean
     FileDeleteService fileDeleteService;
@@ -233,21 +238,21 @@ class ActivityDeleteServiceTest {
                 .lon("lon1")
                 .lat("lat1")
                 .timestamp("timestamp1")
-                .activityId(activity.getActivityId())
+                .activity(activity)
                 .build();
 
         MapCapture mapCapture2 = MapCapture.builder()
                 .lon("lon2")
                 .lat("lat2")
                 .timestamp("timestamp2")
-                .activityId(activity.getActivityId())
+                .activity(activity)
                 .build();
 
         MapCapture mapCapture3 = MapCapture.builder()
                 .lon("lon3")
                 .lat("lat3")
                 .timestamp("timestamp3")
-                .activityId(activity.getActivityId())
+                .activity(activity)
                 .build();
 
         mapCaptureRepository.save(mapCapture1);
@@ -255,10 +260,11 @@ class ActivityDeleteServiceTest {
         mapCaptureRepository.save(mapCapture3);
 
         // when
+        em.clear();
         activityDeleteService.deleteActivity(activity.getActivityId());
 
         // then
-        assertThat(mapCaptureRepository.findAllByActivityId(activity.getActivityId())).isEmpty();
+        assertThat(mapCaptureRepository.findAllByActivity(activity)).isEmpty();
     }
 
     @Test

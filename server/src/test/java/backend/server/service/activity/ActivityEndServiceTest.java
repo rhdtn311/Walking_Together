@@ -22,6 +22,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -49,6 +51,9 @@ class ActivityEndServiceTest {
 
     @Autowired
     private ActivityEndService activityEndService;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @MockBean
     private FileUploadService fileUploadService;
@@ -115,13 +120,15 @@ class ActivityEndServiceTest {
                         , 0);
 
         // when
+        em.clear();
         Long endActivityId = activityEndService.endActivity(activityEndReq); // 활동 종료
+        Member findMember = memberRepository.findMemberByStdId(member.getStdId()).get();
 
         Activity endActivity = activityRepository.findById(endActivityId).get();
 
         // then
         // 시작 활동의 객체와 활동이 종료됐을 때의 객체가 같은지 확인
-        assertThat(startActivity).isSameAs(endActivity);
+        assertThat(startActivity.getActivityId()).isSameAs(endActivity.getActivityId());
         // 활동이 종료 됐으므로 activityStatus가 0으로 바뀌었는지 확인
         assertThat(endActivity.getActivityStatus()).isEqualTo(0);
         // 활동 거리 확인
@@ -131,7 +138,7 @@ class ActivityEndServiceTest {
         // 회원의 총 거리 변경 확인 (회원의 총 거리 + 이번 활동 거리)
         assertThat(member.getDistance()).isEqualTo(beforeActivityDistance + startActivity.getDistance());
         // 회원의 총 시간 변경 확인 (1시간 30분) -> 로직은 ActivityTest에서 테스트
-        assertThat(member.getTotalTime()).isEqualTo(beforeActivityTotalTime + 90);
+        assertThat(findMember.getTotalTime()).isEqualTo(beforeActivityTotalTime + 90);
     }
 
     @Test
@@ -198,15 +205,17 @@ class ActivityEndServiceTest {
         doReturn("fileUrl").when(fileUploadService).uploadFileToS3(any(FileUploadDTO.class));
 
         // when
+        em.clear();
         activityEndService.endActivity(activityEndReqDTO);
+        Member findMember = memberRepository.findMemberByStdId(member.getStdId()).get();
 
         Activity endActivity = activityRepository.findById(startActivity.getActivityId()).get();
 
         // then
         // 활동이 시작했을 때와 끝났을 때 활동이 같은 객체인지 확인
-        assertThat(startActivity).isSameAs(endActivity);
+        assertThat(startActivity.getActivityId()).isSameAs(endActivity.getActivityId());
         // 활동이 종료 됐으므로 activityStatus가 0으로 바뀌었는지 확인
-        assertThat(startActivity.getActivityStatus()).isEqualTo(0);
+        assertThat(endActivity.getActivityStatus()).isEqualTo(0);
         // 활동 거리 확인
         assertThat(endActivity.getDistance()).isEqualTo(2500L);
         // 활동 종료 시간 확인
@@ -214,7 +223,7 @@ class ActivityEndServiceTest {
         // 회원의 총 거리 변경 확인 (회원의 총 거리 + 이번 활동 거리)
         assertThat(member.getDistance()).isEqualTo(beforeActivityDistance + startActivity.getDistance());
         // 회원의 총 시간 변경 확인 (1시간 30분) -> 로직은 ActivityTest에서 테스트
-        assertThat(member.getTotalTime()).isEqualTo(beforeActivityTotalTime + 90);
+        assertThat(findMember.getTotalTime()).isEqualTo(beforeActivityTotalTime + 90);
     }
 
     @Test
@@ -287,6 +296,7 @@ class ActivityEndServiceTest {
 
         // then
         assertThrows(ActivityNotFoundException.class, () -> activityEndService.endActivity(notExistActivityEndReq));
+        em.clear();
         assertDoesNotThrow(() -> activityEndService.endActivity(existActivityEndReq));
     }
 
@@ -347,6 +357,7 @@ class ActivityEndServiceTest {
                         , 0);
 
         // when
+        em.clear();
         activityEndService.endActivity(activityEndReq);
 
         // then

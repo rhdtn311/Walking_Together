@@ -5,6 +5,7 @@ import backend.server.DTO.auth.TokenDTO;
 import backend.server.DTO.s3.fileUpload.ActivityEndImageFileUploadDTO;
 import backend.server.entity.Activity;
 import backend.server.entity.ActivityCheckImages;
+import backend.server.entity.MapCapture;
 import backend.server.entity.Member;
 import backend.server.exception.activityService.ActivityAlreadyDoneException;
 import backend.server.exception.activityService.ActivityDonePhotoNotSendException;
@@ -12,6 +13,7 @@ import backend.server.exception.activityService.ActivityMapPhotoNotSendException
 import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.ActivityCheckImagesRepository;
 import backend.server.repository.ActivityRepository;
+import backend.server.repository.MemberRepository;
 import backend.server.s3.FileUploadService;
 import backend.server.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +21,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class ActivityEndService {
 
-    private final MapCaptureSaveService mapCaptureSaveService;
+//    private final MapCaptureSaveService mapCaptureSaveService;
     private final CertificationSaveService certificationSaveService;
     private final ActivityRepository activityRepository;
     private final FileUploadService fileUploadService;
     private final ActivityCheckImagesRepository activityCheckImagesRepository;
+    private final MemberRepository memberRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -68,7 +72,7 @@ public class ActivityEndService {
         }
 
         // 맵 경로 저장
-        mapCaptureSaveService.saveMapCapture(activityEndReqDTO.mapArrayToHashMap(), activity.getActivityId());
+        activity.setMapCaptures(activityEndReqDTO.toMapCaptures(activity));
 
         // 활동 저장
         activity.changeDistance(activityEndReqDTO.getDistance());

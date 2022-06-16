@@ -135,7 +135,7 @@ class AdminQueryRepositoryTest {
 
         mapCapture1 = MapCapture.builder()
                 .mapCaptureId(1L)
-                .activityId(1L)
+                .activity(activity1)
                 .lat("lat1")
                 .lon("lon1")
                 .timestamp("timestamp1")
@@ -144,7 +144,7 @@ class AdminQueryRepositoryTest {
 
         mapCapture2 = MapCapture.builder()
                 .mapCaptureId(2L)
-                .activityId(2L)
+                .activity(activity2)
                 .lat("lat2")
                 .lon("lon2")
                 .timestamp("timestamp2")

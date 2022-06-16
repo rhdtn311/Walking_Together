@@ -21,8 +21,6 @@ public class ActivityDeleteService {
     private final ActivityCheckImagesRepository activityCheckImagesRepository;
 
     private final CertificationDeleteService certificationDeleteService;
-    private final MapCaptureDeleteService mapCaptureDeleteService;
-    private final ActivityCheckImagesDeleteService activityCheckImagesDeleteService;
 
     private final FileDeleteService fileDeleteService;
 
@@ -46,7 +44,6 @@ public class ActivityDeleteService {
             activityCheckImages.forEach(image -> fileDeleteService.deleteFile(activityCheckImagesRepository, new FileDeleteDTO(activityId)));
         }
         certificationDeleteService.deleteCertification(activityId);
-        mapCaptureDeleteService.deleteMapCaptures(activityId);
         activityRepository.delete(activity);
 
         return activityId;

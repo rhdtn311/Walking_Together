@@ -1,6 +1,7 @@
 package backend.server.service.admin;
 
 import backend.server.DTO.admin.AdminDTO;
+import backend.server.DTO.common.MapCaptureDTO;
 import backend.server.entity.Activity;
 import backend.server.exception.activityService.ActivityNotFoundException;
 import backend.server.repository.ActivityRepository;
@@ -29,6 +30,8 @@ public class ActivityInfoService {
             throw new ActivityNotFoundException();
         }
 
-        return adminQueryRepository.findActivityDetailInfo(activityId);
+        AdminDTO.ActivityDetailInfoResDTO activityDetailInfo = adminQueryRepository.findActivityDetailInfo(activityId);
+        activityDetailInfo.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(activityOpt.get().getMapCaptures()));
+        return activityDetailInfo;
     }
 }

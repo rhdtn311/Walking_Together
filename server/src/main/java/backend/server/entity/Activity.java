@@ -37,6 +37,9 @@ public class Activity extends BaseEntity {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "activity")
     private List<ActivityCheckImages> activityCheckImages = new ArrayList<>();
 
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, mappedBy = "activity")
+    private List<MapCapture> mapCaptures = new ArrayList<>();
+
     @Column(columnDefinition = "text")
     private String review;  // 소감문
 
@@ -79,7 +82,14 @@ public class Activity extends BaseEntity {
 
     // 일반 환산 시간
     public void changeOrdinaryTime(LocalTime ordinaryTime) {
-        this.ordinaryTime = ordinaryTime;}
+        this.ordinaryTime = ordinaryTime;
+    }
+
+    // MapCapture 저장
+    public void setMapCaptures(List<MapCapture> mapCaptures) {
+        System.out.println(mapCaptures);
+        this.mapCaptures.addAll(mapCaptures);
+    }
 
     // 활동 검증
     public long checkAndSaveActivity(Long distance, int checkNormalQuit, LocalDateTime activityEndTime) {

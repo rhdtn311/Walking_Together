@@ -84,7 +84,7 @@ class MapCaptureSaveServiceTest {
         // mapCaptureRepository에 lat, lon, timestamp를 각각 저장
         mapCaptureSaveService.saveMapCapture(activityEndReqDTO.mapArrayToHashMap(), 1L);
         // 방금 저장한 mapCapture를 List형식으로 한 번에 담아서 꺼냄
-        List<MapCapture> mapCaptures = mapCaptureRepository.findAllByActivityId(1L);
+        List<MapCapture> mapCaptures = mapCaptureRepository.findAllByActivity(Activity.builder().activityId(1L).build());
 
         // then
         // 각각 기존에 내가 생성한 lat, lon, timestamp에 들어있는지 확인

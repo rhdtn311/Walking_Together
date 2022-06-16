@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +51,9 @@ class ActivityInfoServiceTest {
 
     @Autowired
     ActivityInfoService activityInfoService;
+
+    @PersistenceContext
+    private EntityManager em;
 
     static Member member1;
     static Member member2;
@@ -133,7 +138,7 @@ class ActivityInfoServiceTest {
             if (i == 0) {
                 for (int j = 0; j < 10; j++) {
                     MapCapture mapCapture = MapCapture.builder()
-                            .activityId(savedActivity1.getActivityId())
+                            .activity(savedActivity1)
                             .lat(latList.get(j))
                             .lon(lonList.get(j))
                             .timestamp(timestampList.get(j))
@@ -145,7 +150,7 @@ class ActivityInfoServiceTest {
             } else {
                 for (int j = 0; j < 10; j++) {
                     MapCapture mapCapture = MapCapture.builder()
-                            .activityId(savedActivity2.getActivityId())
+                            .activity(savedActivity2)
                             .lat(latList.get(j))
                             .lon(lonList.get(j))
                             .timestamp(timestampList.get(j))
@@ -393,22 +398,28 @@ class ActivityInfoServiceTest {
     void findActivityDetailInfo() {
 
         // when
-        List<MapCapture> activity1MapCaptures = mapCaptureRepository.findAllByActivityId(activity1.getActivityId());
-        List<MapCapture> activity2MapCaptures = mapCaptureRepository.findAllByActivityId(activity2.getActivityId());
+        em.clear();
+        Activity findActivity1 = activityRepository.findById(activity1.getActivityId()).get();
+        Activity findActivity2 = activityRepository.findById(activity2.getActivityId()).get();
 
-        AdminDTO.ActivityDetailInfoResDTO activity1DetailInfo = adminQueryRepository.findActivityDetailInfo(activity1.getActivityId());
-        AdminDTO.ActivityDetailInfoResDTO activity2DetailInfo = adminQueryRepository.findActivityDetailInfo(activity2.getActivityId());
+        List<MapCapture> activity1MapCaptures = mapCaptureRepository.findAllByActivity(findActivity1);
+        List<MapCapture> activity2MapCaptures = mapCaptureRepository.findAllByActivity(findActivity2);
+
+        AdminDTO.ActivityDetailInfoResDTO activity1DetailInfo = adminQueryRepository.findActivityDetailInfo(findActivity1.getActivityId());
+        AdminDTO.ActivityDetailInfoResDTO activity2DetailInfo = adminQueryRepository.findActivityDetailInfo(findActivity2.getActivityId());
+        activity1DetailInfo.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(findActivity1.getMapCaptures()));
+        activity2DetailInfo.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(findActivity2.getMapCaptures()));
 
         // then
         assertThat(activity1DetailInfo.getStdName()).isEqualTo(member1.getName());
         assertThat(activity1DetailInfo.getDepartment()).isEqualTo(member1.getDepartment());
         assertThat(activity1DetailInfo.getStdId()).isEqualTo(member1.getStdId());
         assertThat(activity1DetailInfo.getPartnerName()).isEqualTo(partner1.getPartnerName());
-        assertThat(activity1DetailInfo.getReview()).isEqualTo(activity1.getReview());
-        assertThat(activity1DetailInfo.getActivityDate()).isEqualTo(activity1.getActivityDate());
-        assertThat(activity1DetailInfo.getStartTime()).isEqualTo(activity1.getStartTime());
-        assertThat(activity1DetailInfo.getEndTime()).isEqualTo(activity1.getEndTime());
-        assertThat(activity1DetailInfo.getTotalDistance()).isEqualTo(activity1.getDistance());
+        assertThat(activity1DetailInfo.getReview()).isEqualTo(findActivity1.getReview());
+        assertThat(activity1DetailInfo.getActivityDate()).isEqualTo(findActivity1.getActivityDate());
+        assertThat(activity1DetailInfo.getStartTime()).isEqualTo(findActivity1.getStartTime());
+        assertThat(activity1DetailInfo.getEndTime()).isEqualTo(findActivity1.getEndTime());
+        assertThat(activity1DetailInfo.getTotalDistance()).isEqualTo(findActivity1.getDistance());
 
         List<MapCaptureDTO.MapCaptureResDTO> mapPicture1 = activity1DetailInfo.getMapPicture();
         for (int i = 0; i < 10; i++) {
@@ -423,11 +434,11 @@ class ActivityInfoServiceTest {
         assertThat(activity2DetailInfo.getDepartment()).isEqualTo(member2.getDepartment());
         assertThat(activity2DetailInfo.getStdId()).isEqualTo(member2.getStdId());
         assertThat(activity2DetailInfo.getPartnerName()).isEqualTo(partner2.getPartnerName());
-        assertThat(activity2DetailInfo.getReview()).isEqualTo(activity2.getReview());
-        assertThat(activity2DetailInfo.getActivityDate()).isEqualTo(activity2.getActivityDate());
-        assertThat(activity2DetailInfo.getStartTime()).isEqualTo(activity2.getStartTime());
-        assertThat(activity2DetailInfo.getEndTime()).isEqualTo(activity2.getEndTime());
-        assertThat(activity2DetailInfo.getTotalDistance()).isEqualTo(activity2.getDistance());
+        assertThat(activity2DetailInfo.getReview()).isEqualTo(findActivity2.getReview());
+        assertThat(activity2DetailInfo.getActivityDate()).isEqualTo(findActivity2.getActivityDate());
+        assertThat(activity2DetailInfo.getStartTime()).isEqualTo(findActivity2.getStartTime());
+        assertThat(activity2DetailInfo.getEndTime()).isEqualTo(findActivity2.getEndTime());
+        assertThat(activity2DetailInfo.getTotalDistance()).isEqualTo(findActivity2.getDistance());
 
         List<MapCaptureDTO.MapCaptureResDTO> mapPicture2 = activity2DetailInfo.getMapPicture();
         for (int i = 0; i < 10; i++) {

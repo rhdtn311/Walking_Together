@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class ActivityDTO {
@@ -87,6 +88,27 @@ public class ActivityDTO {
                 latLonTime.computeIfAbsent(key, s -> new ArrayList<String>()).add(value);
             }
             return latLonTime;
+        }
+
+        public List<MapCapture> toMapCaptures(Activity activity) {
+
+            List<MapCapture> mapCaptures = new ArrayList<>();
+            HashMap<String, ArrayList<String>> map = mapArrayToHashMap();
+            int size = map.get("lat").size();
+            for (int i = 0; i < size; i++) {
+                String lat = map.get("lat").get(i);
+                String lon = map.get("lon").get(i);
+                String timestamp = map.get("timestamp").get(i);
+
+                mapCaptures.add(MapCapture.builder()
+                        .activity(activity)
+                        .lat(lat)
+                        .lon(lon)
+                        .timestamp(timestamp)
+                        .build());
+            }
+
+            return mapCaptures;
         }
     }
 }

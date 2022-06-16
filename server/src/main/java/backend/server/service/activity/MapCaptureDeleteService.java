@@ -12,16 +12,16 @@ import java.util.List;
 @Service
 public class MapCaptureDeleteService {
 
-    private final MapCaptureRepository mapCaptureRepository;
+//    private final MapCaptureRepository mapCaptureRepository;
 
-    public long deleteMapCaptures(long activityId) {
-        List<MapCapture> allMapsByActivity = mapCaptureRepository.findAllByActivityId(activityId);
-
-        if (!allMapsByActivity.isEmpty()) {
-            for (Object obj : allMapsByActivity) {
-                mapCaptureRepository.delete((MapCapture) obj);
-            }
-        }
-        return activityId;
-    }
+//    public long deleteMapCaptures(long activityId) {
+//        List<MapCapture> allMapsByActivity = mapCaptureRepository.findAllByActivityId(activityId);
+//
+//        if (!allMapsByActivity.isEmpty()) {
+//            for (Object obj : allMapsByActivity) {
+//                mapCaptureRepository.delete((MapCapture) obj);
+//            }
+//        }
+//        return activityId;
+//    }
 }

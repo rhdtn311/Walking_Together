@@ -1,10 +1,7 @@
 package backend.server.entity;
 
 import backend.server.DTO.common.MapCaptureDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -28,5 +25,7 @@ public class MapCapture {
     private String timestamp;
 
     // join 할 활동 id
-    private Long activityId;
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
 }

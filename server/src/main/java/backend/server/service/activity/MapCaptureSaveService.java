@@ -23,7 +23,12 @@ public class MapCaptureSaveService {
             String timestamp = mapToArrayToHashMap.get("timestamp").get(i);
 
             mapCaptureRepository.save(
-                    MapCapture.builder().activityId(activityId).lat(lat).lon(lon).timestamp(timestamp).build());
+//                    MapCapture.builder().activity(activityId).lat(lat).lon(lon).timestamp(timestamp).build());
+                    MapCapture.builder()
+                    .lat(lat)
+                    .lon(lon)
+                    .timestamp(timestamp)
+                    .build());
         }
     }
 }
