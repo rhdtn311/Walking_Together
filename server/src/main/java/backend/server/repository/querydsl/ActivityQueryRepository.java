@@ -17,8 +17,7 @@ public class ActivityQueryRepository {
     public boolean existsActiveActivity(String stdId) {
         Activity findActivity = jpqlQueryFactory.select(QActivity.activity)
                 .from(QActivity.activity)
-                .leftJoin(member).on(QActivity.activity.member.eq(member))
-                .where(member.stdId.eq(stdId))
+                .where(activity.member.stdId.eq(stdId))
                 .where(activity.activityStatus.eq(1))
                 .fetchFirst();
 
