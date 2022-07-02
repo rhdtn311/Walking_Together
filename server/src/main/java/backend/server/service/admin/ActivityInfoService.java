@@ -17,6 +17,7 @@ import java.util.Optional;
 public class ActivityInfoService {
     private final AdminQueryRepository adminQueryRepository;
     private final ActivityRepository activityRepository;
+
     // 활동정보조회
     public List<AdminDTO.ActivityInfoResDTO> findActivityInfo(AdminDTO.ActivityInfoReqDTO activityInfoReqDTO) {
         return adminQueryRepository.findActivityInfo(activityInfoReqDTO);
@@ -31,6 +32,9 @@ public class ActivityInfoService {
         }
 
         AdminDTO.ActivityDetailInfoResDTO activityDetailInfo = adminQueryRepository.findActivityDetailInfo(activityId);
+
+        Activity activity = activityOpt.get();
+        activityDetailInfo.setTotalTime(activity.getActivityDivision() == 0 ? activity.getOrdinaryTime() : activity.getCareTime());
         activityDetailInfo.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(activityOpt.get().getMapCaptures()));
         return activityDetailInfo;
     }

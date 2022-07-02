@@ -96,12 +96,6 @@ public class AdminQueryRepository {
                 .where(activity.activityId.eq(activityId))
                 .fetchOne();
 
-//        List<MapCapture> mapCaptures = findMapCaptures(activityId);
-//        activityDetailInfoResDTO.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(mapCaptures));
-
-        Activity activityEntity = findActivity(activityId);
-        activityDetailInfoResDTO.setTotalTime(activityEntity.getActivityDivision() == 0 ? activityEntity.getOrdinaryTime() : activityEntity.getCareTime());
-
         return activityDetailInfoResDTO;
     }
 
