@@ -10,6 +10,10 @@ import backend.server.repository.PartnerRepository;
 import backend.server.s3.FileDeleteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @RequiredArgsConstructor
 @Service
@@ -20,21 +24,23 @@ public class PartnerDeleteService {
     private final PartnerPhotosRepository partnerPhotosRepository;
     private final FileDeleteService fileDeleteService;
 
+    @PersistenceContext
+    EntityManager em;
+
+    @Transactional
     public Long deletePartner(Long partnerId) {
+
+        // 존재하지 않는 파트너면 삭제 불가능
+        Partner partner = partnerRepository.findById(partnerId).orElseThrow(PartnerNotFoundException::new);
+
         // 파트너가 활동을 가지고 있으면 삭제 불가능
-        if (activityRepository.existsActivitiesByPartner_PartnerId(partnerId)) {
+        if (activityRepository.existsActivitiesByPartner(partner)) {
             throw new PartnerHaveActivityException();
         }
 
-        // 존재하지 않는 파트너면 삭제 불가능
-        if (!partnerRepository.existsPartnerByPartnerId(partnerId)) {
-            throw new PartnerNotFoundException();
-        }
-
         fileDeleteService.deleteFile(partnerPhotosRepository, new FileDeleteDTO(partnerId));
-        partnerPhotosRepository.delete(partnerPhotosRepository.findPartnerPhotosByPartnerId(partnerId));
+        partnerPhotosRepository.delete(partner.getPartnerPhoto());
 
-        Partner partner = partnerRepository.findById(partnerId).get();
         partnerRepository.delete(partner);
 
         return partnerId;
