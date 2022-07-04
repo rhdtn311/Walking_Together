@@ -25,7 +25,8 @@ public class Partner {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "partner")
     private List<Activity> activity;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "partner")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "partnerPhotoId")
     private PartnerPhotos partnerPhoto;
 
     private String partnerName; // 파트너 이름
@@ -37,8 +38,6 @@ public class Partner {
     private String partnerDetail;   // 파트너 세부 정보(임산부, 장애인, 아동, 일반인)
 
     private String gender;  // 파트너 성별
-
-//    private String partnerPhoto;    // 사진
 
     private String selectionReason; // 선정이유
 

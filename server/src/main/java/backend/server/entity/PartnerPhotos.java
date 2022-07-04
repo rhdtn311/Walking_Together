@@ -24,8 +24,7 @@ public class PartnerPhotos {
 
     private String partnerPhotoName;
 
-    @OneToOne
-    @JoinColumn(name = "partnerId")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "partnerPhoto")
     private Partner partner;
 
     public void changeFileUrl(String partnerPhotoUrl) {
