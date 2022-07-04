@@ -132,9 +132,9 @@ public class MyPageDTO {
         private String gender;
         private String partnerBirth;
 
-        public Partner toPartner() {
+        public Partner toPartner(Member member) {
             return Partner.builder()
-                    .member(Member.builder().stdId(this.stdId).build())
+                    .member(member)
                     .partnerName(this.partnerName)
                     .partnerBirth(replacePartnerBirth())
                     .gender(this.gender)

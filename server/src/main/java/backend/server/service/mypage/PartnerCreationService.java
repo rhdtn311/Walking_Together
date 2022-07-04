@@ -2,6 +2,7 @@ package backend.server.service.mypage;
 
 import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.DTO.s3.fileUpload.PartnerProfileImageFileUploadDTO;
+import backend.server.entity.Member;
 import backend.server.entity.Partner;
 import backend.server.entity.PartnerPhotos;
 import backend.server.exception.activityService.MemberNotFoundException;
@@ -25,10 +26,9 @@ public class PartnerCreationService {
 
     @Transactional
     public Long createPartner (MyPageDTO.PartnerCreationReqDTO partnerCreationReqDTO) {
-        if (!memberRepository.existsMemberByStdId(partnerCreationReqDTO.getStdId())) {
-            throw new MemberNotFoundException();
-        }
-        Partner partner = partnerCreationReqDTO.toPartner();
+
+        Member member = memberRepository.findMemberByStdId(partnerCreationReqDTO.getStdId()).orElseThrow(MemberNotFoundException::new);
+        Partner partner = partnerCreationReqDTO.toPartner(member);
         Partner savedPartner = partnerRepository.save(partner);
 
         if (partnerCreationReqDTO.isPartnerPhotoPresent()) {
