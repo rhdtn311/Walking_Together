@@ -34,15 +34,15 @@ public class PartnerCreationService {
         if (partnerCreationReqDTO.isPartnerPhotoPresent()) {
             PartnerProfileImageFileUploadDTO partnerProfileImageFileUploadDTO = new PartnerProfileImageFileUploadDTO(partnerCreationReqDTO.getPartnerPhoto());
             String fileUrl = fileUploadService.uploadFileToS3(partnerProfileImageFileUploadDTO);
-            savePartnerPhoto(savedPartner.getPartnerId(), partnerProfileImageFileUploadDTO.getFileName(), fileUrl);
+            savePartnerPhoto(savedPartner, partnerProfileImageFileUploadDTO.getFileName(), fileUrl);
         }
 
         return savedPartner.getPartnerId();
     }
 
-    private void savePartnerPhoto(Long partnerId, String fileName, String fileUrl) {
+    private void savePartnerPhoto(Partner partner, String fileName, String fileUrl) {
         PartnerPhotos partnerPhoto = PartnerPhotos.builder()
-                .partnerId(partnerId)
+                .partner(partner)
                 .partnerPhotoName(fileName)
                 .partnerPhotoUrl(fileUrl)
                 .build();

@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    @Query("select p from Partner p left join p.member where p.member.stdId = :stdId")
+    @Query("select p from Partner p where p.member.stdId = :stdId")
     List<Partner> getPartnerList(@Param("stdId") String stdId);
 
-    boolean existsActivitiesByPartner_PartnerId(Long partnerId);
+    boolean existsActivitiesByPartner(Partner partner);
 }

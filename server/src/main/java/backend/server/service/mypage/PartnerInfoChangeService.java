@@ -57,25 +57,25 @@ public class PartnerInfoChangeService {
 
         if (partnerInfoChangeReqDTO.isPartnerPhotoPresent()) {
             PartnerProfileImageFileUploadDTO partnerProfileImageFileUploadDTO = new PartnerProfileImageFileUploadDTO(partnerInfoChangeReqDTO.getPartnerPhoto());
-            if (partnerPhotosRepository.existsPartnerPhotosByPartnerId(partnerId)) {
+            if (partnerPhotosRepository.existsPartnerPhotosByPartner(partner)) {
                 String fileUrl = fileUpdateService.updateFile(partnerProfileImageFileUploadDTO, partnerPhotosRepository, partnerId);
-                savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.getFileName(), partnerId);
+                savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.getFileName(), partner);
             } else {
                 String fileUrl = fileUploadService.uploadFileToS3(partnerProfileImageFileUploadDTO);
-                savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.fileName, partnerId);
+                savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.fileName, partner);
             }
         }
         return partnerId;
     }
 
-    private void savePartnerPhoto(String fileUrl, String fileName, Long partnerId) {
-        if (partnerPhotosRepository.existsPartnerPhotosByPartnerId(partnerId)) {
-            PartnerPhotos partnerPhoto = partnerPhotosRepository.findPartnerPhotosByPartnerId(partnerId);
+    private void savePartnerPhoto(String fileUrl, String fileName, Partner partner) {
+        if (partnerPhotosRepository.existsPartnerPhotosByPartner(partner)) {
+            PartnerPhotos partnerPhoto = partnerPhotosRepository.findPartnerPhotosByPartner(partner);
             partnerPhoto.changeFileName(fileName);
             partnerPhoto.changeFileUrl(fileUrl);
         } else {
             PartnerPhotos partnerPhoto = PartnerPhotos.builder()
-                    .partnerId(partnerId)
+                    .partner(partner)
                     .partnerPhotoName(fileName)
                     .partnerPhotoUrl(fileUrl)
                     .build();

@@ -24,8 +24,9 @@ public class PartnerPhotos {
 
     private String partnerPhotoName;
 
-    // join 할 파트너Id
-    private Long partnerId;
+    @OneToOne
+    @JoinColumn(name = "partnerId")
+    private Partner partner;
 
     public void changeFileUrl(String partnerPhotoUrl) {
         this.partnerPhotoUrl = partnerPhotoUrl;
