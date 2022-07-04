@@ -26,9 +26,7 @@ public class PartnerInfoChangeService {
     public Long updatePartnerInfo(MyPageDTO.PartnerInfoChangeReqDTO partnerInfoChangeReqDTO) {
 
         Long partnerId = Long.parseLong(partnerInfoChangeReqDTO.getPartnerId());
-        if (!partnerRepository.existsPartnerByPartnerId(partnerId)) {
-            throw new PartnerNotFoundException();
-        }
+        partnerRepository.findById(partnerId).orElseThrow(PartnerNotFoundException::new);
 
         Partner partner = partnerRepository.findById(partnerId).get();
         if (partnerInfoChangeReqDTO.isPartnerDetailPresent()) {
