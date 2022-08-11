@@ -5,7 +5,7 @@ import backend.server.entity.Partner;
 import backend.server.exception.activityService.PartnerNotFoundException;
 import backend.server.exception.mypageService.PartnerHaveActivityException;
 import backend.server.repository.ActivityRepository;
-import backend.server.repository.PartnerPhotosRepository;
+import backend.server.repository.PartnerPhotoRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.s3.FileDeleteService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class PartnerDeleteService {
 
     private final PartnerRepository partnerRepository;
     private final ActivityRepository activityRepository;
-    private final PartnerPhotosRepository partnerPhotosRepository;
+    private final PartnerPhotoRepository partnerPhotoRepository;
     private final FileDeleteService fileDeleteService;
 
     @PersistenceContext
@@ -38,8 +38,10 @@ public class PartnerDeleteService {
             throw new PartnerHaveActivityException();
         }
 
-        fileDeleteService.deleteFile(partnerPhotosRepository, new FileDeleteDTO(partnerId));
-        partnerPhotosRepository.delete(partner.getPartnerPhoto());
+        if (partner.existsPartnerPhoto()) {
+            fileDeleteService.deleteFile(partnerPhotoRepository, new FileDeleteDTO(partner.getPartnerPhoto().getPartnerPhotoId()));
+            partnerPhotoRepository.delete(partner.getPartnerPhoto());
+        }
 
         partnerRepository.delete(partner);
 

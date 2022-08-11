@@ -1,6 +1,5 @@
 package backend.server.entity;
 
-import backend.server.DTO.activity.PartnerDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,7 +26,7 @@ public class Partner {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partnerPhotoId")
-    private PartnerPhotos partnerPhoto;
+    private PartnerPhoto partnerPhoto;
 
     private String partnerName; // 파트너 이름
 
@@ -71,6 +70,14 @@ public class Partner {
 
     public void changePartnerBirth(String partnerBirth) {
         this.partnerBirth = partnerBirth;
+    }
+
+    public void changePartnerPhoto(PartnerPhoto partnerPhoto) {
+        this.partnerPhoto = partnerPhoto;
+    }
+
+    public boolean existsPartnerPhoto() {
+        return this.partnerPhoto != null;
     }
 
 }

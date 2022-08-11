@@ -3,9 +3,9 @@ package backend.server.service.mypage;
 import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.DTO.s3.fileUpload.PartnerProfileImageFileUploadDTO;
 import backend.server.entity.Partner;
-import backend.server.entity.PartnerPhotos;
+import backend.server.entity.PartnerPhoto;
 import backend.server.exception.activityService.PartnerNotFoundException;
-import backend.server.repository.PartnerPhotosRepository;
+import backend.server.repository.PartnerPhotoRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.s3.FileUpdateService;
 import backend.server.s3.FileUploadService;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PartnerInfoChangeService {
     private final PartnerRepository partnerRepository;
-    private final PartnerPhotosRepository partnerPhotosRepository;
+    private final PartnerPhotoRepository partnerPhotoRepository;
 
     private final FileUploadService fileUploadService;
     private final FileUpdateService fileUpdateService;
@@ -26,9 +26,8 @@ public class PartnerInfoChangeService {
     public Long updatePartnerInfo(MyPageDTO.PartnerInfoChangeReqDTO partnerInfoChangeReqDTO) {
 
         Long partnerId = Long.parseLong(partnerInfoChangeReqDTO.getPartnerId());
-        partnerRepository.findById(partnerId).orElseThrow(PartnerNotFoundException::new);
+        Partner partner = partnerRepository.findById(partnerId).orElseThrow(PartnerNotFoundException::new);
 
-        Partner partner = partnerRepository.findById(partnerId).get();
         if (partnerInfoChangeReqDTO.isPartnerDetailPresent()) {
             partner.changePartnerDetail(partnerInfoChangeReqDTO.getPartnerDetail());
         }
@@ -54,31 +53,35 @@ public class PartnerInfoChangeService {
         }
 
         if (partnerInfoChangeReqDTO.isPartnerPhotoPresent()) {
+            PartnerPhoto partnerPhoto = PartnerPhoto.builder().build();
             PartnerProfileImageFileUploadDTO partnerProfileImageFileUploadDTO = new PartnerProfileImageFileUploadDTO(partnerInfoChangeReqDTO.getPartnerPhoto());
-            if (partnerPhotosRepository.existsPartnerPhotosByPartner(partner)) {
-                String fileUrl = fileUpdateService.updateFile(partnerProfileImageFileUploadDTO, partnerPhotosRepository, partnerId);
-                savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.getFileName(), partner);
+            if (partner.existsPartnerPhoto()) {
+                String fileUrl = fileUpdateService.updateFile(partnerProfileImageFileUploadDTO, partnerPhotoRepository, partner.getPartnerPhoto().getPartnerPhotoId());
+                partnerPhoto = savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.getFileName(), partner);
             } else {
                 String fileUrl = fileUploadService.uploadFileToS3(partnerProfileImageFileUploadDTO);
-                savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.fileName, partner);
+                partnerPhoto = savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.fileName, partner);
             }
+            partner.changePartnerPhoto(partnerPhoto);
         }
         return partnerId;
     }
 
-    private void savePartnerPhoto(String fileUrl, String fileName, Partner partner) {
-        if (partnerPhotosRepository.existsPartnerPhotosByPartner(partner)) {
-            PartnerPhotos partnerPhoto = partnerPhotosRepository.findPartnerPhotosByPartner(partner);
+    private PartnerPhoto savePartnerPhoto(String fileUrl, String fileName, Partner partner) {
+
+        PartnerPhoto partnerPhoto = PartnerPhoto.builder().build();
+        if (partner.existsPartnerPhoto()) {
+            partnerPhoto = partner.getPartnerPhoto();
             partnerPhoto.changeFileName(fileName);
             partnerPhoto.changeFileUrl(fileUrl);
         } else {
-            PartnerPhotos partnerPhoto = PartnerPhotos.builder()
-                    .partner(partner)
+            partnerPhoto = PartnerPhoto.builder()
                     .partnerPhotoName(fileName)
                     .partnerPhotoUrl(fileUrl)
                     .build();
 
-            partnerPhotosRepository.save(partnerPhoto);
+            partnerPhotoRepository.save(partnerPhoto);
         }
+        return partnerPhoto;
     }
 }
