@@ -3,8 +3,7 @@ package backend.server.service.mypage;
 import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
-import backend.server.entity.PartnerPhotos;
-import backend.server.repository.PartnerPhotosRepository;
+import backend.server.repository.PartnerPhotoRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.MemberRepository;
 import backend.server.s3.FileUploadService;
@@ -35,7 +34,7 @@ class PartnerCreationServiceTest {
     PartnerRepository partnerRepository;
 
     @Autowired
-    PartnerPhotosRepository partnerPhotosRepository;
+    PartnerPhotoRepository partnerPhotoRepository;
 
     @Autowired
     PartnerCreationService partnerCreationService;
@@ -84,7 +83,6 @@ class PartnerCreationServiceTest {
         // when
         partnerCreationService.createPartner(partnerCreationReqDTO);
         Partner partner = partnerRepository.findPartnerByMember(member).get();
-        PartnerPhotos findPartnerPhoto = partnerPhotosRepository.findPartnerPhotosByPartnerId(partner.getPartnerId());
 
         // then
         assertThat(partner.getMember().getStdId()).isEqualTo(partnerCreationReqDTO.getStdId());
@@ -93,7 +91,6 @@ class PartnerCreationServiceTest {
         assertThat(partner.getSelectionReason()).isEqualTo(partnerCreationReqDTO.getSelectionReason());
         assertThat(partner.getGender()).isEqualTo(partnerCreationReqDTO.getGender());
         assertThat(partner.getPartnerDetail()).isEqualTo(partnerCreationReqDTO.getPartnerDetail());
-        assertThat(findPartnerPhoto.getPartnerId()).isEqualTo(partner.getPartnerId());
     }
 
     private MockMultipartFile getMockMultipartFile(String fileName, String contentType, String path) throws IOException {

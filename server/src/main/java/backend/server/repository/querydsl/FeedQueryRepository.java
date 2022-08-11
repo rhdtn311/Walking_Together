@@ -56,19 +56,9 @@ public class FeedQueryRepository {
                 .leftJoin(partner).on(partner.eq(activity.partner))
                 .where(eqActivityId(activityId))
                 .fetchOne();
-//        feedDetailResDTO.setMapPicture(findMapCapture(activityId));
 
         return feedDetailResDTO;
     }
-
-//    public List<MapCaptureDTO.MapCaptureResDTO> findMapCapture (Long activityId) {
-//        List<MapCapture> mapCaptureList = queryFactory.select(mapCapture)
-//                .from(mapCapture)
-//                .where(mapCapture.activityId.eq(activityId))
-//                .fetch();
-//
-//        return MapCaptureDTO.MapCaptureResDTO.toDTOList(mapCaptureList);
-//    }
 
     public BooleanExpression eqActivityId(Long activityId) {
         if (activityId == null) {

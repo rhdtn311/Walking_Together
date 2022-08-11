@@ -17,8 +17,8 @@ public class FileDeleteService {
         Object file = repository.find(fileDeleteDTO);
         if (file instanceof MemberProfilePictures) {
             s3Service.deleteFile(((MemberProfilePictures) file).getProfilePictureName());
-        } else if (file instanceof PartnerPhotos) {
-            s3Service.deleteFile(((PartnerPhotos)file).getPartnerPhotoName());
+        } else if (file instanceof PartnerPhoto) {
+            s3Service.deleteFile(((PartnerPhoto)file).getPartnerPhotoName());
         } else if (file instanceof List) {
             ((List<?>) file).forEach(activityCheckFile -> { if (activityCheckFile instanceof ActivityCheckImages)
                     s3Service.deleteFile(((ActivityCheckImages)activityCheckFile).getImageName());});

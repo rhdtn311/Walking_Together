@@ -3,17 +3,19 @@ package backend.server.service.mypage;
 import backend.server.entity.Activity;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
-import backend.server.entity.PartnerPhotos;
+import backend.server.entity.PartnerPhoto;
 import backend.server.exception.mypageService.PartnerHaveActivityException;
 import backend.server.repository.ActivityRepository;
-import backend.server.repository.PartnerPhotosRepository;
+import backend.server.repository.PartnerPhotoRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.MemberRepository;
+import backend.server.s3.FileUploadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.transaction.Transactional;
 
@@ -35,7 +37,7 @@ class PartnerDeleteServiceTest {
     PartnerRepository partnerRepository;
 
     @Autowired
-    PartnerPhotosRepository partnerPhotosRepository;
+    PartnerPhotoRepository partnerPhotoRepository;
 
     @Autowired
     ActivityRepository activityRepository;
@@ -43,10 +45,13 @@ class PartnerDeleteServiceTest {
     @Autowired
     PartnerDeleteService partnerDeleteService;
 
+    @MockBean
+    private FileUploadService fileUploadService;
+
     Member member;
     Partner partner;
     Partner activePartner;
-    PartnerPhotos partnerPhoto;
+    PartnerPhoto partnerPhoto;
     Activity activity;
 
     @BeforeEach
@@ -62,14 +67,22 @@ class PartnerDeleteServiceTest {
                 .build();
         memberRepository.save(member);
 
+        partnerPhoto = PartnerPhoto.builder()
+                .partnerPhotoName("partnerPhotoName")
+                .partnerPhotoUrl("partnerPhotoUrl")
+                .build();
+        partnerPhotoRepository.save(partnerPhoto);
+
         partner = Partner.builder()
                 .member(member)
                 .partnerName("partner")
                 .selectionReason("selectionReason1")
                 .relationship("relationship")
+                .partnerPhoto(partnerPhoto)
                 .gender("남자")
                 .partnerBirth("1996-03-12")
                 .partnerDetail("o")
+                .partnerPhoto(partnerPhoto)
                 .build();
         partnerRepository.save(partner);
 
@@ -94,13 +107,6 @@ class PartnerDeleteServiceTest {
                 .startTime(LocalDateTime.of(2021, 1, 1, 0, 0))
                 .build();
         activityRepository.save(activity);
-
-        partnerPhoto = PartnerPhotos.builder()
-                .partnerId(partner.getPartnerId())
-                .partnerPhotoName("partnerPhotoName")
-                .partnerPhotoUrl("partnerPhotoUrl")
-                .build();
-        partnerPhotosRepository.save(partnerPhoto);
     }
 
     @Test
@@ -110,7 +116,7 @@ class PartnerDeleteServiceTest {
         // when
         partnerDeleteService.deletePartner(partner.getPartnerId());
         Optional<Partner> findPartner = partnerRepository.findById(partner.getPartnerId());
-        Optional<PartnerPhotos> findPartnerPhoto = partnerPhotosRepository.findById(partnerPhoto.getPartnerPhotoId());
+        Optional<PartnerPhoto> findPartnerPhoto = partnerPhotoRepository.findById(partnerPhoto.getPartnerPhotoId());
 
         // then
         assertThat(findPartner).isNotPresent();

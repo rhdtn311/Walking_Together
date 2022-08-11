@@ -66,7 +66,6 @@ class MyPageQueryRepositoryTest {
                 .partnerDivision(0)
                 .partnerDetail("partnerDetail1")
                 .gender("gender1")
-                .partnerPhoto("partnerPhoto1")
                 .selectionReason("selectionReason1")
                 .relationship("relationship1")
                 .build();
@@ -79,7 +78,6 @@ class MyPageQueryRepositoryTest {
                 .partnerDivision(1)
                 .partnerDetail("partnerDetail2")
                 .gender("gender2")
-                .partnerPhoto("partnerPhoto2")
                 .selectionReason("selectionReason2")
                 .relationship("relationship2")
                 .build();

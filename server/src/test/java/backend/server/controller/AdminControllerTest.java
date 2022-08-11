@@ -2,18 +2,12 @@ package backend.server.controller;
 
 import backend.server.DTO.admin.AdminDTO;
 import backend.server.DTO.common.MapCaptureDTO;
-import backend.server.DTO.response.ResponseDTO;
 import backend.server.service.admin.ActivityInfoService;
 import backend.server.service.admin.MemberInfoService;
 import backend.server.service.admin.PartnerInfoService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import org.dom4j.CDATA;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

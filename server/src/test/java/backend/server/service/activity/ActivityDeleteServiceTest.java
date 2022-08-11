@@ -80,7 +80,6 @@ class ActivityDeleteServiceTest {
         activityDeleteService.deleteActivity(activity.getActivityId());
 
         // then
-        System.out.println("memberDistance : " + member.getDistance());
         assertThat(member.getDistance()).isEqualTo(originalMemberDistance - activity.getDistance());
     }
 
@@ -142,14 +141,12 @@ class ActivityDeleteServiceTest {
         activityRepository.save(activity);
 
         ActivityCheckImages activityStartCheckImage = ActivityCheckImages.builder()
-//                .activityId(activity.getActivityId())
                 .activity(activity)
                 .imageName("startActivityName")
                 .imageUrl("startActivityURL")
                 .build();
 
         ActivityCheckImages activityEndCheckImage = ActivityCheckImages.builder()
-//                .activityId(activity.getActivityId())
                 .activity(activity)
                 .imageName("endActivityName")
                 .imageUrl("endActivityURL")

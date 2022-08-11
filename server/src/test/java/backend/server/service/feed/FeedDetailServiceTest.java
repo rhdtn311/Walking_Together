@@ -120,7 +120,6 @@ class FeedDetailServiceTest {
     @DisplayName("활동 id로 조회 확인 (MapCaptureList까지)")
     void findByActivityId() {
         // when
-        em.clear();;
         Activity findActivity = activityRepository.findById(this.activity.getActivityId()).get();
         FeedDTO.FeedDetailResDTO feedDetail = feedDetailService.getFeedDetail(findActivity.getActivityId());
 

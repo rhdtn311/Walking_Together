@@ -3,8 +3,8 @@ package backend.server.service.mypage;
 import backend.server.DTO.myPage.MyPageDTO;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
-import backend.server.entity.PartnerPhotos;
-import backend.server.repository.PartnerPhotosRepository;
+import backend.server.entity.PartnerPhoto;
+import backend.server.repository.PartnerPhotoRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.MemberRepository;
 import backend.server.s3.FileUploadService;
@@ -34,7 +34,7 @@ class PartnerInfoChangeServiceTest {
     PartnerRepository partnerRepository;
 
     @Autowired
-    PartnerPhotosRepository partnerPhotosRepository;
+    PartnerPhotoRepository partnerPhotoRepository;
 
     @Autowired
     PartnerInfoChangeService partnerInfoChangeService;
@@ -44,7 +44,7 @@ class PartnerInfoChangeServiceTest {
 
     Member member;
     Partner partner;
-    PartnerPhotos partnerPhoto;
+    PartnerPhoto partnerPhoto;
 
     @BeforeEach
     void init() {
@@ -59,6 +59,12 @@ class PartnerInfoChangeServiceTest {
                 .build();
         memberRepository.save(member);
 
+        partnerPhoto = PartnerPhoto.builder()
+                .partnerPhotoName("partnerPhotoName")
+                .partnerPhotoUrl("partnerPhotoUrl")
+                .build();
+        partnerPhotoRepository.save(partnerPhoto);
+
         partner = Partner.builder()
                 .member(member)
                 .partnerName("partner")
@@ -67,16 +73,9 @@ class PartnerInfoChangeServiceTest {
                 .gender("남자")
                 .partnerBirth("1996-03-12")
                 .partnerDetail("o")
+                .partnerPhoto(partnerPhoto)
                 .build();
         partnerRepository.save(partner);
-
-        partnerPhoto = PartnerPhotos.builder()
-                .partnerId(partner.getPartnerId())
-                .partnerPhotoName("partnerPhotoName")
-                .partnerPhotoUrl("partnerPhotoUrl")
-                .build();
-        partnerPhotosRepository.save(partnerPhoto);
-
     }
 
     @Test
@@ -204,10 +203,11 @@ class PartnerInfoChangeServiceTest {
 
         // when
         partnerInfoChangeService.updatePartnerInfo(changePartnerDTO);
-        PartnerPhotos changePartnerPhoto = partnerPhotosRepository.findPartnerPhotosByPartnerId(partner.getPartnerId());
+        PartnerPhoto changePartnerPhoto = partner.getPartnerPhoto();
 
         // then
-        Assertions.assertThat(changePartnerPhoto.getPartnerId()).isEqualTo(partner.getPartnerId());
+//        Assertions.assertThat(changePartnerPhoto.getPartner()).isEqualTo(partner);
+        Assertions.assertThat(partner.getPartnerPhoto()).isEqualTo(changePartnerPhoto);
     }
 
     private MockMultipartFile getMockMultipartFile(String fileName, String contentType, String path) throws IOException {

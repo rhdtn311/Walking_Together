@@ -2,10 +2,7 @@ package backend.server.repository.querydsl;
 
 import backend.TestConfig;
 import backend.server.DTO.admin.AdminDTO;
-import backend.server.entity.Activity;
-import backend.server.entity.MapCapture;
-import backend.server.entity.Member;
-import backend.server.entity.Partner;
+import backend.server.entity.*;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.MapCaptureRepository;
 import backend.server.repository.MemberRepository;
@@ -56,7 +53,6 @@ class AdminQueryRepositoryTest {
 
     @BeforeEach
     void init() {
-
         member1 = Member.builder()
                 .name("name1")
                 .password("password1")
@@ -88,7 +84,7 @@ class AdminQueryRepositoryTest {
                 .partnerDivision(0)
                 .partnerDetail("partnerDetail1")
                 .gender("gender1")
-                .partnerPhoto("partnerPhoto1")
+                .partnerPhoto(null)
                 .selectionReason("selectionReason1")
                 .relationship("relationship1")
                 .build();
@@ -101,7 +97,7 @@ class AdminQueryRepositoryTest {
                 .partnerDivision(1)
                 .partnerDetail("partnerDetail2")
                 .gender("gender2")
-                .partnerPhoto("partnerPhoto2")
+                .partnerPhoto(null)
                 .selectionReason("selectionReason2")
                 .relationship("relationship2")
                 .build();

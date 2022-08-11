@@ -405,6 +405,7 @@ class ActivityInfoServiceTest {
         List<MapCapture> activity1MapCaptures = mapCaptureRepository.findAllByActivity(findActivity1);
         List<MapCapture> activity2MapCaptures = mapCaptureRepository.findAllByActivity(findActivity2);
 
+        activityInfoService.findActivityDetailInfo(findActivity1.getActivityId());
         AdminDTO.ActivityDetailInfoResDTO activity1DetailInfo = adminQueryRepository.findActivityDetailInfo(findActivity1.getActivityId());
         AdminDTO.ActivityDetailInfoResDTO activity2DetailInfo = adminQueryRepository.findActivityDetailInfo(findActivity2.getActivityId());
         activity1DetailInfo.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(findActivity1.getMapCaptures()));
