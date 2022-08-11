@@ -28,7 +28,6 @@ import java.util.Optional;
 @Service
 public class ActivityEndService {
 
-//    private final MapCaptureSaveService mapCaptureSaveService;
     private final CertificationSaveService certificationSaveService;
     private final ActivityRepository activityRepository;
     private final FileUploadService fileUploadService;
