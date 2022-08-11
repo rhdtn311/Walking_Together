@@ -1,21 +1,29 @@
 package backend.server.repository.querydsl;
 
+import backend.TestConfig;
 import backend.server.entity.Activity;
 import backend.server.entity.Member;
 import backend.server.entity.Partner;
 import backend.server.repository.ActivityRepository;
 import backend.server.repository.PartnerRepository;
 import backend.server.repository.MemberRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Transactional
-@SpringBootTest
+@Import({TestConfig.class, ActivityQueryRepository.class})
+@DataJpaTest
 class ActivityQueryRepositoryTest {
 
     @Autowired
@@ -105,5 +113,39 @@ class ActivityQueryRepositoryTest {
         // then
         assertTrue(activityQueryRepository.existsActiveActivity("2015100800"));
         assertFalse(activityQueryRepository.existsActiveActivity("2015100885"));
+    }
+
+    @Test
+    @DisplayName("파트너 리스트 조회")
+    void getPartnerListByStdId() {
+        List<Member> members = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            Member member = Member.builder()
+                    .stdId("stdId" + i)
+                    .name("name" + i)
+                    .email("email" + i)
+                    .password("password" + i)
+                    .phoneNumber("phone_number" + i)
+                    .build();
+            members.add(member);
+            memberRepository.save(member);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            Member member = members.get(i);
+            partnerRepository.save(Partner.builder()
+                    .partnerName("partnerName" + i)
+                    .member(member)
+                    .build());
+        }
+
+        // when
+        List<Partner> partners = activityRepository.getPartnerList("stdId0");
+
+        // then
+        assertThat(partners.size()).isEqualTo(1);
+        assertThat(partners.get(0).getPartnerName()).isEqualTo("partnerName0");
+
     }
 }
