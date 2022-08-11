@@ -1,6 +1,5 @@
 package backend.server.entity;
 
-import backend.server.DTO.s3.fileDelete.FileDeleteDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,8 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "partner_photos")
-public class PartnerPhotos {
+@Table(name = "partnerPhoto")
+public class PartnerPhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +22,6 @@ public class PartnerPhotos {
     private String partnerPhotoUrl;
 
     private String partnerPhotoName;
-
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "partnerPhoto")
-    private Partner partner;
 
     public void changeFileUrl(String partnerPhotoUrl) {
         this.partnerPhotoUrl = partnerPhotoUrl;
