@@ -28,12 +28,8 @@ public class MyPagePartnerInfoService {
     // 마이페이지 - 파트너 세부 정보
     @Transactional(readOnly = true)
     public MyPageDTO.MyPagePartnerDetailResDTO findPartnerDetail(Long partnerId) {
-        Optional<Partner> partnerOptional = partnerRepository.findPartnerByPartnerId(partnerId);
-        if (partnerOptional.isEmpty()) {
-            throw new PartnerNotFoundException();
-        }
 
-        Partner partner = partnerOptional.get();
+        Partner partner = partnerRepository.findPartnerByPartnerId(partnerId).orElseThrow(PartnerNotFoundException::new);
 
         return MyPageDTO.MyPagePartnerDetailResDTO.entityToDTO(partner);
     }

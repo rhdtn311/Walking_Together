@@ -26,11 +26,8 @@ public class NoticeDeleteService {
     private final FileDeleteService fileDeleteService;
 
     public Long deleteNotice(Long noticeId) {
-        Optional<Notice> noticeOptional = noticeRepository.findById(noticeId);
-        if (noticeOptional.isEmpty()) {
-            throw new NoticeNotFoundException();
-        }
-        Notice notice = noticeOptional.get();
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(NoticeNotFoundException::new);
+
         noticeRepository.delete(notice);
 
         fileDeleteService.deleteFile(noticeImagesRepository, new FileDeleteDTO(noticeId));
@@ -43,14 +40,10 @@ public class NoticeDeleteService {
     }
 
     public void deleteNoticeImages(Long noticeId) {
-        List<NoticeImages> noticeImages = noticeImagesRepository.findNoticeImagesByNoticeId(noticeId);
-
-        noticeImages.forEach(noticeImagesRepository::delete);
+        noticeImagesRepository.deleteAll(noticeImagesRepository.findNoticeImagesByNoticeId(noticeId));
     }
 
     public void deleteNoticeAttachedFiles(Long noticeId) {
-        List<NoticeAttachedFiles> noticeAttachedFiles = noticeAttachedFilesRepository.findNoticeAttachedFilesByNoticeId(noticeId);
-
-        noticeAttachedFiles.forEach(noticeAttachedFilesRepository::delete);
+        noticeAttachedFilesRepository.deleteAll(noticeAttachedFilesRepository.findNoticeAttachedFilesByNoticeId(noticeId));
     }
 }

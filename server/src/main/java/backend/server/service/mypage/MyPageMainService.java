@@ -22,11 +22,9 @@ public class MyPageMainService {
     // 마이페이지 메인
     @Transactional(readOnly = true)
     public MyPageDTO.MyPageMainResDTO getMyPageMain(String stdId) {
-        Optional<Member> memberOptional = memberRepository.findMemberByStdId(stdId);
-        if(memberOptional.isEmpty()) {
-            throw new MemberNotFoundException();
-        }
-        Member member = memberOptional.get();
+
+        Member member = memberRepository.findMemberByStdId(stdId).orElseThrow(MemberNotFoundException::new);
+
         MyPageDTO.MyPageMainResDTO myPageMainResDTO = MyPageDTO.MyPageMainResDTO.entityToDto(member);
 
         Optional<MemberProfilePictures> profilePictureOptional = memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId);

@@ -17,15 +17,13 @@ public class FeedDetailService {
 
     private final ActivityRepository activityRepository;
     private final FeedQueryRepository feedQueryRepository;
+
     public FeedDTO.FeedDetailResDTO getFeedDetail(Long activityId) {
-        Optional<Activity> activityOptional = activityRepository.findById(activityId);
-        if(activityOptional.isEmpty()) {
-            throw new ActivityNotFoundException();
-        }
+
+        Activity activity = activityRepository.findById(activityId).orElseThrow(ActivityNotFoundException::new);
 
         FeedDTO.FeedDetailResDTO feedDetail = feedQueryRepository.findFeedDetail(activityId);
 
-        Activity activity = activityOptional.get();
         feedDetail.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(activity.getMapCaptures()));
 
         return feedDetail;

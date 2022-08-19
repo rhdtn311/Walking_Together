@@ -27,11 +27,8 @@ public class ActivityDeleteService {
     // 활동 삭제
     public Long deleteActivity(Long activityId) {
 
-        Optional<Activity> activityOptional = activityRepository.findById(activityId);
-        if(activityOptional.isEmpty()) {
-            throw new ActivityNotFoundException();
-        }
-        Activity activity = activityOptional.get();
+        Activity activity = activityRepository.findById(activityId).orElseThrow(ActivityNotFoundException::new);
+
         Member member = activity.getMember();
 
         if (!activity.isActive()) {

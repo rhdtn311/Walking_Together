@@ -26,16 +26,12 @@ public class ActivityInfoService {
     //활동 정보 세부 조회
     public AdminDTO.ActivityDetailInfoResDTO findActivityDetailInfo(Long activityId) {
 
-        Optional<Activity> activityOpt = activityRepository.findById(activityId);
-        if (activityOpt.isEmpty()) {
-            throw new ActivityNotFoundException();
-        }
+        Activity activity = activityRepository.findById(activityId).orElseThrow(ActivityNotFoundException::new);
 
         AdminDTO.ActivityDetailInfoResDTO activityDetailInfo = adminQueryRepository.findActivityDetailInfo(activityId);
 
-        Activity activity = activityOpt.get();
         activityDetailInfo.setTotalTime(activity.getActivityDivision() == 0 ? activity.getOrdinaryTime() : activity.getCareTime());
-        activityDetailInfo.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(activityOpt.get().getMapCaptures()));
+        activityDetailInfo.setMapPicture(MapCaptureDTO.MapCaptureResDTO.toDTOList(activity.getMapCaptures()));
         return activityDetailInfo;
     }
 }

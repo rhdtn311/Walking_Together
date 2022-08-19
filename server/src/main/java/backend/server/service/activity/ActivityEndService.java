@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,13 +41,8 @@ public class ActivityEndService {
     @Transactional
     public Long endActivity(ActivityDTO.ActivityEndReqDTO activityEndReqDTO) {
 
-        Optional<Activity> activityOptional = activityRepository.findById(activityEndReqDTO.getActivityId());
+        Activity activity = activityRepository.findById(activityEndReqDTO.getActivityId()).orElseThrow(ActivityNotFoundException::new);
 
-        if (activityOptional.isEmpty()) {
-            throw new ActivityNotFoundException();
-        }
-
-        Activity activity = activityOptional.get();
         if (activity.getEndTime() != null) {
             throw new ActivityAlreadyDoneException();
         }

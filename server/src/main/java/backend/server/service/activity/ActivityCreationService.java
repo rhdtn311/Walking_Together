@@ -60,24 +60,16 @@ public class ActivityCreationService {
     // 활동 생성 완료
     @Transactional
     public Long createActivityDone(ActivityDTO.ActivityCreationReqDTO activityCreationReq) {
-        Optional<Partner> partnerOpt = partnerRepository.findById(activityCreationReq.getPartnerId());
-        if (partnerOpt.isEmpty()) {
-            throw new PartnerNotFoundException();
-        }
 
-        Optional<Member> memberOpt = memberRepository.findMemberByStdId(activityCreationReq.getStdId());
-        if (memberOpt.isEmpty()) {
-            throw new MemberNotFoundException();
-        }
+        Partner partner = partnerRepository.findById(activityCreationReq.getPartnerId()).orElseThrow(PartnerNotFoundException::new);
 
-        Partner partner = partnerOpt.get();
-        Member member = memberOpt.get();
+        Member member = memberRepository.findMemberByStdId(activityCreationReq.getStdId()).orElseThrow(MemberNotFoundException::new);
 
         Activity activity = activityRepository.save(activityCreationReq.toActivity(member, partner));
 
         ActivityStartImageFileUploadDTO activityStartImageFileUploadDTO = new ActivityStartImageFileUploadDTO(activityCreationReq.getStartPhoto());
-        String fileUrl = fileUploadService.uploadFileToS3(activityStartImageFileUploadDTO);
-        saveActivityStartImage(activity, fileUrl, activityStartImageFileUploadDTO.getFileName());
+//        String fileUrl = fileUploadService.uploadFileToS3(activityStartImageFileUploadDTO);
+        saveActivityStartImage(activity, "fileUrl", activityStartImageFileUploadDTO.getFileName());
 
         return activity.getActivityId();
     }

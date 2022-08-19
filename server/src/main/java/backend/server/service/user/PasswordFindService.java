@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Service
@@ -24,13 +25,8 @@ public class PasswordFindService {
 
     @Transactional
     public UserDTO.PasswordFindResDTO findPassword(UserDTO.PasswordFindReqDTO passwordFindReqDTO) {
-        Optional<Member> memberOptional
-                = memberRepository.findMemberByStdIdAndNameAndBirth(passwordFindReqDTO.getStdId(), passwordFindReqDTO.getName(), passwordFindReqDTO.getBirth());
-
-        if(memberOptional.isEmpty()) {
-            throw new MemberNotFoundException();
-        }
-        Member member = memberOptional.get();
+        Member member = memberRepository.findMemberByStdIdAndNameAndBirth(passwordFindReqDTO.getStdId(), passwordFindReqDTO.getName(), passwordFindReqDTO.getBirth())
+                .orElseThrow(MemberNotFoundException::new);
 
         String tempPassword = sendPasswordByMail(member.getEmail());
         member.changePassword(passwordEncoder.encode(tempPassword));
@@ -56,6 +52,7 @@ public class PasswordFindService {
                 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
                 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
         };
+
         StringBuilder tempPassword = new StringBuilder();
 
         for (int i = 0; i < 7; i++) {

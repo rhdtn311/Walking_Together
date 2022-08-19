@@ -29,12 +29,8 @@ public class MyPageChangeService {
 
     @Transactional
     public String updateMemberInfo(MyPageDTO.MyPageChangeReqDTO myPageChangeReqDTO) {
-        Optional<Member> memberOptional = memberRepository.findMemberByStdId(myPageChangeReqDTO.getStdId());
-        if (memberOptional.isEmpty()) {
-            throw new MemberNotFoundException();
-        }
+        Member member = memberRepository.findMemberByStdId(myPageChangeReqDTO.getStdId()).orElseThrow(MemberNotFoundException::new);
 
-        Member member = memberOptional.get();
         if (myPageChangeReqDTO.isPasswordPresent()) {
             member.changePassword(passwordEncoder.encode(myPageChangeReqDTO.getPassword()));
         }
@@ -58,6 +54,7 @@ public class MyPageChangeService {
     }
 
     private void saveMemberProfileImage(String fileUrl, String fileName, String stdId) {
+
         if (memberProfilePicturesRepository.existsMemberProfilePicturesByStdId(stdId)) {
             MemberProfilePictures memberProfilePictures = memberProfilePicturesRepository.findMemberProfilePicturesByStdId(stdId).get();
             memberProfilePictures.changeFileUrl(fileUrl);

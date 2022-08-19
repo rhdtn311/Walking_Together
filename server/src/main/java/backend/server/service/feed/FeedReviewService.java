@@ -18,12 +18,9 @@ public class FeedReviewService {
 
     @Transactional
     public Long writeActivityReview(Long activityId, String review) {
-        Optional<Activity> activityOptional = activityRepository.findById(activityId);
-        if(activityOptional.isEmpty()) {
-            throw new ActivityNotFoundException();
-        }
 
-        Activity activity = activityOptional.get();
+        Activity activity = activityRepository.findById(activityId).orElseThrow(ActivityNotFoundException::new);
+
         if (activity.isActive()) {
             throw new ActiveActivityNotWriteReviewException();
         }

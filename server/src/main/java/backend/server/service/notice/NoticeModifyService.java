@@ -49,11 +49,9 @@ public class NoticeModifyService {
     // 게시물 수정 (title, content)
     @Transactional
     public Long updateNoticeInfo(NoticeDTO.NoticeModifyReqDTO noticeModifyReqDTO) {
-        if (!noticeRepository.existsById(noticeModifyReqDTO.getNoticeId())) {
-            throw new NoticeNotFoundException();
-        }
 
-        Notice notice = noticeRepository.findNoticeByNoticeId(noticeModifyReqDTO.getNoticeId());
+        Notice notice = noticeRepository.findById(noticeModifyReqDTO.getNoticeId()).orElseThrow(NoticeNotFoundException::new);
+
         notice.changeTitle(noticeModifyReqDTO.getTitle());
         notice.changeContent(noticeModifyReqDTO.getContent());
 
