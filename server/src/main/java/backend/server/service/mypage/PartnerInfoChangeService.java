@@ -60,7 +60,7 @@ public class PartnerInfoChangeService {
                 partnerPhoto = savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.getFileName(), partner);
             } else {
                 String fileUrl = fileUploadService.uploadFileToS3(partnerProfileImageFileUploadDTO);
-                partnerPhoto = savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.fileName, partner);
+                partnerPhoto = savePartnerPhoto(fileUrl, partnerProfileImageFileUploadDTO.getFileName(), partner);
             }
             partner.changePartnerPhoto(partnerPhoto);
         }

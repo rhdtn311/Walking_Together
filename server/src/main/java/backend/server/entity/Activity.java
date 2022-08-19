@@ -87,7 +87,6 @@ public class Activity extends BaseEntity {
 
     // MapCapture 저장
     public void setMapCaptures(List<MapCapture> mapCaptures) {
-        System.out.println(mapCaptures);
         this.mapCaptures.addAll(mapCaptures);
     }
 

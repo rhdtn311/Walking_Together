@@ -24,9 +24,6 @@ public class PartnerDeleteService {
     private final PartnerPhotoRepository partnerPhotoRepository;
     private final FileDeleteService fileDeleteService;
 
-    @PersistenceContext
-    EntityManager em;
-
     @Transactional
     public Long deletePartner(Long partnerId) {
 
